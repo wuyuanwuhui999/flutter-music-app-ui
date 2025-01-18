@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'movie/pages/MovieIndexPage.dart';
 import 'package:provider/provider.dart';
-import './movie/provider/UserInfoProvider.dart';
-import './movie/provider/TokenProvider.dart';
-import './music/provider/PlayerMusicProvider.dart';
-import './movie/model/UserInfoModel.dart';
+import './provider/UserInfoProvider.dart';
+import './provider/TokenProvider.dart';
+import './provider/PlayerMusicProvider.dart';
+import './model/UserInfoModel.dart';
 import './router/index.dart';
-import 'movie/pages/LaunchPage.dart';
+import './pages/LaunchPage.dart';
 
 void main() {
   runApp(

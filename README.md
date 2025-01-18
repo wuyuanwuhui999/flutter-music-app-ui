@@ -1,29 +1,8 @@
-# flutter电影APP
+# flutter 音乐APP
 
 开发者：吴怨吴悔
 
 =============================界面预览（如果无法预览，请查看项目根目录png文件）==========================
-
-![app首页](./新版电影APP整体预览图.jpg)
-![app首页](电影预览1.png)
-![app首页](电影预览2.png)
-![app首页](电影预览3.png)
-![app首页](电影预览4.png)
-![app首页](电影预览5.png)
-![app首页](电影预览6.png)
-![app首页](电影预览7.png)
-![app首页](电影预览8.png)
-![app首页](电影预览9.png)
-![app首页](电影预览9-1.png)
-![app首页](电影预览9-2.png)
-![app首页](电影预览9-3.png)
-![app首页](电影预览9-4.png)
-![app首页](电影预览10.png)
-![app首页](电影预览11.png)
-![app首页](电影预览12.png)
-![app首页](电影预览13.jpg)
-![app首页](电影预览14.jpg)
-![app首页](电影预览15.png)
 ![app首页](音乐首页.jpg)
 ![app首页](音乐推荐.jpg)
 ![app首页](音乐朋友圈1.jpg)
@@ -47,6 +26,11 @@
 ![app首页](音乐收藏列表.png)
 ![app首页](音乐列表页.png)
 ![app首页](分类歌曲.png)
+![app首页](用户信息.png)
+![app首页](更改用户信息1.png)
+![app首页](更改用户信息2.png)
+![app首页](更改用户信息3.png)
+![app首页](更改用户信息4.png)
 =============================界面预览（如果无法预览，请查看项目根目录png文件）==========================
 
 
@@ -58,7 +42,7 @@ dart版本：2.12.1
 
 运行命令：flutter run --enable-software-rendering
 
-后端接口使用springboot开发，所有电影数据来自于python爬虫程序，爬取第三方电影网站数据
+后端接口使用springboot开发，所有音乐数据来自于python爬虫程序，爬取第三方音乐网站数据
 
 ## 使用的插件
 
@@ -102,37 +86,11 @@ app功能
 
 ​	●头像
 
-​	●电影搜索
-
 ​	●banner轮播
-
-​	●滚动加载分类电影
-
-​	●电影详情页
-
-​	●电影推荐
-
-​	●电影评分
-
-​	●电影收藏
-
-​	●电影评论
-
-​	●电影播放器
-
-​	●电影播放地址切换
-
-​	●电影播放记录
-
-​	●电影浏览记录
-
-​	●电影收藏记录
 
 ​	●用户使用情况
 
-​	●电影剧情
-
-​	●电影演员
+​	●编辑用户信息
 
 ​	●音乐推荐
 
@@ -181,8 +139,8 @@ app功能
 ​	......
 
 flutter版本参见：   
-https://github.com/wuyuanwuhui99/flutter-movie-app-ui   
-https://gitee.com/wuyuanwuhui99/flutter-movie-app-ui
+https://github.com/wuyuanwuhui99/flutter-music-app-ui   
+https://gitee.com/wuyuanwuhui99/flutter-music-app-ui
 
 react native版本参见：   
 https://github.com/wuyuanwuhui99/react-native-app-ui   
@@ -226,7 +184,7 @@ https://github.com/wuyuanwuhui99/vue3-ts-toutiao-app-ui
 
 使用token做登录验证，/service/movie/接口不需要验证，/service/movie-getway/接口需要token验证   
 
-乐播放器正在开发中，音乐数据来自于python爬虫程序，爬取酷狗音乐数据，敬请关注   
+音乐播放器正在开发中，音乐数据来自于python爬虫程序，爬取酷狗音乐数据，敬请关注   
 
 接口和数据请在本地电脑中，暂时没有购买和部署服务器，仅限本地调试，如有需要调试请联系本人启动外网映射   
 

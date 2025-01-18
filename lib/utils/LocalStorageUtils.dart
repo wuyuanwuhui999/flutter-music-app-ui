@@ -1,9 +1,8 @@
 import 'dart:convert';
 
-import 'package:movie/music/provider/PlayerMusicProvider.dart';
+import '../provider/PlayerMusicProvider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../music/model/MusicModel.dart';
-import '../music/model/ClassMusicParamsModel.dart';
+import '../model/MusicModel.dart';
 import '../common/constant.dart';
 
 class LocalStorageUtils {
