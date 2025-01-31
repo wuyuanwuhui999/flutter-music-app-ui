@@ -16,6 +16,7 @@ import '../pages/MusicAuthorCategoryPage.dart';
 import '../pages/MusicSharePage.dart';
 import '../pages/MusicClassifyListPage.dart';
 import '../model/MusicClassifyModel.dart';
+import '../pages/LoginPage.dart';
 
 class Routes {
   static final FluroRouter router = FluroRouter();
@@ -24,24 +25,27 @@ class Routes {
     router.notFoundHandler = Handler(
         handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
           debugPrint('未找到目标页');
-          return NotFoundPage();
+          return const NotFoundPage();
         });
 
     router.define('/MusicSearchPage', handler: Handler(handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
       return MusicSearchPage(keyword:params['keyword']!.first);
     }));
-    
+    router.define('/LoginPage', handler: Handler(handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
+      return const LoginPage();
+    }));
+
     router.define('/MusicPlayerPage', handler: Handler(handlerFunc: (BuildContext? context, params) {
       return MusicPlayerPage();
     }));
     router.define('/MusicLyricPage', handler: Handler(handlerFunc: (BuildContext? context, Map<String,List<String>> params) {
-      return MusicLyricPage();
+      return const MusicLyricPage();
     }));
     router.define('/MusicIndexPage', handler: Handler(handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
-      return MusicIndexPage();
+      return const MusicIndexPage();
     }));
     router.define('/MusicAuthorCategoryPage', handler: Handler(handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
-      return MusicAuthorCategoryPage();
+      return const MusicAuthorCategoryPage();
     }));
     router.define('/MusicSharePage', handler: Handler(handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
       return MusicSharePage(musicModel:MusicModel.fromJson(jsonDecode(params['musicItem']!.first)));
@@ -56,7 +60,7 @@ class Routes {
       return MusicAuthorListPage(authorMode:MusicAuthorModel.fromJson(jsonDecode(params['authorModel']!.first)));
     }));
     router.define('/MusicCategoryPage', handler: Handler(handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
-      return MusicCategoryPage();
+      return const MusicCategoryPage();
     }));
 
   }

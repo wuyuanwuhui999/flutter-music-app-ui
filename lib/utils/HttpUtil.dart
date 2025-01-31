@@ -26,26 +26,6 @@ class ResponseModel<T> {
   }
 }
 
-class LogInterceptor extends Interceptor {
-  @override
-  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    print('REQUEST[${options.method}] => PATH: ${options.path}');
-    super.onRequest(options, handler);
-  }
-
-  @override
-  void onResponse(Response response, ResponseInterceptorHandler handler) {
-    print('RESPONSE[${response.statusCode}] => PATH: ${response.requestOptions.path}');
-    super.onResponse(response, handler);
-  }
-
-  @override
-  void onError(DioException err, ErrorInterceptorHandler handler) {
-    print('ERROR[${err.response?.statusCode}] => PATH: ${err.requestOptions.path}');
-    super.onError(err, handler);
-  }
-}
-
 // 网络请求工具类
 class HttpUtil {
   static HttpUtil instance = HttpUtil();
@@ -74,7 +54,7 @@ class HttpUtil {
       headers: {
         //do something
         "version": "1.0.0",
-        'Content-Type':'application/json '
+        // 'Content-Type':'application/json '
       },
       //请求的Content-Type，默认值是"application/json; charset=utf-8",Headers.formUrlEncodedContentType会自动编码请求体.
       contentType: Headers.jsonContentType,

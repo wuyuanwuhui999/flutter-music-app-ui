@@ -13,7 +13,7 @@ import '../utils/LocalStorageUtils.dart';
 import '../model/UserInfoModel.dart';
 
 class LaunchPage extends StatefulWidget {
-  LaunchPage({super.key});
+  const LaunchPage({super.key});
 
   @override
   LaunchPageState createState() => LaunchPageState();

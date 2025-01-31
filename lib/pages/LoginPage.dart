@@ -17,12 +17,12 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-    UserInfoModel userInfo = Provider.of<UserInfoProvider>(context).userInfo;
-    String userId = userInfo.userId;
+    UserInfoModel? userInfo = Provider.of<UserInfoProvider>(context).userInfo;
+    String userId = userInfo?.userId ?? "吴时吴刻";
     TextEditingController userController =
-        new TextEditingController(text: userInfo.userId);
+        TextEditingController(text: userId);
     TextEditingController pwdController =
-        new TextEditingController(text: "123456");
+        TextEditingController(text: "123456");
     String password = "123456";
     return Scaffold(
         backgroundColor: ThemeColors.colorBg,
@@ -164,6 +164,11 @@ class LoginPage extends StatelessWidget {
                               });
                             }
                           },
+                          style: ButtonStyle(
+                            backgroundColor: WidgetStateProperty.all(ThemeColors.warnColor), // 按扭背景颜色
+                            foregroundColor: WidgetStateProperty.all(Colors.white), // 按钮文本颜色
+                            shape: WidgetStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))), // 圆角
+                          ),
                           child: Text("登录",
                               style: TextStyle(color: ThemeColors.colorWhite))),
                     ),
