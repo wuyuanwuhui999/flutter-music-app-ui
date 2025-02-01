@@ -26,8 +26,8 @@ class MusicModel extends ClassMusicParamsModel{
   String localPlayUrl; // 本地播放地址
   String sourceName; // 歌曲来源
   String sourceUrl; // 来源地址
-  String createTime; // 创建时间
-  String updateTime; // 更新时间
+  String? createTime; // 创建时间
+  String? updateTime; // 更新时间
   String? label; // 标签
   String? lyrics; // 歌词
   int isLike; // 是否喜欢
@@ -57,8 +57,8 @@ class MusicModel extends ClassMusicParamsModel{
         required this.localPlayUrl, // 本地播放地址
         required this.sourceName, // 歌曲来源
         required this.sourceUrl, // 来源地址
-        required this.createTime, // 创建时间
-        required this.updateTime, // 更新时间
+        this.createTime, // 创建时间
+        this.updateTime, // 更新时间
       this.label, // 标签
       this.lyrics, // 歌词
         required this.isLike, // 是否喜欢

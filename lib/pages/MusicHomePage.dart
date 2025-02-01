@@ -63,9 +63,9 @@ class _MusicHomePageState extends State<MusicHomePage>
 
   List<Widget> buildCurrentClassifiesWidget() {
     List<Widget> currentClassifiesWidget = [];
-    currentClassifiesList.forEach((element) {
-      currentClassifiesWidget.add(buildMuiscModuleByClassifyIdWidget(element));
-    });
+    for (var element in currentClassifiesList) {
+      currentClassifiesWidget.add(buildMusicModuleByClassifyIdWidget(element));
+    }
     return currentClassifiesWidget;
   }
 
@@ -105,8 +105,8 @@ class _MusicHomePageState extends State<MusicHomePage>
                 },
                 child: Column(
                   children: [
-                    buildClassifyWidget(),
-                  ]..addAll(buildCurrentClassifiesWidget()),
+                    buildClassifyWidget(), ...buildCurrentClassifiesWidget(),
+                  ],
                 ),
               ))
         ]));
@@ -244,7 +244,7 @@ class _MusicHomePageState extends State<MusicHomePage>
   }
 
   // 获取分类音乐
-  Widget buildMuiscModuleByClassifyIdWidget(
+  Widget buildMusicModuleByClassifyIdWidget(
       MusicClassifyModel musicClassifyModel) {
     return Container(
         key: ValueKey(musicClassifyModel.classifyName),
@@ -262,9 +262,9 @@ class _MusicHomePageState extends State<MusicHomePage>
                     width: ThemeSize.smallIcon, height: ThemeSize.smallIcon),
                 SizedBox(width: ThemeSize.smallMargin),
                 Text(musicClassifyModel.classifyName),
-                Expanded(child: SizedBox(), flex: 1),
+                const Expanded(flex: 1, child: SizedBox()),
                 InkWell(
-                  child: Text("更多"),
+                  child:Text("更多",style: TextStyle(color: ThemeColors.disableColor,decoration: TextDecoration.underline,decorationColor:ThemeColors.disableColor),),
                   onTap: () {
                     if (musicClassifyModel.classifyName == "推荐歌手") {
                       Routes.router
@@ -313,7 +313,7 @@ class _MusicHomePageState extends State<MusicHomePage>
                     children: [
                       MusicAvaterComponent(
                           type:'music',name:'',
-                          size: ThemeSize.bigAvater, avater: musicItem.cover),
+                          size: ThemeSize.middleAvater, avater: musicItem.cover),
                       SizedBox(width: ThemeSize.containerPadding),
                       Expanded(
                         flex: 1,
@@ -322,38 +322,14 @@ class _MusicHomePageState extends State<MusicHomePage>
                           children: [
                             Text(musicItem.songName,
                                 style:
-                                    TextStyle(fontSize: ThemeSize.bigFontSize)),
-                            SizedBox(height: ThemeSize.smallMargin),
-                            Row(
-                              children: [
-                                Container(
-                                  padding: EdgeInsets.only(
-                                      left: ThemeSize.miniMargin,
-                                      right: ThemeSize.miniMargin),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(
-                                              ThemeSize.minBtnRadius)),
-                                      border: Border.all(
-                                          width: 1,
-                                          color: ThemeColors.activeColor)),
-                                  child: Text("Hi-Res",
-                                      style: TextStyle(
-                                          color: ThemeColors.activeColor)),
-                                ),
-                                SizedBox(width: ThemeSize.smallMargin),
-                                Expanded(
-                                  child: Text(
-                                    "${musicItem.authorName} - ${musicItem.albumName}",
-                                    softWrap: false,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                        color: ThemeColors.disableColor),
-                                  ),
-                                  flex: 1,
-                                )
-                              ],
+                                    TextStyle(fontSize: ThemeSize.middleFontSize)),
+                            Text(
+                              "${musicItem.authorName} - ${musicItem.albumName}",
+                              softWrap: false,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                  color: ThemeColors.disableColor),
                             )
                           ],
                         ),
@@ -393,7 +369,7 @@ class _MusicHomePageState extends State<MusicHomePage>
                           }),
                       SizedBox(width: ThemeSize.containerPadding),
                       Image.asset(
-                        "lib/assets/images/icon_music_add.png",
+                        musicItem.isLike == 1 ? "lib/assets/images/icon_like_active.png" : "lib/assets/images/icon_like.png" ,
                         width: ThemeSize.smallIcon,
                         height: ThemeSize.smallIcon,
                       ),
@@ -422,9 +398,6 @@ class _MusicHomePageState extends State<MusicHomePage>
           } else {
             List authorsList = snapshot.data?.data as List;
             // 动态计算歌手头像大小
-            double size = (MediaQuery.of(context).size.width -
-                    (authorsList.length + 3) * ThemeSize.containerPadding) /
-                authorsList.length;
             return Column(
               children: [
                 SizedBox(height: ThemeSize.containerPadding),
@@ -441,7 +414,7 @@ class _MusicHomePageState extends State<MusicHomePage>
                         },
                         child: Column(
                           children: [
-                            MusicAvaterComponent(type:'author',avater:authorModel.avatar!,size:size,name:authorModel.authorName![0]),
+                            MusicAvaterComponent(type:'author',avater:authorModel.avatar,size:ThemeSize.middleAvater,name:authorModel.authorName![0]),
                             SizedBox(height: ThemeSize.containerPadding),
                             Text(authorModel.authorName!)
                           ],

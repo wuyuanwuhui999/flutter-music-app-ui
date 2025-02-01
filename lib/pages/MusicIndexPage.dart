@@ -24,7 +24,7 @@ class MusicIndexPage extends StatefulWidget {
 }
 
 class _MusicIndexPageState extends State<MusicIndexPage>
-    with AutomaticKeepAliveClientMixin, TickerProviderStateMixin,RouteAware {
+    with AutomaticKeepAliveClientMixin, TickerProviderStateMixin, RouteAware {
   @override
   bool get wantKeepAlive => true;
 
@@ -63,7 +63,7 @@ class _MusicIndexPageState extends State<MusicIndexPage>
   @override
   void didPush() {
     super.didPush();
-    onPlayerStateChangedListener?.resume();// 恢复监听音乐播放进度
+    onPlayerStateChangedListener?.resume(); // 恢复监听音乐播放进度
   }
 
   ///@author: wuwenqiang
@@ -72,7 +72,7 @@ class _MusicIndexPageState extends State<MusicIndexPage>
   @override
   void didPopNext() {
     super.didPopNext();
-    onPlayerStateChangedListener?.resume();// 恢复监听音乐播放进度
+    onPlayerStateChangedListener?.resume(); // 恢复监听音乐播放进度
   }
 
   ///@author: wuwenqiang
@@ -81,14 +81,12 @@ class _MusicIndexPageState extends State<MusicIndexPage>
   @override
   void didPop() {
     super.didPop();
-    onPlayerStateChangedListener.cancel();// 取消监听音乐播放进度
+    onPlayerStateChangedListener.cancel(); // 取消监听音乐播放进度
   }
 
   @override
   void dispose() {
     super.dispose();
-    // 移除监听订阅
-    // MyApp.routeObserver.unsubscribe(this);
     _pageController.dispose();
   }
 
@@ -108,21 +106,22 @@ class _MusicIndexPageState extends State<MusicIndexPage>
     useStorage();
   }
 
-  useStorage(){
-    PlayerMusicProvider provider = Provider.of<PlayerMusicProvider>(context, listen: false);
-    LocalStorageUtils.getPlayMusic().then((value){
-      if(value != null){
-        provider.setPlayMusic(value,false);
+  useStorage() {
+    PlayerMusicProvider provider =
+        Provider.of<PlayerMusicProvider>(context, listen: false);
+    LocalStorageUtils.getPlayMusic().then((value) {
+      if (value != null) {
+        provider.setPlayMusic(value, false);
       }
     });
-    LocalStorageUtils.getLoopMode().then((value){
+    LocalStorageUtils.getLoopMode().then((value) {
       provider.setLoopMode(value);
     });
-    LocalStorageUtils.getMusicList().then((value){
+    LocalStorageUtils.getMusicList().then((value) {
       provider.setMusicList(value);
     });
   }
-  
+
   /// 获取播放状态
   usePlayState() {
     AudioPlayer player =
@@ -139,18 +138,18 @@ class _MusicIndexPageState extends State<MusicIndexPage>
     });
   }
 
-  var _pageController = PageController();
+  final _pageController = PageController();
 
   Widget _getPage() {
     if (pages[_currentIndex] == null) {
       if (_currentIndex == 0) {
-        pages[_currentIndex] = MusicHomePage();
+        pages[_currentIndex] = const MusicHomePage();
       } else if (_currentIndex == 1) {
-        pages[_currentIndex] = MusicRecommentPage();
+        pages[_currentIndex] = const MusicRecommentPage();
       } else if (_currentIndex == 2) {
-        pages[_currentIndex] = MusicCirclePage();
+        pages[_currentIndex] = const MusicCirclePage();
       } else if (_currentIndex == 3) {
-        pages[_currentIndex] = MusicUserPage();
+        pages[_currentIndex] = const MusicUserPage();
       }
     }
     return pages[_currentIndex]!;
@@ -166,83 +165,81 @@ class _MusicIndexPageState extends State<MusicIndexPage>
       imgUrl = selectedImgUrls[index];
     }
     //构造返回的Widget
-    Widget item = Container(
-      padding: EdgeInsets.only(
-          top: ThemeSize.smallMargin, bottom: ThemeSize.smallMargin),
-      child: GestureDetector(
-        behavior: HitTestBehavior.opaque,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Image.asset(imgUrl,
-                width: ThemeSize.navigationIcon,
-                height: ThemeSize.navigationIcon),
-            SizedBox(height: ThemeSize.smallMargin),
-            Text(
-              titles[index],
-              style: style,
-            )
-          ],
-        ),
-        onTap: () {
-          if (_currentIndex != index) {
-            setState(() {
-              _currentIndex = index;
-            });
-          }
-        },
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      child: Column(
+        children: <Widget>[
+          Image.asset(imgUrl,
+              width: ThemeSize.middleIcon,
+              height: ThemeSize.middleIcon),
+          SizedBox(height: ThemeSize.smallMargin),
+          Text(
+            titles[index],
+            style: style,
+          )
+        ],
       ),
+      onTap: () {
+        if (_currentIndex != index) {
+          setState(() {
+            _currentIndex = index;
+          });
+        }
+      },
     );
-    return item;
   }
 
   @override
   Widget build(BuildContext context) {
-      MusicModel? musicModel = Provider.of<PlayerMusicProvider>(context).musicModel;
-      return Scaffold(
-          backgroundColor: ThemeColors.colorBg,
-          body: SafeArea(
-              top: true,
-              child: PageView.builder(
-                  controller: _pageController,
-                  physics: const NeverScrollableScrollPhysics(),
-                  onPageChanged: _pageChanged,
-                  itemCount: 4,
-                  itemBuilder: (context, index) {
-                    return _getPage();
-                  })),
-          floatingActionButtonLocation:
-          FloatingActionButtonLocation.centerDocked,
-          //悬浮按钮
-          floatingActionButton: SizedBox(
-              height: ThemeSize.minPlayIcon,
-              width: ThemeSize.minPlayIcon,
-              child: FloatingActionButton(
-                backgroundColor: ThemeColors.colorBg,
-                child: musicModel != null
-                    ? InkWell(
-                    child: RotationTransition(
-                        turns: _curveAnimation,
-                        child: MusicAvaterComponent(type:'music',name:'',avater:musicModel.cover,size:ThemeSize.minPlayIcon),
-                    ),
-                    onTap: () {
-                      Routes.router.navigateTo(context, '/MusicPlayerPage');
-                    })
-                    : Icon(Icons.music_note,color:ThemeColors.colorBg, size: ThemeSize.bigIcon),
-                onPressed: () {},
-              )),
-          bottomNavigationBar: BottomAppBar(
-              shape: const CircularNotchedRectangle(),
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    bottomAppBarItem(0),
-                    bottomAppBarItem(1),
-                    const SizedBox(width: 50),
-                    bottomAppBarItem(2),
-                    bottomAppBarItem(3)
-                  ])));
+    MusicModel? musicModel =
+        Provider.of<PlayerMusicProvider>(context).musicModel;
+    return Scaffold(
+        backgroundColor: ThemeColors.colorBg,
+        body: SafeArea(
+            top: true,
+            child: PageView.builder(
+                controller: _pageController,
+                physics: const NeverScrollableScrollPhysics(),
+                onPageChanged: _pageChanged,
+                itemCount: 4,
+                itemBuilder: (context, index) {
+                  return _getPage();
+                })),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        //悬浮按钮
+        floatingActionButton: SizedBox(
+            height: ThemeSize.minPlayIcon,
+            width: ThemeSize.minPlayIcon,
+            child:  musicModel != null
+                ? InkWell(
+                child: RotationTransition(
+                  turns: _curveAnimation,
+                  child: MusicAvaterComponent(
+                      type: 'music',
+                      name: '',
+                      avater: musicModel.cover,
+                      size: ThemeSize.minPlayIcon),
+                ),
+                onTap: () {
+                  Routes.router.navigateTo(context, '/MusicPlayerPage');
+                })
+                : Icon(Icons.music_note,
+                color: ThemeColors.colorBg, size: ThemeSize.bigIcon),
+            ),
+        bottomNavigationBar: BottomAppBar(
+            height:ThemeSize.bottomBarHeight,
+            color: ThemeColors.colorWhite,
+            shape: const CircularNotchedRectangle(),
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  bottomAppBarItem(0),
+                  bottomAppBarItem(1),
+                  const SizedBox(width: 50),
+                  bottomAppBarItem(2),
+                  bottomAppBarItem(3)
+                ])));
   }
 
   void _pageChanged(int index) {

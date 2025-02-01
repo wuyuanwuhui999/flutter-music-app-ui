@@ -4,12 +4,12 @@ import '../utils/common.dart';
 
 /*-----------------------头像组件------------------------*/
 class MusicAvaterComponent extends StatelessWidget {
-  final String avater;
+  final String? avater;
   final double size;
   final String type;
   final String name;
 
-  const MusicAvaterComponent({super.key, required this.avater, required this.size, required this.type, required this.name});
+  const MusicAvaterComponent({super.key, this.avater, required this.size, required this.type, required this.name});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +18,7 @@ class MusicAvaterComponent extends StatelessWidget {
             child: avater != null
                 ? Image.network(
                     //从全局的provider中获取用户信息
-                    getMusicCover(avater),
+                    getMusicCover(avater!),
                     height: size,
                     width: size,
                     fit: BoxFit.cover,
@@ -34,7 +34,7 @@ class MusicAvaterComponent extends StatelessWidget {
             ? ClipOval(
                 child: Image.network(
                 //从全局的provider中获取用户信息
-                getMusicCover(avater),
+                getMusicCover(avater!),
                 height: size,
                 width: size,
                 fit: BoxFit.cover,
