@@ -17,6 +17,8 @@ import '../pages/MusicSharePage.dart';
 import '../pages/MusicClassifyListPage.dart';
 import '../model/MusicClassifyModel.dart';
 import '../pages/LoginPage.dart';
+import '../pages/ForgetPasswordPage.dart';
+import '../pages/ResetPasswordPage.dart';
 
 class Routes {
   static final FluroRouter router = FluroRouter();
@@ -61,6 +63,12 @@ class Routes {
     }));
     router.define('/MusicCategoryPage', handler: Handler(handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
       return const MusicCategoryPage();
+    }));
+    router.define('/ForgetPasswordPage', handler: Handler(handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
+      return ForgetPasswordPage();
+    }));
+    router.define('/ResetPasswordPage', handler: Handler(handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
+      return ResetPasswordPage(email: json.decode(params['email']!.first));
     }));
 
   }

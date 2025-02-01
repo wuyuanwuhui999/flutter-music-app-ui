@@ -19,10 +19,8 @@ class LoginPage extends StatelessWidget {
     final GlobalKey<FormState> formKey = GlobalKey<FormState>();
     UserInfoModel? userInfo = Provider.of<UserInfoProvider>(context).userInfo;
     String userId = userInfo?.userId ?? "吴时吴刻";
-    TextEditingController userController =
-        TextEditingController(text: userId);
-    TextEditingController pwdController =
-        TextEditingController(text: "123456");
+    TextEditingController userController = TextEditingController(text: userId);
+    TextEditingController pwdController = TextEditingController(text: "123456");
     String password = "123456";
     return Scaffold(
         backgroundColor: ThemeColors.colorBg,
@@ -117,7 +115,7 @@ class LoginPage extends StatelessWidget {
                                 hintStyle: TextStyle(
                                     fontSize: ThemeSize.smallFontSize,
                                     color: Colors.grey),
-                                contentPadding: EdgeInsets.only(left: 0.0),
+                                contentPadding: EdgeInsets.only(left: ThemeSize.containerPadding),
                                 border: InputBorder.none,
                               ))),
                       SizedBox(height: ThemeSize.containerPadding),
@@ -126,66 +124,83 @@ class LoginPage extends StatelessWidget {
                 ),
                 Column(
                   children: <Widget>[
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Colors.red,
-                        borderRadius: BorderRadius.all(
-                            Radius.circular(ThemeSize.superRadius)),
-                      ),
-                      width: double.infinity,
-                      child: ElevatedButton(
-                          onPressed: () {
-                            if (formKey.currentState!.validate()) {
-                              loginService(userId, generateMd5(password))
-                                  .then((res) async {
-                                if (res.data != null) {
-                                  await LocalStorageUtils.setToken(res.token!);
-                                  await Fluttertoast.showToast(
-                                      msg: "登录成功",
-                                      toastLength: Toast.LENGTH_SHORT,
-                                      gravity: ToastGravity.BOTTOM,
-                                      backgroundColor: Colors.green,
-                                      textColor: Colors.white,
-                                      fontSize: ThemeSize.middleFontSize);
-                                  Provider.of<UserInfoProvider>(context,
-                                          listen: false)
-                                      .setUserInfo(
-                                          UserInfoModel.fromJson(res.data));
-                                  Routes.router.navigateTo(context, '/MusicIndexPage',replace: true);
-                                } else {
-                                  Fluttertoast.showToast(
-                                      msg: "登录失败，账号或密码错误",
-                                      toastLength: Toast.LENGTH_SHORT,
-                                      gravity: ToastGravity.BOTTOM,
-                                      backgroundColor: Colors.red,
-                                      textColor: Colors.white,
-                                      fontSize: ThemeSize.middleFontSize);
-                                }
-                              });
+                    InkWell(
+                      onTap: () {
+                        if (formKey.currentState!.validate()) {
+                          loginService(userId, password)
+                              .then((res) async {
+                            if (res.data != null) {
+                              await LocalStorageUtils.setToken(res.token!);
+                              await Fluttertoast.showToast(
+                                  msg: "登录成功",
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.BOTTOM,
+                                  backgroundColor: Colors.green,
+                                  textColor: Colors.white,
+                                  fontSize: ThemeSize.middleFontSize);
+                              Provider.of<UserInfoProvider>(context,
+                                      listen: false)
+                                  .setUserInfo(
+                                      UserInfoModel.fromJson(res.data));
+                              Routes.router.navigateTo(
+                                  context, '/MusicIndexPage',
+                                  replace: true);
+                            } else {
+                              Fluttertoast.showToast(
+                                  msg: "登录失败，账号或密码错误",
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.BOTTOM,
+                                  backgroundColor: Colors.red,
+                                  textColor: Colors.white,
+                                  fontSize: ThemeSize.middleFontSize);
                             }
-                          },
-                          style: ButtonStyle(
-                            backgroundColor: WidgetStateProperty.all(ThemeColors.warnColor), // 按扭背景颜色
-                            foregroundColor: WidgetStateProperty.all(Colors.white), // 按钮文本颜色
-                            shape: WidgetStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))), // 圆角
-                          ),
-                          child: Text("登录",
-                              style: TextStyle(color: ThemeColors.colorWhite))),
-                    ),
-                    SizedBox(height: ThemeSize.containerPadding),
-                    Container(
-                      width: double.infinity,
-                      decoration: BoxDecoration(
+                          });
+                        }
+                      },
+                      child: Container(
+                        height: ThemeSize.buttonHeight,
+                        decoration: BoxDecoration(
+                          color: Colors.red,
                           borderRadius: BorderRadius.all(
                               Radius.circular(ThemeSize.superRadius)),
-                          border: Border.all(color: ThemeColors.borderColor)),
-                      child: ElevatedButton(
-                        onPressed: () {
-                          Routes.router.navigateTo(context, '/RegisterPage',replace: false);
-                        },
-                        child: const Text("注册"),
+                        ),
+                        width: double.infinity,
+                        child: Center(
+                            child: Text("登录",
+                                style:
+                                    TextStyle(color: ThemeColors.colorWhite))),
                       ),
-                    )
+                    ),
+                    SizedBox(height: ThemeSize.containerPadding),
+                    InkWell(
+                        onTap: () {
+                          Routes.router.navigateTo(context, '/RegisterPage',
+                              replace: false);
+                        },
+                        child: Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.all(
+                                    Radius.circular(ThemeSize.superRadius)),
+                                border:
+                                    Border.all(color: ThemeColors.borderColor)),
+                            width: double.infinity,
+                            height: ThemeSize.buttonHeight,
+                            child: const Center(child: Text("注册")))),
+                    SizedBox(height: ThemeSize.containerPadding),
+                    InkWell(
+                        onTap: () {
+                          Routes.router.navigateTo(context, '/ForgetPasswordPage',
+                              replace: false);
+                        },
+                        child: Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.all(
+                                    Radius.circular(ThemeSize.superRadius)),
+                                border:
+                                Border.all(color: ThemeColors.borderColor)),
+                            width: double.infinity,
+                            height: ThemeSize.buttonHeight,
+                            child: const Center(child: Text("忘记密码"))))
                   ],
                 ),
               ],

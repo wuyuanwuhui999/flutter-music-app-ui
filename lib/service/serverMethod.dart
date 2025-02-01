@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ffi';
 import 'package:dio/dio.dart';
 import '../model/CircleModel.dart';
 import '../common/config.dart';
@@ -8,6 +9,8 @@ import '../model/MusicRecordModel.dart';
 import '../api/api.dart';
 import '../utils/HttpUtil.dart';
 import '../utils/LocalStorageUtils.dart';
+import '../model/UserInfoModel.dart';
+import '../utils/crypto.dart';
 
 //获取用户数据
 Future<ResponseModel<dynamic>> getUserDataService() async {
@@ -24,6 +27,18 @@ Future<ResponseModel<dynamic>> getUserDataService() async {
 }
 
 
+//登录
+Future<ResponseModel<dynamic>> loginService(
+    String userId, String password) async {
+  try {
+    Response response = await dio.post(servicePath['login']!, data: {'userId':userId,'password':generateMd5(password)});
+    return ResponseModel.fromJson(response.data);
+  } catch (e) {
+    print('ERROR:======>${e}');
+    return ResponseModel.fromJson(null);
+  }
+}
+
 ///@author: wuwenqiang
 ///@description: 更新用户信息
 /// @date: 2021-04-20 23:57
@@ -36,12 +51,10 @@ Future<ResponseModel<int>> updateUserData(Map map) async {
     return ResponseModel.fromJson(null);
   }
 }
-///@author: wuwenqiang
-///@description: 获取音乐搜索框关键词
-/// @date: 2023-05-18 23:32
-Future<ResponseModel<dynamic>> getKeyWordMusicService() async {
+
+Future<ResponseModel<int>>getBackPasswordService(String email) async {
   try {
-    Response response = await dio.get(servicePath['getKeywordMusic']!);
+    Response response = await dio.post(servicePath['getBackPasswordByEmail']!,data:{'email':email});
     return ResponseModel.fromJson(response.data);
   } catch (e) {
     print('ERROR:======>${e}');
@@ -49,14 +62,23 @@ Future<ResponseModel<dynamic>> getKeyWordMusicService() async {
   }
 }
 
-//登录
-Future<ResponseModel<dynamic>> loginService(
-    String userId, String password) async {
+Future<ResponseModel<dynamic>>resetPasswordService(String email,String password,String code) async {
+  password = generateMd5(password);
   try {
-    var map = {};
-    map['userId'] = userId;
-    map['password'] = password;
-    Response response = await dio.post(servicePath['login']!, data: map);
+    Response response = await dio.post(servicePath['resetPassword']!,data:{'email':email,'code':code,'password':password});
+    return ResponseModel.fromJson(response.data);
+  } catch (e) {
+    print('ERROR:======>${e}');
+    return ResponseModel.fromJson(null);
+  }
+}
+
+///@author: wuwenqiang
+///@description: 获取音乐搜索框关键词
+/// @date: 2023-05-18 23:32
+Future<ResponseModel<dynamic>> getKeyWordMusicService() async {
+  try {
+    Response response = await dio.get(servicePath['getKeywordMusic']!);
     return ResponseModel.fromJson(response.data);
   } catch (e) {
     print('ERROR:======>${e}');

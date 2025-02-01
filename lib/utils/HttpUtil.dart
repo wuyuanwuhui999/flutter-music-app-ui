@@ -47,9 +47,9 @@ class HttpUtil {
       //请求基地址,可以包含子路径
       baseUrl: HOST,
       //连接服务器超时时间，单位是毫秒.
-      connectTimeout: const Duration(milliseconds: 10000),
+      connectTimeout: const Duration(seconds: 10),
       //响应流上前后两次接受到数据的间隔，单位为毫秒。
-      receiveTimeout: const Duration(milliseconds: 5000),
+      receiveTimeout: const Duration(seconds: 20),
       //Http请求头.
       headers: {
         //do something
