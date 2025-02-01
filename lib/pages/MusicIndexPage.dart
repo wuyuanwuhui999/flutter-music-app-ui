@@ -55,8 +55,6 @@ class _MusicIndexPageState extends State<MusicIndexPage>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    // 添加监听订阅
-    // MyApp.routeObserver.subscribe(this, ModalRoute.of(context));
   }
 
   ///@author: wuwenqiang
@@ -200,14 +198,14 @@ class _MusicIndexPageState extends State<MusicIndexPage>
 
   @override
   Widget build(BuildContext context) {
-      MusicModel musicModel = Provider.of<PlayerMusicProvider>(context).musicModel;
+      MusicModel? musicModel = Provider.of<PlayerMusicProvider>(context).musicModel;
       return Scaffold(
           backgroundColor: ThemeColors.colorBg,
           body: SafeArea(
               top: true,
               child: PageView.builder(
                   controller: _pageController,
-                  physics: NeverScrollableScrollPhysics(),
+                  physics: const NeverScrollableScrollPhysics(),
                   onPageChanged: _pageChanged,
                   itemCount: 4,
                   itemBuilder: (context, index) {
@@ -234,14 +232,14 @@ class _MusicIndexPageState extends State<MusicIndexPage>
                 onPressed: () {},
               )),
           bottomNavigationBar: BottomAppBar(
-              shape: CircularNotchedRectangle(),
+              shape: const CircularNotchedRectangle(),
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     bottomAppBarItem(0),
                     bottomAppBarItem(1),
-                    SizedBox(width: 50),
+                    const SizedBox(width: 50),
                     bottomAppBarItem(2),
                     bottomAppBarItem(3)
                   ])));

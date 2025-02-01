@@ -41,7 +41,7 @@ class LaunchPageState extends State<LaunchPage> {
               HttpUtil.getInstance().setToken(token);
               userInfoprovider.setUserInfo(UserInfoModel.fromJson(data.data));
             }
-            Routes.router.navigateTo(context, '/MovieIndexPage',replace: true);
+            Routes.router.navigateTo(context, '/MusicIndexPage',replace: true);
           });
         }else{// 没有登录
           Routes.router.navigateTo(context, '/LoginPage',replace: true);

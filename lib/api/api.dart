@@ -1,5 +1,5 @@
 const servicePath = {
-  'getUserData': '/service/user/getUserData', // 获取用户信息
+  'getUserData': '/service/user-getway/getUserData', // 获取用户信息
   'login': '/service/user/login', //登录
   'updateUser': '/service/user-getway/updateUser',//更新用户信息
   'updatePassword': '/service/user-getway/updatePassword',//更新密码wq
