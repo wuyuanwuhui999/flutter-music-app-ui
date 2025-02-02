@@ -25,7 +25,7 @@ class UpdatePasswordPage extends StatelessWidget {
             width: double.infinity,
             child: Column(
               children: <Widget>[
-                const NavigatorTitleComponent(title: "忘记密码"),
+                const NavigatorTitleComponent(title: "修改密码"),
                 SizedBox(height: ThemeSize.containerPadding),
                 Column(
                   children: [

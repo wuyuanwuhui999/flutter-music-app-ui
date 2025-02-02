@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter/cupertino.dart';
 import '../common/config.dart';
@@ -78,24 +79,25 @@ class UserPageState extends State<UserPage> {
     });
   }
 
-  void useSave(dynamic value, String name, String field, bool isRequire) {
+  Future<void> useSave(
+      dynamic value, String name, String field, bool isRequire) async {
     if (!hasChange || loading) return;
     loading = true;
     if (isRequire && value == "") {
       Fluttertoast.showToast(
-          msg: "${name}不能为空",
+          msg: "$name不能为空",
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
           fontSize: ThemeSize.middleFontSize);
       loading = false;
     } else {
-      // await EasyLoading.show();
+      await EasyLoading.show();
       Map myUserInfo = provider.userInfo.toMap();
       myUserInfo[field] = value;
       updateUserData(myUserInfo).then((value) async {
         hasChange = false;
         provider.setUserInfo(UserInfoModel.fromJson(myUserInfo));
-        // await EasyLoading.dismiss(animation: true);
+        await EasyLoading.dismiss(animation: true);
         Navigator.pop(context);
         loading = false;
       }).catchError(() {
@@ -165,6 +167,7 @@ class UserPageState extends State<UserPage> {
   @override
   Widget build(BuildContext context) {
     provider = Provider.of<UserInfoProvider>(context, listen: true);
+    print(provider.userInfo.toMap());
     return Scaffold(
         backgroundColor: ThemeColors.colorBg,
         body: SafeArea(
@@ -474,16 +477,19 @@ class UserPageState extends State<UserPage> {
                             ),
                             InkWell(
                                 onTap: () {
-                                  Routes.router.navigateTo(context, '/UpdatePasswordPage',
+                                  Routes.router.navigateTo(
+                                      context, '/UpdatePasswordPage',
                                       replace: false);
                                 },
                                 child: Container(
-                                  margin: EdgeInsets.only(top:ThemeSize.containerPadding),
+                                    margin: EdgeInsets.only(
+                                        top: ThemeSize.containerPadding),
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.all(
-                                            Radius.circular(ThemeSize.superRadius)),
-                                        border:
-                                        Border.all(color: ThemeColors.borderColor)),
+                                            Radius.circular(
+                                                ThemeSize.superRadius)),
+                                        border: Border.all(
+                                            color: ThemeColors.borderColor)),
                                     width: double.infinity,
                                     height: ThemeSize.buttonHeight,
                                     child: const Center(child: Text("修改密码")))),
