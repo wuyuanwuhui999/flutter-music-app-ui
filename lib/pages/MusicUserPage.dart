@@ -101,8 +101,11 @@ class _MusicUserPageState extends State<MusicUserPage>
                       style: TextStyle(color: ThemeColors.subTitle))
                 ],
               )),
-          Image.asset("lib/assets/images/icon_edit.png",
-              width: ThemeSize.middleIcon, height: ThemeSize.middleIcon)
+          InkWell(onTap: (){
+            Routes.router.navigateTo(context, '/UserPage');
+          },child:  Image.asset("lib/assets/images/icon_edit.png",
+              width: ThemeSize.middleIcon, height: ThemeSize.middleIcon),)
+
         ],
       ),
     );

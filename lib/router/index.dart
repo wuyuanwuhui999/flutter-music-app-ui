@@ -19,6 +19,8 @@ import '../model/MusicClassifyModel.dart';
 import '../pages/LoginPage.dart';
 import '../pages/ForgetPasswordPage.dart';
 import '../pages/ResetPasswordPage.dart';
+import '../pages/UpdatePasswordPage.dart';
+import '../pages/UserPage.dart';
 
 class Routes {
   static final FluroRouter router = FluroRouter();
@@ -70,6 +72,11 @@ class Routes {
     router.define('/ResetPasswordPage', handler: Handler(handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
       return ResetPasswordPage(email: json.decode(params['email']!.first));
     }));
-
+    router.define('/UpdatePasswordPage', handler: Handler(handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
+      return UpdatePasswordPage();
+    }));
+    router.define('/UserPage', handler: Handler(handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
+      return const UserPage();
+    }));
   }
 }

@@ -72,6 +72,21 @@ Future<ResponseModel<dynamic>>resetPasswordService(String email,String password,
 }
 
 ///@author: wuwenqiang
+///@description: 更新密码
+/// @date: 2021-04-20 23:57
+Future<ResponseModel<int>> updatePasswordService(String oldPassword,String newPassword) async {
+  try {
+    oldPassword = generateMd5(oldPassword);
+    newPassword = generateMd5(newPassword);
+    Response response = await dio.put(servicePath['updatePassword']!, data: {"oldPassword":oldPassword,"newPassword":newPassword});
+    return ResponseModel.fromJson(response.data);
+  } catch (e) {
+    print('ERROR:======>${e}');
+    return ResponseModel.fromJson(null);
+  }
+}
+
+///@author: wuwenqiang
 ///@description: 获取音乐搜索框关键词
 /// @date: 2023-05-18 23:32
 Future<ResponseModel<dynamic>> getKeyWordMusicService() async {
