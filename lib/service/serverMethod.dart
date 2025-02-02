@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:ffi';
 import 'package:dio/dio.dart';
 import '../model/CircleModel.dart';
 import '../common/config.dart';
@@ -9,7 +8,6 @@ import '../model/MusicRecordModel.dart';
 import '../api/api.dart';
 import '../utils/HttpUtil.dart';
 import '../utils/LocalStorageUtils.dart';
-import '../model/UserInfoModel.dart';
 import '../utils/crypto.dart';
 
 //获取用户数据
