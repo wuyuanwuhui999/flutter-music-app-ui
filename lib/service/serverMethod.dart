@@ -116,7 +116,7 @@ Future<ResponseModel<List>> getMusicClassifyService() async {
 ///@description: 获取分类音乐列表
 /// @date: 2023-05-25 22:45
 /// @params isRedis是否从缓存中获取，首页数据没有是否喜欢字段，不用从缓存中获取，只有推荐页面才有
-Future<ResponseModel<List>> getMusicListByClassifyIdService(
+Future<ResponseModel<List<dynamic>>> getMusicListByClassifyIdService(
     int classifyId, int pageNum, int pageSize, int isRedis) async {
   try {
     Response response = await dio.get(

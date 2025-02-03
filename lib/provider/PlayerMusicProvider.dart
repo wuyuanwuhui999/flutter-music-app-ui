@@ -17,7 +17,7 @@ class PlayerMusicProvider with ChangeNotifier {
   MusicModel? _musicModel; // 正在播放的音乐
   bool _playing = false;
   PlayerMusicProvider(this._musicModel);
-  final AudioPlayer _player = AudioPlayer();
+  late AudioPlayer _player;
   List<MusicModel> _musicList = []; // 所有音乐
   List<MusicModel> _playMusicList = [];// 已经播放过的音乐
   List<MusicModel> _unPlayMusicList = []; // 待播放的歌曲列表
@@ -129,6 +129,7 @@ class PlayerMusicProvider with ChangeNotifier {
       _playIndex = playIndex;
       insertMusicRecordService(MusicRecordModel(musicId: _musicModel!.id,version: _version,device: _device,platform:_platform));
       LocalStorageUtils.setPlayMusic(_musicModel!);
+      _player ??= AudioPlayer();
       _player.play((HOST + _musicModel!.localPlayUrl) as Source);
       removeMusic();
       notifyListeners();

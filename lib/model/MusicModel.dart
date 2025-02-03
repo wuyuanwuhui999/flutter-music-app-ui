@@ -7,8 +7,8 @@ class MusicModel extends ClassMusicParamsModel{
   int albumId; // 专辑id
   String songName; // 歌曲名称
   String authorName; // 歌手名称
-  int authorId; // 歌手id
-  String albumName; // 专辑
+  int? authorId; // 歌手id
+  String? albumName; // 专辑
   String? version; // 版本
   String? language; // 语言
   String? publishDate; // 发布时间
@@ -24,8 +24,8 @@ class MusicModel extends ClassMusicParamsModel{
   String cover; // 歌曲图片
   String playUrl; // 网络播放地址
   String localPlayUrl; // 本地播放地址
-  String sourceName; // 歌曲来源
-  String sourceUrl; // 来源地址
+  String? sourceName; // 歌曲来源
+  String? sourceUrl; // 来源地址
   String? createTime; // 创建时间
   String? updateTime; // 更新时间
   String? label; // 标签
@@ -38,8 +38,8 @@ class MusicModel extends ClassMusicParamsModel{
         required this.albumId, // 专辑id
         required this.songName, // 歌曲名称
         required this.authorName, // 歌手名称
-        required this.authorId, // 歌手id
-        required this.albumName, // 专辑
+        this.authorId, // 歌手id
+        this.albumName, // 专辑
       this.version, // 版本
       this.language, // 语言
       this.publishDate, // 发布时间
@@ -55,8 +55,8 @@ class MusicModel extends ClassMusicParamsModel{
         required this.cover, // 歌曲图片
         required this.playUrl, // 网络播放地址
         required this.localPlayUrl, // 本地播放地址
-        required this.sourceName, // 歌曲来源
-        required this.sourceUrl, // 来源地址
+        this.sourceName, // 歌曲来源
+        this.sourceUrl, // 来源地址
         this.createTime, // 创建时间
         this.updateTime, // 更新时间
       this.label, // 标签

@@ -5,7 +5,6 @@ import 'dart:ui';
 import 'package:provider/provider.dart';
 import 'package:audioplayers/audioplayers.dart';
 import '../utils/LocalStorageUtils.dart';
-import '../main.dart';
 import '../service/serverMethod.dart';
 import '../router/index.dart';
 import '../theme/ThemeColors.dart';
@@ -21,13 +20,13 @@ import '../utils/HttpUtil.dart';
 import '../component/MusicAvaterComponent.dart';
 
 class MusicPlayerPage extends StatefulWidget {
-  MusicPlayerPage({super.key});
+  const MusicPlayerPage({super.key});
 
   @override
-  _MusicPlayerPageState createState() => _MusicPlayerPageState();
+  MusicPlayerPageState createState() => MusicPlayerPageState();
 }
 
-class _MusicPlayerPageState extends State<MusicPlayerPage>
+class MusicPlayerPageState extends State<MusicPlayerPage>
     with AutomaticKeepAliveClientMixin, TickerProviderStateMixin, RouteAware {
   @override
   bool get wantKeepAlive => true;
@@ -231,6 +230,7 @@ class _MusicPlayerPageState extends State<MusicPlayerPage>
     return Row(
       children: [
         Expanded(
+          flex: 3,
           child: Center(
               child: Text(provider.musicModel.authorName,
                   maxLines: 1, // 设置最大行数为1
@@ -238,19 +238,10 @@ class _MusicPlayerPageState extends State<MusicPlayerPage>
                   style: TextStyle(
                       decoration: TextDecoration.underline,
                       color: ThemeColors.colorWhite))),
-          flex: 1,
         ),
-        Expanded(
-          child: SizedBox(),
+        const Expanded(
           flex: 1,
-        ),
-        Expanded(
           child: SizedBox(),
-          flex: 1,
-        ),
-        Expanded(
-          child: SizedBox(),
-          flex: 1,
         ),
       ],
     );
@@ -281,6 +272,7 @@ class _MusicPlayerPageState extends State<MusicPlayerPage>
     return Row(
       children: [
         Expanded(
+          flex: 1,
           child: InkWell(
             child: Image.asset(
               provider.musicModel.isLike == 0
@@ -315,7 +307,6 @@ class _MusicPlayerPageState extends State<MusicPlayerPage>
               }
             },
           ),
-          flex: 1,
         ),
         Expanded(
           child: InkWell(
