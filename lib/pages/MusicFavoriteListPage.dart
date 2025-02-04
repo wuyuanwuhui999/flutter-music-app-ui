@@ -166,6 +166,7 @@ class _MusicFavoriteListPageState extends State<MusicFavoriteListPage>
           .then((value) {
         provider.setClassifyMusic(
             value.data.map((e) => MusicModel.fromJson(e)).toList(),
+            musicModel,
             index,
             classifyName);
       });

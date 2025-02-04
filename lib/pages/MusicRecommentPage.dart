@@ -120,7 +120,7 @@ class _MusicRecommentPageState extends State<MusicRecommentPage>
                 PlayerMusicProvider provider = Provider.of<PlayerMusicProvider>(context, listen: false);
                 if(provider.classifyName != '推荐歌曲'){
                   await getMusicListByClassifyIdService(1, 1, MAX_FAVORITE_NUMBER, 1).then((value){
-                    provider.setClassifyMusic(value.data.map((element) => MusicModel.fromJson(element)).toList(),index,'推荐歌曲');
+                    provider.setClassifyMusic(value.data.map((element) => MusicModel.fromJson(element)).toList(),musicModel,index,'推荐歌曲');
                   });
                 }else if(musicModel.id != provider.musicModel?.id){
                   provider.setPlayMusic(musicModel, true);

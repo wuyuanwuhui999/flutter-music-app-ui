@@ -169,7 +169,7 @@ class MusicPlayerPageState extends State<MusicPlayerPage>
               margin: EdgeInsets.all(ThemeSize.smallMargin),
               clipBehavior: Clip.hardEdge,
               decoration: BoxDecoration(
-                gradient: LinearGradient(
+                gradient: const LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   colors: [
@@ -227,24 +227,14 @@ class MusicPlayerPageState extends State<MusicPlayerPage>
   ///@description: 创建歌手
   /// @date: 2024-05-22 22:29
   Widget buildSinger() {
-    return Row(
-      children: [
-        Expanded(
-          flex: 3,
-          child: Center(
-              child: Text(provider.musicModel.authorName,
-                  maxLines: 1, // 设置最大行数为1
-                  overflow: TextOverflow.ellipsis, // 设置溢出模式为省略号
-                  style: TextStyle(
-                      decoration: TextDecoration.underline,
-                      color: ThemeColors.colorWhite))),
-        ),
-        const Expanded(
-          flex: 1,
-          child: SizedBox(),
-        ),
-      ],
-    );
+    return Center(
+        child: Text(provider.musicModel.authorName,
+            maxLines: 1, // 设置最大行数为1
+            overflow: TextOverflow.ellipsis, // 设置溢出模式为省略号
+            style: TextStyle(
+                decoration: TextDecoration.underline,
+                decorationColor: ThemeColors.colorWhite,
+                color: ThemeColors.colorWhite)));
   }
 
   ///@author: wuwenqiang
@@ -527,10 +517,7 @@ class MusicPlayerPageState extends State<MusicPlayerPage>
 
   /// 播放音乐
   void usePlay() async {
-    provider =
-        provider ?? Provider.of<PlayerMusicProvider>(context, listen: false);
-    final result =
-        await provider.player.play(HOST + provider.musicModel.localPlayUrl);
+    final result = await provider.player.play(UrlSource(HOST + provider.musicModel.localPlayUrl));
     if (result == 1) {
       provider.setPlaying(true);
       onDurationChangedListener?.cancel(); // 恢复监听音乐播放时长

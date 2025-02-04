@@ -107,6 +107,7 @@ class _MusicClassifyListPageState extends State<MusicClassifyListPage>
           .then((value) {
         provider.setClassifyMusic(
             value.data.map((e) => MusicModel.fromJson(e)).toList(),
+            musicModel,
             index,
             widget.musicClassifyModel.classifyName);
       });

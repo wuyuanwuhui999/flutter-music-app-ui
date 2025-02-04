@@ -357,6 +357,7 @@ class _MusicHomePageState extends State<MusicHomePage>
                                         .map((element) =>
                                             MusicModel.fromJson(element))
                                         .toList(),
+                                    musicItem,
                                     index,
                                     classifyModel.classifyName);
                               });
@@ -381,7 +382,6 @@ class _MusicHomePageState extends State<MusicHomePage>
                       )
                     ],
                   )));
-              index++;
             });
             return Column(children: musicWidgetList);
           }

@@ -17,7 +17,7 @@ class PlayerMusicProvider with ChangeNotifier {
   MusicModel? _musicModel; // 正在播放的音乐
   bool _playing = false;
   PlayerMusicProvider(this._musicModel);
-  late AudioPlayer _player;
+  final AudioPlayer _player = AudioPlayer();
   List<MusicModel> _musicList = []; // 所有音乐
   List<MusicModel> _playMusicList = [];// 已经播放过的音乐
   List<MusicModel> _unPlayMusicList = []; // 待播放的歌曲列表
@@ -75,8 +75,8 @@ class PlayerMusicProvider with ChangeNotifier {
   ///  @desc 设置分类音乐
   ///  @data 2024-07-18 23:55
   ///  @author wuwenqiang
-  void setClassifyMusic(List<MusicModel> musicList,int index,String classifyName){
-    _musicModel = musicList[index];
+  void setClassifyMusic(List<MusicModel> musicList,MusicModel musicItem,int index,String classifyName){
+    _musicModel = musicItem;
     _musicList = musicList;
     _classifyName = classifyName;
     _playMusicList = [];
@@ -129,7 +129,6 @@ class PlayerMusicProvider with ChangeNotifier {
       _playIndex = playIndex;
       insertMusicRecordService(MusicRecordModel(musicId: _musicModel!.id,version: _version,device: _device,platform:_platform));
       LocalStorageUtils.setPlayMusic(_musicModel!);
-      _player ??= AudioPlayer();
       _player.play((HOST + _musicModel!.localPlayUrl) as Source);
       removeMusic();
       notifyListeners();

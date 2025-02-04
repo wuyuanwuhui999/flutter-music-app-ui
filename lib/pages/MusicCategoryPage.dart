@@ -137,6 +137,7 @@ class _MusicCategoryPageState extends State<MusicCategoryPage>
           .then((value) {
         provider.setClassifyMusic(
             value.data.map((e) => MusicModel.fromJson(e)).toList(),
+            musicModel,
             index,
             MUSIC_CLASSIFY_NAME_STORAGE_KEY +
                 allClassifies[activeIndex].classifyName);

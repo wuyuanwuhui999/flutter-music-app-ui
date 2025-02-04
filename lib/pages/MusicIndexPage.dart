@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import '../router/index.dart';
 import 'package:provider/provider.dart';
 import 'package:audioplayers/audioplayers.dart';
-import '../main.dart';
 import '../theme/ThemeSize.dart';
 import '../theme/ThemeColors.dart';
 import './MusicHomePage.dart';
@@ -15,6 +14,7 @@ import '../provider/PlayerMusicProvider.dart';
 import '../model/MusicModel.dart';
 import '../utils/LocalStorageUtils.dart';
 import '../component/MusicAvaterComponent.dart';
+import '../common/constant.dart';
 
 class MusicIndexPage extends StatefulWidget {
   const MusicIndexPage({super.key});
@@ -102,7 +102,7 @@ class _MusicIndexPageState extends State<MusicIndexPage>
     _curveAnimation =
         Tween<double>(begin: 0, end: 1).animate(_repeatController);
     _repeatController.stop(canceled: false);
-    usePlayState();
+    // usePlayState();
     useStorage();
   }
 

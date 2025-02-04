@@ -7,6 +7,7 @@ import './router/index.dart';
 import './pages/LaunchPage.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized(); // 确保绑定被初始化
   runApp(
     MultiProvider(
       providers: [
@@ -32,6 +33,6 @@ class MyApp extends StatelessWidget {
         title: 'Flutter bottomNavigationBar',
         debugShowCheckedModeBanner:false,
         theme: ThemeData.light(),
-        home: LaunchPage());
+        home: const LaunchPage());
   }
 }
