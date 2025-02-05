@@ -282,7 +282,7 @@ class MusicPlayerPageState extends State<MusicPlayerPage>
                   if (res.data > 0) {
                     provider.setFavorite(1);
                   }
-                }).catchError(() {
+                }).catchError((err) {
                   loading = false;
                 });
               } else {
@@ -291,7 +291,7 @@ class MusicPlayerPageState extends State<MusicPlayerPage>
                   if (res.data > 0) {
                     provider.setFavorite(0);
                   }
-                }).catchError(() {
+                }).catchError((err) {
                   loading = false;
                 });
               }
@@ -299,6 +299,7 @@ class MusicPlayerPageState extends State<MusicPlayerPage>
           ),
         ),
         Expanded(
+          flex: 1,
           child: InkWell(
             child: Image.asset(
               "lib/assets/images/icon_share_music.png",
@@ -310,7 +311,6 @@ class MusicPlayerPageState extends State<MusicPlayerPage>
                   '/MusicSharePage?musicItem=${Uri.encodeComponent(MusicModel.stringify(provider.musicModel))}');
             },
           ),
-          flex: 1,
         ),
         Expanded(
           flex: 1,
@@ -597,7 +597,7 @@ class MusicPlayerPageState extends State<MusicPlayerPage>
         currentPlayIndex = 0;
       }
     }
-    this.useIsMusicFavorite();
+    useIsMusicFavorite();
     provider.setPlayIndex(currentPlayIndex);
   }
 }
