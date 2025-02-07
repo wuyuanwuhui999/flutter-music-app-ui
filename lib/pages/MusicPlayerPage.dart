@@ -44,9 +44,9 @@ class MusicPlayerPageState extends State<MusicPlayerPage>
     LoopModeEnum.REPEAT: "lib/assets/images/icon_music_loop.png",
     LoopModeEnum.RANDOM: "lib/assets/images/icon_music_random.png"
   };
-  late StreamSubscription onDurationChangedListener; // 监听总时长
-  late StreamSubscription onAudioPositionChangedListener; // 监听播放进度
-  late StreamSubscription onPlayerCompletionListener; // 监听播放完成
+  StreamSubscription? onDurationChangedListener; // 监听总时长
+  StreamSubscription? onPositionChangedListener; // 监听播放进度
+  StreamSubscription? onPlayerCompletionListener; // 监听播放完成
   late PlayerMusicProvider provider;
   bool loading = false;
   bool isFavorite = false; // 是否已经收藏
@@ -85,16 +85,16 @@ class MusicPlayerPageState extends State<MusicPlayerPage>
   @override
   void didPop() {
     super.didPop();
-    onDurationChangedListener.cancel(); // 取消监听音乐播放时长
-    onAudioPositionChangedListener.cancel(); // 取消监听音乐播放进度
+    onDurationChangedListener?.cancel(); // 取消监听音乐播放时长
+    onPositionChangedListener?.cancel(); // 取消监听音乐播放进度
   }
 
   @override
   void dispose() {
     super.dispose();
     // 移除监听订阅
-    onDurationChangedListener.cancel(); // 取消监听音乐播放时长
-    onAudioPositionChangedListener.cancel(); // 取消监听音乐播放进度
+    onDurationChangedListener?.cancel(); // 取消监听音乐播放时长
+    onPositionChangedListener?.cancel(); // 取消监听音乐播放进度
     // MyApp.routeObserver.unsubscribe(this);
     _repeatController.dispose();
   }
@@ -517,30 +517,27 @@ class MusicPlayerPageState extends State<MusicPlayerPage>
 
   /// 播放音乐
   void usePlay() async {
+    onDurationChangedListener?.cancel(); // 恢复监听音乐播放时长
+    onPositionChangedListener?.cancel(); // 恢复监听音乐播放进度
+    onPlayerCompletionListener?.cancel();
+    onDurationChangedListener = provider.player.onDurationChanged.listen((Duration  d) {
+      setState(() {
+        totalSec = d.inSeconds;
+      });
+    });
+    onPlayerCompletionListener = provider.player.onPlayerComplete.listen((event) {
+      useNextMusic(); // 切换下一首
+    });
+    onPositionChangedListener = provider.player.onPositionChanged.listen((Duration  d) {
+      // _lyricController.progress = Duration(seconds: event.inSeconds);
+      setState(() {
+        duration = d.inSeconds;
+        sliderValue = (duration / totalSec) * 100;
+      });
+    });
     final result = await provider.player.play(UrlSource(HOST + provider.musicModel.localPlayUrl));
-    if (result == 1) {
+    if (result == null) {
       provider.setPlaying(true);
-      onDurationChangedListener?.cancel(); // 恢复监听音乐播放时长
-      onAudioPositionChangedListener?.cancel(); // 恢复监听音乐播放进度
-      onDurationChangedListener =
-          provider.player.onDurationChanged.listen((event) {
-        setState(() {
-          totalSec = event.inSeconds;
-        });
-      });
-      onAudioPositionChangedListener =
-          provider.player.onAudioPositionChanged.listen((event) {
-        // _lyricController.progress = Duration(seconds: event.inSeconds);
-        setState(() {
-          duration = event.inSeconds;
-          sliderValue = (duration / totalSec) * 100;
-        });
-      });
-      onPlayerCompletionListener?.cancel();
-      onPlayerCompletionListener =
-          provider.player.onPlayerCompletion.listen((event) {
-        useNextMusic(); // 切换下一首
-      });
     }
   }
 

@@ -40,7 +40,7 @@ class Routes {
     }));
 
     router.define('/MusicPlayerPage', handler: Handler(handlerFunc: (BuildContext? context, params) {
-      return MusicPlayerPage();
+      return const MusicPlayerPage();
     }));
     router.define('/MusicLyricPage', handler: Handler(handlerFunc: (BuildContext? context, Map<String,List<String>> params) {
       return const MusicLyricPage();
