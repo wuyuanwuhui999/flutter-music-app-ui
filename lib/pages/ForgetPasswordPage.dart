@@ -41,13 +41,13 @@ class ForgetPasswordPage extends StatelessWidget {
                                 flex: 1,
                                 child: TextField(
                                     controller: emailController,
-                                    cursorColor: Colors.grey,
+                                    cursorColor: ThemeColors.grey,
                                     //设置光标
                                     decoration: InputDecoration(
                                       hintText: "请输入邮箱",
                                       hintStyle: TextStyle(
                                           fontSize: ThemeSize.smallFontSize,
-                                          color: Colors.grey),
+                                          color: ThemeColors.grey),
                                       contentPadding: EdgeInsets.only(
                                           left: ThemeSize.containerPadding),
                                       border: InputBorder.none,
@@ -70,7 +70,7 @@ class ForgetPasswordPage extends StatelessWidget {
                                   fontSize: ThemeSize.middleFontSize);
                             }else{
                               loading = true;
-                              getBackPasswordService(emailController.text)
+                              sendEmailVertifyCodeService(emailController.text)
                                   .then((res) async {
                                     loading = false;
                                 if (res.data as int > 0) {

@@ -214,7 +214,7 @@ class _MusicCategoryPageState extends State<MusicCategoryPage>
             decoration: BoxDecoration(
               border: Border.all(
                   color: allClassifies[activeIndex].id == allClassifies[i].id
-                      ? Colors.orange
+                      ? ThemeColors.orange
                       : ThemeColors.borderColor),
               borderRadius:
                   BorderRadius.all(Radius.circular(ThemeSize.middleRadius)),
@@ -224,7 +224,7 @@ class _MusicCategoryPageState extends State<MusicCategoryPage>
               allClassifies[i].classifyName,
               style: TextStyle(
                   color: allClassifies[activeIndex].id == allClassifies[i].id
-                      ? Colors.orange
+                      ? ThemeColors.orange
                       : Colors.black),
             )),
           )));

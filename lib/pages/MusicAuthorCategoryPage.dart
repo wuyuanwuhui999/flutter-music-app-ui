@@ -150,7 +150,7 @@ class _MusicAuthorCategoryPageState extends State<MusicAuthorCategoryPage>
               border: Border.all(
                   color: authorCategoryList[activeIndex].id ==
                           authorCategoryList[i].id
-                      ? Colors.orange
+                      ? ThemeColors.orange
                       : ThemeColors.borderColor),
               borderRadius:
                   BorderRadius.all(Radius.circular(ThemeSize.middleRadius)),
@@ -161,7 +161,7 @@ class _MusicAuthorCategoryPageState extends State<MusicAuthorCategoryPage>
               style: TextStyle(
                   color: authorCategoryList[activeIndex].categoryName ==
                           authorCategoryList[i].categoryName
-                      ? Colors.orange
+                      ? ThemeColors.orange
                       : Colors.black),
             )),
           )));

@@ -50,9 +50,9 @@ Future<ResponseModel<int>> updateUserData(Map map) async {
   }
 }
 
-Future<ResponseModel<int>>getBackPasswordService(String email) async {
+Future<ResponseModel<int>>sendEmailVertifyCodeService(String email) async {
   try {
-    Response response = await dio.post(servicePath['getBackPasswordByEmail']!,data:{'email':email});
+    Response response = await dio.post(servicePath['sendEmailVertifyCode']!,data:{'email':email});
     return ResponseModel.fromJson(response.data);
   } catch (e) {
     print('ERROR:======>${e}');
@@ -79,6 +79,19 @@ Future<ResponseModel<int>> updatePasswordService(String oldPassword,String newPa
     oldPassword = generateMd5(oldPassword);
     newPassword = generateMd5(newPassword);
     Response response = await dio.put(servicePath['updatePassword']!, data: {"oldPassword":oldPassword,"newPassword":newPassword});
+    return ResponseModel.fromJson(response.data);
+  } catch (e) {
+    print('ERROR:======>${e}');
+    return ResponseModel.fromJson(null);
+  }
+}
+
+///@author: wuwenqiang
+///@description: 更新密码
+/// @date: 2021-04-20 23:57
+Future<ResponseModel<dynamic>> loginByEmailService(String email,String code) async {
+  try {
+    Response response = await dio.post(servicePath['loginByEmail']!, data: {"email":email,"code":code});
     return ResponseModel.fromJson(response.data);
   } catch (e) {
     print('ERROR:======>${e}');
@@ -430,3 +443,4 @@ Future<ResponseModel<dynamic>> insertCommentService(Map commentMap) async {
     return ResponseModel.fromJson(null);
   }
 }
+

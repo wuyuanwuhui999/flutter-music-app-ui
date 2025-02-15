@@ -166,12 +166,12 @@ class _SearchMusicPageState extends State<MusicSearchPage> {
                           flex: 1,
                           child: TextField(
                               controller: keywordController,
-                              cursorColor: Colors.grey, //设置光标
+                              cursorColor: ThemeColors.grey, //设置光标
                               decoration: InputDecoration(
                                 hintText: widget.keyword,
                                 hintStyle: TextStyle(
                                     fontSize: ThemeSize.smallFontSize,
-                                    color: Colors.grey),
+                                    color: ThemeColors.grey),
                                 border: InputBorder.none,
                                 contentPadding: EdgeInsets.only(
                                     bottom: ThemeSize.smallMargin),
@@ -262,7 +262,7 @@ class _SearchMusicPageState extends State<MusicSearchPage> {
       ),
       child: Text(
         text,
-        style: TextStyle(color: Colors.grey),
+        style: TextStyle(color: ThemeColors.grey),
       ),
     );
   }

@@ -46,13 +46,13 @@ class UpdatePasswordPage extends StatelessWidget {
                                     child: TextField(
                                         obscureText: true,
                                         controller: oldPasswordController,
-                                        cursorColor: Colors.grey,
+                                        cursorColor: ThemeColors.grey,
                                         //设置光标
                                         decoration: InputDecoration(
                                           hintText: "请输入旧密码",
                                           hintStyle: TextStyle(
                                               fontSize: ThemeSize.smallFontSize,
-                                              color: Colors.grey),
+                                              color: ThemeColors.grey),
                                           contentPadding: EdgeInsets.only(
                                               left: ThemeSize.containerPadding),
                                           border: InputBorder.none,
@@ -72,13 +72,13 @@ class UpdatePasswordPage extends StatelessWidget {
                                     child: TextField(
                                         obscureText: true,
                                         controller: newPasswordController,
-                                        cursorColor: Colors.grey,
+                                        cursorColor: ThemeColors.grey,
                                         //设置光标
                                         decoration: InputDecoration(
                                           hintText: "请输入新密码",
                                           hintStyle: TextStyle(
                                               fontSize: ThemeSize.smallFontSize,
-                                              color: Colors.grey),
+                                              color: ThemeColors.grey),
                                           contentPadding: EdgeInsets.only(
                                               left: ThemeSize.containerPadding),
                                           border: InputBorder.none,
@@ -98,13 +98,13 @@ class UpdatePasswordPage extends StatelessWidget {
                                     child: TextField(
                                         obscureText: true,
                                         controller: comfirmController,
-                                        cursorColor: Colors.grey,
+                                        cursorColor: ThemeColors.grey,
                                         //设置光标
                                         decoration: InputDecoration(
                                           hintText: "请输入确认密码",
                                           hintStyle: TextStyle(
                                               fontSize: ThemeSize.smallFontSize,
-                                              color: Colors.grey),
+                                              color: ThemeColors.grey),
                                           contentPadding: EdgeInsets.only(
                                               left: ThemeSize.containerPadding),
                                           border: InputBorder.none,

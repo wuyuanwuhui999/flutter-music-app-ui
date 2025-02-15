@@ -170,7 +170,7 @@ class _MusicHomePageState extends State<MusicHomePage>
                                       left: ThemeSize.containerPadding),
                                   child: Text(
                                     keyword,
-                                    style: TextStyle(color: Colors.grey),
+                                    style: TextStyle(color: ThemeColors.grey),
                                   )));
                         })))
           ],

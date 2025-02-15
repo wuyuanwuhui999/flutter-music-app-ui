@@ -166,13 +166,13 @@ class _FavoriteComponentState extends State<FavoriteComponent> {
                     },
                     textAlign: TextAlign.start,
                     controller: favoriteNameController,
-                    cursorColor: Colors.grey,
+                    cursorColor: ThemeColors.grey,
                     //设置光标
                     decoration: InputDecoration(
                       hintText: "请输入收藏夹名称",
                       hintStyle: TextStyle(
                           fontSize: ThemeSize.smallFontSize,
-                          color: Colors.grey),
+                          color: ThemeColors.grey),
                       border: InputBorder.none,
                       contentPadding:
                           EdgeInsets.only(bottom: ThemeSize.smallMargin),

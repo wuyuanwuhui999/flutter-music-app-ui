@@ -157,11 +157,11 @@ class _MusicIndexPageState extends State<MusicIndexPage>
 
   Widget bottomAppBarItem(int index) {
     //设置默认未选中的状态
-    TextStyle style = const TextStyle(color: Colors.grey);
+    TextStyle style = TextStyle(color: ThemeColors.grey);
     String imgUrl = normalImgUrls[index];
     if (_currentIndex == index) {
       //选中的话
-      style = const TextStyle(color: Colors.orange);
+      style = TextStyle(color: ThemeColors.orange);
       imgUrl = selectedImgUrls[index];
     }
     //构造返回的Widget

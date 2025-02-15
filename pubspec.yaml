@@ -159,6 +159,8 @@ flutter:
     - lib/assets/images/icon_share_music.png
     - lib/assets/images/icon_permission.png
     - lib/assets/images/default_cover.jpg
+    - lib/assets/images/icon_code.png
+    - lib/assets/images/icon_send.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

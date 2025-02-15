@@ -139,7 +139,7 @@ class _MusicCirclePageState extends State<MusicCirclePage>
                           height: ThemeSize.middleAvater,
                           child: TextField(
                               controller: inputController,
-                              cursorColor: Colors.grey, //设置光标
+                              cursorColor: ThemeColors.grey, //设置光标
                               decoration: InputDecoration(
                                 filled: true,
                                 fillColor: ThemeColors.colorBg,
@@ -148,7 +148,7 @@ class _MusicCirclePageState extends State<MusicCirclePage>
                                     : (firstCommentModel != null ? "回复${firstCommentModel?.username}" : "评论"),
                                 hintStyle: TextStyle(
                                     fontSize: ThemeSize.smallFontSize,
-                                    color: Colors.grey),
+                                    color: ThemeColors.grey),
                                 border: OutlineInputBorder(
                                   borderSide: BorderSide.none,
                                   borderRadius: BorderRadius.circular(
