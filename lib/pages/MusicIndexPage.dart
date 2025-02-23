@@ -170,8 +170,7 @@ class _MusicIndexPageState extends State<MusicIndexPage>
       child: Column(
         children: <Widget>[
           Image.asset(imgUrl,
-              width: ThemeSize.middleIcon,
-              height: ThemeSize.middleIcon),
+              width: ThemeSize.middleIcon, height: ThemeSize.middleIcon),
           SizedBox(height: ThemeSize.smallMargin),
           Text(
             titles[index],
@@ -197,37 +196,40 @@ class _MusicIndexPageState extends State<MusicIndexPage>
         backgroundColor: ThemeColors.colorBg,
         body: SafeArea(
             top: true,
-            child: PageView.builder(
-                controller: _pageController,
-                physics: const NeverScrollableScrollPhysics(),
-                onPageChanged: _pageChanged,
-                itemCount: 4,
-                itemBuilder: (context, index) {
-                  return _getPage();
-                })),
+            child: Padding(
+              padding: EdgeInsets.only(top: ThemeSize.containerPadding),
+              child: PageView.builder(
+                  controller: _pageController,
+                  physics: const NeverScrollableScrollPhysics(),
+                  onPageChanged: _pageChanged,
+                  itemCount: 4,
+                  itemBuilder: (context, index) {
+                    return _getPage();
+                  }),
+            )),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         //悬浮按钮
         floatingActionButton: SizedBox(
-            height: ThemeSize.minPlayIcon,
-            width: ThemeSize.minPlayIcon,
-            child:  musicModel != null
-                ? InkWell(
-                child: RotationTransition(
-                  turns: _curveAnimation,
-                  child: MusicAvaterComponent(
-                      type: 'music',
-                      name: '',
-                      avater: musicModel.cover,
-                      size: ThemeSize.minPlayIcon),
-                ),
-                onTap: () {
-                  Routes.router.navigateTo(context, '/MusicPlayerPage');
-                })
-                : Icon(Icons.music_note,
-                color: ThemeColors.colorBg, size: ThemeSize.bigIcon),
-            ),
+          height: ThemeSize.minPlayIcon,
+          width: ThemeSize.minPlayIcon,
+          child: musicModel != null
+              ? InkWell(
+                  child: RotationTransition(
+                    turns: _curveAnimation,
+                    child: MusicAvaterComponent(
+                        type: 'music',
+                        name: '',
+                        avater: musicModel.cover,
+                        size: ThemeSize.minPlayIcon),
+                  ),
+                  onTap: () {
+                    Routes.router.navigateTo(context, '/MusicPlayerPage');
+                  })
+              : Icon(Icons.music_note,
+                  color: ThemeColors.colorBg, size: ThemeSize.bigIcon),
+        ),
         bottomNavigationBar: BottomAppBar(
-            height:ThemeSize.bottomBarHeight,
+            height: ThemeSize.bottomBarHeight,
             color: ThemeColors.colorWhite,
             shape: const CircularNotchedRectangle(),
             child: Row(

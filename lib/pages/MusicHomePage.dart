@@ -21,10 +21,10 @@ class MusicHomePage extends StatefulWidget {
   const MusicHomePage({super.key});
 
   @override
-  _MusicHomePageState createState() => _MusicHomePageState();
+  MusicHomePageState createState() => MusicHomePageState();
 }
 
-class _MusicHomePageState extends State<MusicHomePage>
+class MusicHomePageState extends State<MusicHomePage>
     with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
