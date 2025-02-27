@@ -29,7 +29,7 @@ class _CommentComponentState extends State<CommentComponent>{
   @override
   void initState() {
     super.initState();
-    getTopCommentListService(widget.relationId, CommentEnum.MOVIE, 1,20).then((res) {
+    getTopCommentListService(widget.relationId, CommentEnum.MUSIC, 1,20).then((res) {
       setState(() {
         for (var element in res.data) {
           commentList.add(CommentModel.fromJson(element));

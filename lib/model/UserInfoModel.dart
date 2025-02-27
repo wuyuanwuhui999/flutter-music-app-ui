@@ -1,4 +1,5 @@
 class UserInfoModel{
+  String? id;
   String? avater;
   String? birthday;
   String createDate;
@@ -7,13 +8,14 @@ class UserInfoModel{
   int? sex;
   String? telephone;
   String updateDate;
-  String userId;
+  String userAccount;
   String username;
   String? sign;
   String? region;
   int? disabled;
   int? permission;
   UserInfoModel({
+    this.id,
     this.avater,
     this.birthday,
     required this.createDate,
@@ -22,7 +24,7 @@ class UserInfoModel{
     this.sex,
     this.telephone,
     required this.updateDate,
-    required this.userId,
+    required this.userAccount,
     required this.username,
     this.sign,
     this.region,
@@ -40,7 +42,7 @@ class UserInfoModel{
       sex: json["sex"],
       telephone: json["telephone"],
       updateDate: json["updateDate"],
-      userId: json["userId"],
+      userAccount: json["userAccount"],
       username: json["username"],
       sign: json["sign"],
       region: json["region"],
@@ -59,7 +61,7 @@ class UserInfoModel{
       "sex": sex,
       "telephone": telephone,
       "updateDate": updateDate,
-      "userId": userId,
+      "userAccount": userAccount,
       "username": username,
       "sign": sign,
       "region": region
