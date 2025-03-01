@@ -27,9 +27,9 @@ Future<ResponseModel<dynamic>> getUserDataService() async {
 
 //登录
 Future<ResponseModel<dynamic>> loginService(
-    String userId, String password) async {
+    String userAccount, String password) async {
   try {
-    Response response = await dio.post(servicePath['login']!, data: {'userId':userId,'password':generateMd5(password)});
+    Response response = await dio.post(servicePath['login']!, data: {'userAccount':userAccount,'password':generateMd5(password)});
     return ResponseModel.fromJson(response.data);
   } catch (e) {
     print('ERROR:======>${e}');

@@ -25,10 +25,10 @@ class LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     UserInfoModel? userInfo = Provider.of<UserInfoProvider>(context).userInfo;
-    String userId = userInfo?.userAccount ?? "吴时吴刻";
+    String userAccount = userInfo?.userAccount ?? "吴时吴刻";
     String email = "";
     String code = "";
-    TextEditingController userController = TextEditingController(text: userId);
+    TextEditingController userController = TextEditingController(text: userAccount);
     TextEditingController pwdController = TextEditingController(text: "123456");
     TextEditingController emailController = TextEditingController(text: "");
     TextEditingController codeController = TextEditingController(text: "");
@@ -121,7 +121,7 @@ class LoginPageState extends State<LoginPage> {
                             child: TextField(
                                 onChanged: (value) {
                                   if (value != "") {
-                                    userId = value;
+                                    userAccount = value;
                                   } else {
                                     Fluttertoast.showToast(
                                         msg: "请输入用户名",
@@ -319,7 +319,7 @@ class LoginPageState extends State<LoginPage> {
                     InkWell(
                       onTap: () async {
                         if (tabIndex == 0) {
-                          loginService(userId, password).then((res) async {
+                          loginService(userAccount, password).then((res) async {
                             if (res.data != null) {
                               await LocalStorageUtils.setToken(res.token!);
                               await Fluttertoast.showToast(

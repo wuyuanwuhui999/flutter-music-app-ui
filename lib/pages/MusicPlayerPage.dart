@@ -18,6 +18,7 @@ import '../component/CommentComponent.dart';
 import '../component/FavoriteComponent.dart';
 import '../utils/HttpUtil.dart';
 import '../component/MusicAvaterComponent.dart';
+import 'package:flutter_lyric/lyrics_reader.dart';
 
 class MusicPlayerPage extends StatefulWidget {
   const MusicPlayerPage({super.key});
@@ -50,6 +51,9 @@ class MusicPlayerPageState extends State<MusicPlayerPage>
   late PlayerMusicProvider provider;
   bool loading = false;
   bool isFavorite = false; // 是否已经收藏
+  int playProgress = 0;
+  var lyricUI = UINetease();
+  bool playing = false;
 
   @override
   void initState() {
@@ -193,34 +197,62 @@ class MusicPlayerPageState extends State<MusicPlayerPage>
   }
 
   Widget buildLyric() {
-    return Container(
-      width: double.infinity,
-      height: double.infinity,
-      child: Center(
-          child: provider.musicModel.lyrics != null &&
-                  provider.musicModel.lyrics != ''
-              ? InkWell(
-                  child:SizedBox(),
-                  // LyricWidget(
-                  //   lyricStyle: TextStyle(
-                  //       color: ThemeColors.opcityWhiteColor,
-                  //       fontSize: ThemeSize.middleFontSize),
-                  //   currLyricStyle: TextStyle(
-                  //       color: ThemeColors.colorWhite,
-                  //       fontSize: ThemeSize.middleFontSize),
-                  //   size: Size(double.infinity, double.infinity),
-                  //   lyrics: LyricUtil.formatLyric(provider.musicModel.lyrics),
-                  //   controller: _lyricController,
-                  // ),
-                  onTap: () {
-                    Routes.router.navigateTo(context, '/MusicLyricPage');
-                  },
-                )
-              : Text('暂无歌词',
-                  style: TextStyle(
-                      color: ThemeColors.opcityWhiteColor,
-                      fontSize: ThemeSize.middleFontSize))),
-    );
+    return Center(
+        child: provider.musicModel.lyrics != null &&
+            provider.musicModel.lyrics != ''
+            ? InkWell(
+          child:
+          LyricsReader(
+            padding: EdgeInsets.symmetric(horizontal: ThemeSize.containerPadding),
+            model: LyricsModelBuilder.create()
+                .bindLyricToMain(provider.musicModel.lyrics)
+                // .bindLyricToExt(transLyric)
+                .getModel(),
+            position: playProgress,
+            lyricUi: lyricUI,
+            playing: playing,
+            size: Size(double.infinity, MediaQuery.of(context).size.height / 2),
+            emptyBuilder: () => Center(
+              child: Text(
+                "No lyrics",
+                style: lyricUI.getOtherMainTextStyle(),
+              ),
+            ),
+            selectLineBuilder: (progress, confirm) {
+              return Row(
+                children: [
+                  IconButton(
+                      onPressed: () {
+                        LyricsLog.logD("点击事件");
+                        confirm.call();
+                        setState(() {
+                          player?.seek(Duration(milliseconds: progress));
+                        });
+                      },
+                      icon: const Icon(Icons.play_arrow, color: Colors.green)),
+                  Expanded(
+                    child: Container(
+                      decoration: BoxDecoration(color: Colors.green),
+                      height: 1,
+                      width: double.infinity,
+                    ),
+                  ),
+                  Text(
+                    progress.toString(),
+                    style: const TextStyle(color: Colors.green),
+                  )
+                ],
+              );
+            },
+          ),
+          onTap: () {
+            Routes.router.navigateTo(context, '/MusicLyricPage');
+          },
+        )
+            : Text('暂无歌词',
+            style: TextStyle(
+                color: ThemeColors.opcityWhiteColor,
+                fontSize: ThemeSize.middleFontSize)));
   }
 
   ///@author: wuwenqiang
@@ -249,7 +281,7 @@ class MusicPlayerPageState extends State<MusicPlayerPage>
         isScrollControlled: true,
         context: context,
         builder: (BuildContext context) {
-          return Container(
+          return SizedBox(
               height: MediaQuery.of(context).size.height * 0.7,
               child: component);
         });
@@ -529,8 +561,8 @@ class MusicPlayerPageState extends State<MusicPlayerPage>
       useNextMusic(); // 切换下一首
     });
     onPositionChangedListener = provider.player.onPositionChanged.listen((Duration  d) {
-      // _lyricController.progress = Duration(seconds: event.inSeconds);
       setState(() {
+        playProgress = d.inMilliseconds;
         duration = d.inSeconds;
         sliderValue = (duration / totalSec) * 100;
       });
