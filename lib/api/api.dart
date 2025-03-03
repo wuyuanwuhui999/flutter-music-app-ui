@@ -14,7 +14,8 @@ const servicePath = {
   'getMusicListByClassifyId': '/service/myMusic/getMusicListByClassifyId',//获取推荐音乐列表
   'getMusicAuthorListByCategoryId': '/service/myMusic/getMusicAuthorListByCategoryId',// 获取歌手列表
   'getCircleListByType': '/service/circle/getCircleListByType',// 获取歌手列表
-  'getMyLikeMusicAuthor': '/service/myMusic-getway/getMyLikeMusicAuthor',// 获取我关注的歌手
+  'getFavoriteAuthor': '/service/myMusic-getway/getFavoriteAuthor',// 获取我关注的歌手
+  'deleteFavoriteAuthor': '/service/myMusic-getway/deleteFavoriteAuthor/',// 删除我关注的歌手
   'getMusicRecord': '/service/myMusic-getway/getMusicRecord',// 获取播放记录
   'insertMusicRecord': '/service/myMusic-getway/insertMusicRecord',// 记录播放日志
   'insertMusicLike': '/service/myMusic-getway/insertMusicLike/',// 插入收藏
@@ -30,8 +31,10 @@ const servicePath = {
   'getCommentCount': '/service/social/getCommentCount',// 获取评论总数
   'isMusicFavorite':'/service/myMusic-getway/isMusicFavorite/', // 查询音乐是否收藏
   'getFavoriteDirectory':'/service/myMusic-getway/getFavoriteDirectory',// 查询收藏夹
-  'insertMusicFavorite':'/service/myMusic-getway/insertMusicFavorite/',// 查询收藏夹
+  'updateFavoriteDirectory':'/service/myMusic-getway/deleteFavoriteDirectory/',// 删除收藏夹
+  'deleteFavoriteDirectory':'/service/myMusic-getway/deleteFavoriteDirectory/',// 删除收藏夹
   'insertFavoriteDirectory':'/service/myMusic-getway/insertFavoriteDirectory',// 创建收藏夹
+  'insertMusicFavorite':'/service/myMusic-getway/insertMusicFavorite/',// 把音乐插入到收藏夹
   'insertCircle':'/service/circle-getway/insertCircle',// 插入一条朋友圈说说
   'getMusicListByFavoriteId':'/service/myMusic-getway/getMusicListByFavoriteId'// 按照收藏夹的id查询音乐列表
 };

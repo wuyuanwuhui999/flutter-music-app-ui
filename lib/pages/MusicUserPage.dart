@@ -41,7 +41,7 @@ class _MusicUserPageState extends State<MusicUserPage>
         Tween<double>(begin: 0, end: 1).animate(_repeatController);
 
     getMusicRecordService(1, 10).then((value) {
-      this.setState(() {
+      setState(() {
         playRecordList = value.data;
       });
     });
@@ -296,7 +296,7 @@ class _MusicUserPageState extends State<MusicUserPage>
               ],
             ),
             FutureBuilder(
-                future: getMyLikeMusicAuthorService(1, 3),
+                future: getFavoriteAuthorService(1, 3),
                 builder: (context, snapshot) {
                   if (snapshot.data == null) {
                     return Container();

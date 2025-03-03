@@ -30,6 +30,7 @@ Future<ResponseModel<dynamic>> loginService(
     String userAccount, String password) async {
   try {
     Response response = await dio.post(servicePath['login']!, data: {'userAccount':userAccount,'password':generateMd5(password)});
+    HttpUtil.getInstance().setToken(response.data['token']);
     return ResponseModel.fromJson(response.data);
   } catch (e) {
     print('ERROR:======>${e}');
@@ -92,6 +93,7 @@ Future<ResponseModel<int>> updatePasswordService(String oldPassword,String newPa
 Future<ResponseModel<dynamic>> loginByEmailService(String email,String code) async {
   try {
     Response response = await dio.post(servicePath['loginByEmail']!, data: {"email":email,"code":code});
+    HttpUtil.getInstance().setToken(response.data['token']);
     return ResponseModel.fromJson(response.data);
   } catch (e) {
     print('ERROR:======>${e}');
@@ -189,11 +191,24 @@ Future<ResponseModel<List>> getCircleListByTypeService(
 ///@author: wuwenqiang
 ///@description: 获取我关注的歌手
 /// @date: 2023-07-09 11:29
-Future<ResponseModel<List>> getMyLikeMusicAuthorService(
+Future<ResponseModel<List>> getFavoriteAuthorService(
     int pageNum, int pageSize) async {
   try {
     Response response = await dio.get(
-        "${servicePath['getMyLikeMusicAuthor']}?pageNum=${pageNum}&pageSize=${pageSize}");
+        "${servicePath['getFavoriteAuthor']}?pageNum=${pageNum}&pageSize=${pageSize}");
+    return ResponseModel.fromJson(response.data);
+  } catch (e) {
+    print('ERROR:======>${e}');
+    return ResponseModel.fromJson(null);
+  }
+}
+
+///@author: wuwenqiang
+///@description: 删除我关注的歌手
+/// @date: 2025-03-04 00:07
+Future<ResponseModel<List>> deleteFavoriteAuthorService(int authorId) async {
+  try {
+    Response response = await dio.delete("${servicePath['deleteFavoriteAuthor']}$authorId");
     return ResponseModel.fromJson(response.data);
   } catch (e) {
     print('ERROR:======>${e}');
@@ -343,6 +358,32 @@ Future<ResponseModel<List>> getFavoriteDirectoryService(int musicId) async {
   }
 }
 
+///@description: 创建收藏夹
+///@date: 2024-06-29 11:26
+///@author wuwenqiang
+Future<ResponseModel<Map>> insertFavoriteDirectoryService (FavoriteDirectoryModel favoriteDirectory)async {
+  try {
+    Response response = await dio.post(servicePath['insertFavoriteDirectory']!,data: favoriteDirectory.toMap());
+    return ResponseModel.fromJson(response.data);
+  } catch (e) {
+    print('ERROR:======>${e}');
+    return ResponseModel.fromJson(null);
+  }
+}
+
+///@description: 删除音乐收藏
+///@date: 2025-03-04 00:04
+///@author wuwenqiang
+Future<ResponseModel<Map>> deleteFavoriteDirectoryService (int favoriteId)async {
+  try {
+    Response response = await dio.delete("${servicePath['deleteFavoriteDirectory']}/$favoriteId");
+    return ResponseModel.fromJson(response.data);
+  } catch (e) {
+    print('ERROR:======>${e}');
+    return ResponseModel.fromJson(null);
+  }
+}
+
 ///@description: 查询音乐是否已经收藏
 ///@date: 2024-06-25 22:02
 ///@author wuwenqiang
@@ -363,19 +404,6 @@ Future<ResponseModel<int>> isMusicFavoriteService (int musicId) async {
 Future<ResponseModel<int>> insertMusicFavoriteService (int musicId,List<int>favoriteList) async {
   try {
     Response response = await dio.post(servicePath['insertMusicFavorite']! + musicId.toString(),data: favoriteList.map((item) => {"favoriteId":item}).toList());
-    return ResponseModel.fromJson(response.data);
-  } catch (e) {
-    print('ERROR:======>${e}');
-    return ResponseModel.fromJson(null);
-  }
-}
-
-///@description: 添加音乐收藏
-///@date: 2024-06-29 11:26
-///@author wuwenqiang
-Future<ResponseModel<Map>> insertFavoriteDirectoryService (FavoriteDirectoryModel favoriteDirectory)async {
-  try {
-    Response response = await dio.post(servicePath['insertFavoriteDirectory']!,data: favoriteDirectory.toMap());
     return ResponseModel.fromJson(response.data);
   } catch (e) {
     print('ERROR:======>${e}');

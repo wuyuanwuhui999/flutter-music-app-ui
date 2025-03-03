@@ -336,6 +336,7 @@ class LoginPageState extends State<LoginPage> {
                               Routes.router.navigateTo(
                                   context, '/MusicIndexPage',
                                   replace: true);
+
                             } else {
                               Fluttertoast.showToast(
                                   msg: "登录失败，账号或密码错误",
