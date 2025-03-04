@@ -18,6 +18,7 @@ const servicePath = {
   'deleteFavoriteAuthor': '/service/myMusic-getway/deleteFavoriteAuthor/',// 删除我关注的歌手
   'getMusicRecord': '/service/myMusic-getway/getMusicRecord',// 获取播放记录
   'insertMusicRecord': '/service/myMusic-getway/insertMusicRecord',// 记录播放日志
+  'getMusicLike': '/service/myMusic-getway/getMusicLike',// 查询喜欢的歌曲
   'insertMusicLike': '/service/myMusic-getway/insertMusicLike/',// 插入收藏
   'deleteMusicLike': '/service/myMusic-getway/deleteMusicLike/',// 删除收藏
   'queryMusicLike': '/service/myMusic-getway/queryMusicLike',// 查询收藏

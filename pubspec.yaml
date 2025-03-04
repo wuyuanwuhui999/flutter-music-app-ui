@@ -147,7 +147,7 @@ flutter:
     - lib/assets/images/icon_music_play_white.png
     - lib/assets/images/icon_music_playing.png
     - lib/assets/images/icon_music_playing_grey.png
-    - lib/assets/images/icon_music_refresh.png
+    - lib/assets/images/icon_refresh.png
     - lib/assets/images/default_avater.png
     - lib/assets/images/icon_comment_white.png
     - lib/assets/images/icon_like_white.png

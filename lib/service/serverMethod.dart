@@ -217,6 +217,21 @@ Future<ResponseModel<List>> deleteFavoriteAuthorService(int authorId) async {
 }
 
 ///@author: wuwenqiang
+///@description: 删除我关注的歌手
+/// @date: 2025-03-04 00:07
+Future<ResponseModel<List>> getMusicLikeService(
+    int pageNum, int pageSize) async {
+  try {
+    Response response = await dio.get(
+        "${servicePath['getMusicLike']}?pageNum=${pageNum}&pageSize=${pageSize}");
+    return ResponseModel.fromJson(response.data);
+  } catch (e) {
+    print('ERROR:======>${e}');
+    return ResponseModel.fromJson(null);
+  }
+}
+
+///@author: wuwenqiang
 ///@description: 获取我关注的歌手
 /// @date: 2023-07-09 11:29
 Future<ResponseModel<List>> getMusicRecordService(
