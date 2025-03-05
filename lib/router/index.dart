@@ -21,7 +21,7 @@ import '../pages/ForgetPasswordPage.dart';
 import '../pages/ResetPasswordPage.dart';
 import '../pages/UpdatePasswordPage.dart';
 import '../pages/UserPage.dart';
-
+import '../pages/RegisterPage.dart';
 class Routes {
   static final FluroRouter router = FluroRouter();
   static void initRoutes() {
@@ -78,5 +78,9 @@ class Routes {
     router.define('/UserPage', handler: Handler(handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
       return const UserPage();
     }));
+    router.define('/RegisterPage', handler: Handler(handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
+      return const RegisterPage();
+    }));
+
   }
 }

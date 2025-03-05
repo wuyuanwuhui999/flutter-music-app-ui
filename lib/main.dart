@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
 import './provider/UserInfoProvider.dart';
 import './provider/TokenProvider.dart';
@@ -33,6 +34,7 @@ class MyApp extends StatelessWidget {
         title: 'Flutter bottomNavigationBar',
         debugShowCheckedModeBanner:false,
         theme: ThemeData.light(),
+        builder: EasyLoading.init(),
         home: const LaunchPage());
   }
 }

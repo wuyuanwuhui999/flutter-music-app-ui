@@ -324,31 +324,6 @@ class UserPageState extends State<UserPage> {
                                       ),
                                     ),
                                   ),
-                                  // Container(
-                                  //   decoration: ThemeStyle.bottomDecoration,
-                                  //   padding: ThemeStyle.columnPadding,
-                                  //   child: InkWell(
-                                  //       onTap: useDatePicker,
-                                  //       child: Row(
-                                  //         mainAxisAlignment:
-                                  //             MainAxisAlignment.center,
-                                  //         children: <Widget>[
-                                  //           Expanded(
-                                  //             child: Text("出生年月日"),
-                                  //             flex: 1,
-                                  //           ),
-                                  //           Text(provider.userInfo.birthday ??
-                                  //               ""),
-                                  //           SizedBox(
-                                  //               width: ThemeSize.smallMargin),
-                                  //           Image.asset(
-                                  //               "lib/assets/images/icon_arrow.png",
-                                  //               height: ThemeSize.miniIcon,
-                                  //               width: ThemeSize.miniIcon,
-                                  //               fit: BoxFit.cover),
-                                  //         ],
-                                  //       )),
-                                  // ),
                                   Container(
                                       decoration: ThemeStyle.bottomDecoration,
                                       padding: ThemeStyle.columnPadding,

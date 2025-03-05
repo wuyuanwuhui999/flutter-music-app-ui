@@ -1,11 +1,15 @@
 import 'dart:async';
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_music_app/theme/ThemeColors.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import '../model/CircleModel.dart';
 import '../common/config.dart';
 import '../model/CircleLikeModel.dart';
 import '../model/FavoriteDirectoryModel.dart';
 import '../model/MusicRecordModel.dart';
 import '../api/api.dart';
+import '../theme/ThemeSize.dart';
 import '../utils/HttpUtil.dart';
 import '../utils/LocalStorageUtils.dart';
 import '../utils/crypto.dart';
@@ -34,6 +38,13 @@ Future<ResponseModel<dynamic>> loginService(
     return ResponseModel.fromJson(response.data);
   } catch (e) {
     print('ERROR:======>${e}');
+    // Fluttertoast.showToast(
+    //     msg: "登录失败，账号或密码错误",
+    //     toastLength: Toast.LENGTH_SHORT,
+    //     gravity: ToastGravity.BOTTOM,
+    //     backgroundColor: ThemeColors.disableColor,
+    //     textColor: Colors.white,
+    //     fontSize: ThemeSize.middleFontSize);
     return ResponseModel.fromJson(null);
   }
 }

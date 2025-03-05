@@ -20,25 +20,11 @@ class MusicTitleComponent extends StatefulWidget {
 class MusicTitleComponentState extends State<MusicTitleComponent>
     with TickerProviderStateMixin {
   late bool isFold;
-  late AnimationController _controller;
-  late Animation<double> _animation;
 
   @override
   void initState() {
     super.initState();
     isFold = widget.isFold!;
-    _controller = AnimationController(
-      duration: const Duration(milliseconds: 300),
-      vsync: this,
-    );
-    _animation =  Tween<double>(begin: 0, end: 90 * (pi / 180)).animate(_controller);
-  }
-
-  ///@author: wuwenqiang
-  ///@description: 展开或者折叠
-  ///@date: 2025-03-04 22:52
-  void useFold() {
-
   }
 
   @override
@@ -47,26 +33,21 @@ class MusicTitleComponentState extends State<MusicTitleComponent>
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
 
-        InkWell(
-          onTap: () {
-            widget.onFold?.call(isFold);
-          },
-            child: RotationTransition(
-          turns: _animation,
+        RotatedBox(
+          quarterTurns: isFold ? 1 : 0,
           child: InkWell(
               onTap: () {
-                if (_controller.status == AnimationStatus.completed) {
-                  _controller.reverse();
-                  isFold = true;
-                } else {
-                  _controller.forward();
-                  isFold = false;
-                }
+                setState(() {
+                  isFold = !isFold;
+                });
+                widget.onFold?.call(isFold);
               },
               child: Image.asset("lib/assets/images/icon_down.png",
+                  color: ThemeColors.disableColor,
+                  colorBlendMode: BlendMode.srcIn,
                   width: ThemeSize.smallIcon, height: ThemeSize.smallIcon)
           ),
-        ))
+        )
         ,
         SizedBox(width: ThemeSize.smallMargin),
         Text(widget.title),

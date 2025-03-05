@@ -25,11 +25,11 @@ class LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     UserInfoModel? userInfo = Provider.of<UserInfoProvider>(context).userInfo;
-    String userAccount = userInfo?.userAccount ?? "吴时吴刻";
+    String userAccount = userInfo?.userAccount ?? "";
     String email = "";
     String code = "";
     TextEditingController userController = TextEditingController(text: userAccount);
-    TextEditingController pwdController = TextEditingController(text: "123456");
+    TextEditingController pwdController = TextEditingController(text: "");
     TextEditingController emailController = TextEditingController(text: "");
     TextEditingController codeController = TextEditingController(text: "");
 
@@ -164,7 +164,7 @@ class LoginPageState extends State<LoginPage> {
                                     password = value;
                                   } else {
                                     Fluttertoast.showToast(
-                                        msg: "请输入用户名",
+                                        msg: "请输入密码",
                                         toastLength: Toast.LENGTH_SHORT,
                                         gravity: ToastGravity.CENTER,
                                         timeInSecForIosWeb: 1,
@@ -346,6 +346,14 @@ class LoginPageState extends State<LoginPage> {
                                   textColor: Colors.white,
                                   fontSize: ThemeSize.middleFontSize);
                             }
+                          }).catchError((){
+                            Fluttertoast.showToast(
+                                msg: "登录失败，账号或密码错误",
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.BOTTOM,
+                                backgroundColor: Colors.red,
+                                textColor: Colors.white,
+                                fontSize: ThemeSize.middleFontSize);
                           });
                         } else if (email.trim() == "") {
                           Fluttertoast.showToast(
