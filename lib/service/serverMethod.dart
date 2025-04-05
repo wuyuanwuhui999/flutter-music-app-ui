@@ -38,13 +38,7 @@ Future<ResponseModel<dynamic>> loginService(
     return ResponseModel.fromJson(response.data);
   } catch (e) {
     print('ERROR:======>${e}');
-    // Fluttertoast.showToast(
-    //     msg: "登录失败，账号或密码错误",
-    //     toastLength: Toast.LENGTH_SHORT,
-    //     gravity: ToastGravity.BOTTOM,
-    //     backgroundColor: ThemeColors.disableColor,
-    //     textColor: Colors.white,
-    //     fontSize: ThemeSize.middleFontSize);
+    throw Error();
     return ResponseModel.fromJson(null);
   }
 }
@@ -62,6 +56,9 @@ Future<ResponseModel<int>> updateUserData(Map map) async {
   }
 }
 
+///@author: wuwenqiang
+///@description: 更新用户信息
+/// @date: 2025-04-05 19:59
 Future<ResponseModel<int>>sendEmailVertifyCodeService(String email) async {
   try {
     Response response = await dio.post(servicePath['sendEmailVertifyCode']!,data:{'email':email});

@@ -260,8 +260,8 @@ class LoginPageState extends State<LoginPage> {
                                             .disableColor,
                                         fontSize: ThemeSize
                                             .middleFontSize);
+                                    EasyLoading.dismiss(animation: true);
                                   });
-                                  await EasyLoading.dismiss(animation: true);
                                 },
                                 child: Image.asset(
                                     "lib/assets/images/icon_send.png",
@@ -383,6 +383,7 @@ class LoginPageState extends State<LoginPage> {
                                   backgroundColor: Colors.green,
                                   textColor: Colors.white,
                                   fontSize: ThemeSize.middleFontSize);
+                              EasyLoading.dismiss();
                               Provider.of<UserInfoProvider>(context,
                                   listen: false)
                                   .setUserInfo(

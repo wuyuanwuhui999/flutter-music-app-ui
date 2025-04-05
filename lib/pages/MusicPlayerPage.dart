@@ -58,7 +58,6 @@ class MusicPlayerPageState extends State<MusicPlayerPage>
   @override
   void initState() {
     provider = Provider.of<PlayerMusicProvider>(context, listen: false);
-    // _lyricController = LyricController(vsync: this);
     usePlay();
     _repeatController = AnimationController(
       duration: const Duration(seconds: 10),
@@ -79,8 +78,6 @@ class MusicPlayerPageState extends State<MusicPlayerPage>
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    // 添加监听订阅
-    // MyApp.routeObserver.subscribe(this, ModalRoute.of(context));
   }
 
   ///@author: wuwenqiang
@@ -113,7 +110,8 @@ class MusicPlayerPageState extends State<MusicPlayerPage>
           ImageFiltered(
             imageFilter: ImageFilter.blur(
                 sigmaX: 50, sigmaY: 50, tileMode: TileMode.mirror),
-            child: provider.musicModel.cover != null && provider.musicModel.cover != ''
+            child: provider.musicModel.cover != null &&
+                    provider.musicModel.cover != ''
                 ? Image.network(getMusicCover(provider.musicModel.cover),
                     fit: BoxFit.cover,
                     height: MediaQuery.of(context).size.height,
@@ -150,7 +148,20 @@ class MusicPlayerPageState extends State<MusicPlayerPage>
                 SizedBox(height: ThemeSize.containerPadding)
               ],
             ),
-          )
+          ),
+          Positioned(
+              left: ThemeSize.containerPadding,
+              top: ThemeSize.containerPadding +
+                  MediaQuery.of(context).padding.top,
+              child: InkWell(
+                onTap: (){
+                  Navigator.of(context).pop();
+                },
+                  child: Opacity(
+                      opacity: 0.5,
+                      child: Image.asset("lib/assets/images/icon_back.png",
+                          width: ThemeSize.smallIcon,
+                          height: ThemeSize.smallIcon))))
         ]));
   }
 
@@ -188,10 +199,13 @@ class MusicPlayerPageState extends State<MusicPlayerPage>
               child: Padding(
                   padding: EdgeInsets.all(ThemeSize.containerPadding * 4),
                   child: ClipOval(
-                      child:
-                      MusicAvaterComponent(type:'music',name:'',avater:provider.musicModel.cover,size:playerWidth -
-                          ThemeSize.smallMargin -
-                          ThemeSize.containerPadding * 3),
+                    child: MusicAvaterComponent(
+                        type: 'music',
+                        name: '',
+                        avater: provider.musicModel.cover,
+                        size: playerWidth -
+                            ThemeSize.smallMargin -
+                            ThemeSize.containerPadding * 3),
                   ))),
         ));
   }
@@ -199,60 +213,61 @@ class MusicPlayerPageState extends State<MusicPlayerPage>
   Widget buildLyric() {
     return Center(
         child: provider.musicModel.lyrics != null &&
-            provider.musicModel.lyrics != ''
+                provider.musicModel.lyrics != ''
             ? InkWell(
-          child:
-          LyricsReader(
-            padding: EdgeInsets.symmetric(horizontal: ThemeSize.containerPadding),
-            model: LyricsModelBuilder.create()
-                .bindLyricToMain(provider.musicModel.lyrics)
-                // .bindLyricToExt(transLyric)
-                .getModel(),
-            position: playProgress,
-            lyricUi: lyricUI,
-            playing: playing,
-            size: Size(double.infinity, MediaQuery.of(context).size.height / 2),
-            emptyBuilder: () => Center(
-              child: Text(
-                "No lyrics",
-                style: lyricUI.getOtherMainTextStyle(),
-              ),
-            ),
-            selectLineBuilder: (progress, confirm) {
-              return Row(
-                children: [
-                  IconButton(
-                      onPressed: () {
-                        LyricsLog.logD("点击事件");
-                        confirm.call();
-                        setState(() {
-                          player?.seek(Duration(milliseconds: progress));
-                        });
-                      },
-                      icon: const Icon(Icons.play_arrow, color: Colors.green)),
-                  Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(color: Colors.green),
-                      height: 1,
-                      width: double.infinity,
+                child: LyricsReader(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: ThemeSize.containerPadding),
+                  model: LyricsModelBuilder.create()
+                      .bindLyricToMain(provider.musicModel.lyrics)
+                      .getModel(),
+                  position: playProgress,
+                  lyricUi: lyricUI,
+                  playing: playing,
+                  size: Size(
+                      double.infinity, MediaQuery.of(context).size.height / 2),
+                  emptyBuilder: () => Center(
+                    child: Text(
+                      "No lyrics",
+                      style: lyricUI.getOtherMainTextStyle(),
                     ),
                   ),
-                  Text(
-                    progress.toString(),
-                    style: const TextStyle(color: Colors.green),
-                  )
-                ],
-              );
-            },
-          ),
-          onTap: () {
-            Routes.router.navigateTo(context, '/MusicLyricPage');
-          },
-        )
+                  selectLineBuilder: (progress, confirm) {
+                    return Row(
+                      children: [
+                        IconButton(
+                            onPressed: () {
+                              LyricsLog.logD("点击事件");
+                              confirm.call();
+                              setState(() {
+                                player?.seek(Duration(milliseconds: progress));
+                              });
+                            },
+                            icon: const Icon(Icons.play_arrow,
+                                color: Colors.green)),
+                        Expanded(
+                          child: Container(
+                            decoration: BoxDecoration(color: Colors.green),
+                            height: 1,
+                            width: double.infinity,
+                          ),
+                        ),
+                        Text(
+                          progress.toString(),
+                          style: const TextStyle(color: Colors.green),
+                        )
+                      ],
+                    );
+                  },
+                ),
+                onTap: () {
+                  Routes.router.navigateTo(context, '/MusicLyricPage');
+                },
+              )
             : Text('暂无歌词',
-            style: TextStyle(
-                color: ThemeColors.opcityWhiteColor,
-                fontSize: ThemeSize.middleFontSize)));
+                style: TextStyle(
+                    color: ThemeColors.opcityWhiteColor,
+                    fontSize: ThemeSize.middleFontSize)));
   }
 
   ///@author: wuwenqiang
@@ -552,22 +567,26 @@ class MusicPlayerPageState extends State<MusicPlayerPage>
     onDurationChangedListener?.cancel(); // 恢复监听音乐播放时长
     onPositionChangedListener?.cancel(); // 恢复监听音乐播放进度
     onPlayerCompletionListener?.cancel();
-    onDurationChangedListener = provider.player.onDurationChanged.listen((Duration  d) {
+    onDurationChangedListener =
+        provider.player.onDurationChanged.listen((Duration d) {
       setState(() {
         totalSec = d.inSeconds;
       });
     });
-    onPlayerCompletionListener = provider.player.onPlayerComplete.listen((event) {
+    onPlayerCompletionListener =
+        provider.player.onPlayerComplete.listen((event) {
       useNextMusic(); // 切换下一首
     });
-    onPositionChangedListener = provider.player.onPositionChanged.listen((Duration  d) {
+    onPositionChangedListener =
+        provider.player.onPositionChanged.listen((Duration d) {
       setState(() {
         playProgress = d.inMilliseconds;
         duration = d.inSeconds;
         sliderValue = (duration / totalSec) * 100;
       });
     });
-    final result = await provider.player.play(UrlSource(HOST + provider.musicModel.localPlayUrl));
+    final result = await provider.player
+        .play(UrlSource(HOST + provider.musicModel.localPlayUrl));
     if (result == null) {
       provider.setPlaying(true);
     }
