@@ -27,7 +27,7 @@ class RegisterPageState extends State<RegisterPage> {
     userFocusNode.addListener(()  {
       if (!userFocusNode.hasFocus)  {
         // 失去焦点时执行操作（如验证输入）
-        
+
       }
     });
   }
