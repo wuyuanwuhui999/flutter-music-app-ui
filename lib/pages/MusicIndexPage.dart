@@ -196,17 +196,14 @@ class _MusicIndexPageState extends State<MusicIndexPage>
         backgroundColor: ThemeColors.colorBg,
         body: SafeArea(
             top: true,
-            child: Padding(
-              padding: EdgeInsets.only(top: ThemeSize.containerPadding),
-              child: PageView.builder(
-                  controller: _pageController,
-                  physics: const NeverScrollableScrollPhysics(),
-                  onPageChanged: _pageChanged,
-                  itemCount: 4,
-                  itemBuilder: (context, index) {
-                    return _getPage();
-                  }),
-            )),
+            child: PageView.builder(
+                controller: _pageController,
+                physics: const NeverScrollableScrollPhysics(),
+                onPageChanged: _pageChanged,
+                itemCount: 4,
+                itemBuilder: (context, index) {
+                  return _getPage();
+                })),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         //悬浮按钮
         floatingActionButton: SizedBox(

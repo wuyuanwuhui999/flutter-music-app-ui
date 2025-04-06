@@ -73,7 +73,7 @@ class MusicHomePageState extends State<MusicHomePage>
   Widget build(BuildContext context) {
     return Container(
         width: MediaQuery.of(context).size.width,
-        padding: ThemeStyle.paddingBox,
+        padding: EdgeInsets.only(left: ThemeSize.containerPadding,right: ThemeSize.containerPadding,top: ThemeSize.containerPadding + MediaQuery.of(context).padding.top),
         child: Column(children: <Widget>[
           buildSearchWidget(),
           Expanded(

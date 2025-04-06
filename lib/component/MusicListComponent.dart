@@ -69,8 +69,8 @@ class _MusicListComponentState extends State<MusicListComponent> {
           MusicAvaterComponent(type:'music',name:'',avater:ele.cover,size:ThemeSize.middleAvater),
           SizedBox(width: ThemeSize.containerPadding),
           Expanded(
-            child: Text('${ele.authorName} - ${ele.songName}'),
             flex: 1,
+            child: Text('${ele.authorName} - ${ele.songName}'),
           ),
           SizedBox(width: ThemeSize.containerPadding),
           Image.asset(
@@ -84,7 +84,7 @@ class _MusicListComponentState extends State<MusicListComponent> {
           SizedBox(width: ThemeSize.containerPadding),
           InkWell(
             onTap: () {
-              this.useLike(ele);
+              useLike(ele);
             },
             child: Image.asset(
                 ele.isLike == 1

@@ -33,7 +33,7 @@ class LaunchPageState extends State<LaunchPage> {
       Future.delayed(const Duration(seconds: 1), () {
         // 这里是你想要延时执行的代码
         HttpUtil.getInstance().setToken(res);
-        if(false){// 已经登录
+        if(res != ""){// 已经登录
           getUserDataService().then((data){
             if(data.token != null){
               String token = data.token!;

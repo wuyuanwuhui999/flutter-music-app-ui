@@ -212,9 +212,22 @@ Future<ResponseModel<List>> getFavoriteAuthorService(
 }
 
 ///@author: wuwenqiang
+///@description: 新增我关注的歌手
+/// @date: 2025-03-04 00:07
+Future<ResponseModel<int>> insertFavoriteAuthorService(String authorId) async {
+  try {
+    Response response = await dio.post("${servicePath['insertFavoriteAuthor']}$authorId");
+    return ResponseModel.fromJson(response.data);
+  } catch (e) {
+    print('ERROR:======>${e}');
+    return ResponseModel.fromJson(null);
+  }
+}
+
+///@author: wuwenqiang
 ///@description: 删除我关注的歌手
 /// @date: 2025-03-04 00:07
-Future<ResponseModel<List>> deleteFavoriteAuthorService(int authorId) async {
+Future<ResponseModel<int>> deleteFavoriteAuthorService(String authorId) async {
   try {
     Response response = await dio.delete("${servicePath['deleteFavoriteAuthor']}$authorId");
     return ResponseModel.fromJson(response.data);

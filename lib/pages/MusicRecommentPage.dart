@@ -59,13 +59,13 @@ class _MusicRecommentPageState extends State<MusicRecommentPage>
     getMusicListByClassifyIdService(1, pageNum, pageSize, 1).then((res) {
       setState(() {
         total = res.total!;
-        res.data.forEach((item) {
+        for (var item in res.data) {
           item['classifyId'] = 1;
           item['pageNum'] = pageNum;
           item['pageSize'] = pageSize;
           item['isRedis'] = 0;
           musicModelList.add(MusicModel.fromJson(item));
-        });
+        }
       });
       easyRefreshController.finishLoad(success: true,noMore: musicModelList.length == total);
     });
@@ -84,7 +84,7 @@ class _MusicRecommentPageState extends State<MusicRecommentPage>
           index < iconList.length
               ? Image.asset(iconList[index],
                   width: ThemeSize.middleIcon, height: ThemeSize.middleIcon)
-              : Container(
+              : SizedBox(
                   width: ThemeSize.middleIcon,
                   height: ThemeSize.middleIcon,
                   child: Center(
@@ -200,7 +200,10 @@ class _MusicRecommentPageState extends State<MusicRecommentPage>
           }
         },
         child: Column(
-          children: buildMusicWedgetList(),
+          children: [
+            SizedBox(height: MediaQuery.of(context).padding.top + ThemeSize.containerPadding),
+            ...buildMusicWedgetList()
+          ],
         ),
       ),
     );

@@ -18,6 +18,7 @@ import '../pages/MusicClassifyListPage.dart';
 import '../model/MusicClassifyModel.dart';
 import '../pages/LoginPage.dart';
 import '../pages/ForgetPasswordPage.dart';
+import '../pages/RecordMusicPage.dart';
 import '../pages/ResetPasswordPage.dart';
 import '../pages/UpdatePasswordPage.dart';
 import '../pages/UserPage.dart';
@@ -81,6 +82,8 @@ class Routes {
     router.define('/RegisterPage', handler: Handler(handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
       return const RegisterPage();
     }));
-
+    router.define('/RecordMusicPage', handler: Handler(handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
+      return const RecordMusicPage();
+    }));
   }
 }

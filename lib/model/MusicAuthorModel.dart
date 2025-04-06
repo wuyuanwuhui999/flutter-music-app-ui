@@ -13,6 +13,7 @@ class MusicAuthorModel {
   String createTime;// 创建时间
   String updateTime;// 更新时间
   int total;// 歌曲总数
+  int? isLike;
 
   MusicAuthorModel(
       {
@@ -29,7 +30,8 @@ class MusicAuthorModel {
       this.rank,
         required this.createTime,
         required this.updateTime,
-        required this.total
+        required this.total,
+        this.isLike
   });
 
   //工厂模式-用这种模式可以省略New关键字
@@ -48,7 +50,8 @@ class MusicAuthorModel {
         rank: json["rank"],
         createTime: json["createTime"],
         updateTime: json["updateTime"],
-        total: json["total"]
+        total: json["total"],
+        isLike: json["isLike"]
     );
   }
 

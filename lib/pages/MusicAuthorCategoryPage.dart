@@ -129,7 +129,7 @@ class _MusicAuthorCategoryPageState extends State<MusicAuthorCategoryPage>
             shrinkWrap: true,
             childAspectRatio: 3,
             // 宽高比列
-            children: this.buildGridItems(context)));
+            children: buildGridItems(context)));
   }
 
   List<Widget> buildGridItems(BuildContext context) {
@@ -240,8 +240,24 @@ class _MusicAuthorCategoryPageState extends State<MusicAuthorCategoryPage>
                     Image.asset("lib/assets/images/icon_music_play.png",
                         height: ThemeSize.smallIcon, width: ThemeSize.smallIcon),
                     SizedBox(width: ThemeSize.containerPadding),
-                    Image.asset("lib/assets/images/icon_like.png",
-                        height: ThemeSize.smallIcon, width: ThemeSize.smallIcon),
+                    InkWell(
+                        onTap: (){
+                          if(item.isLike == 1){
+                            deleteFavoriteAuthorService(item.authorId).then((res){
+                              setState(() {
+                                item.isLike = 0;
+                              });
+                            });
+                          }else{
+                            insertFavoriteAuthorService(item.authorId).then((res){
+                              setState(() {
+                                item.isLike = 1;
+                              });
+                            });
+                          }
+                        },
+                        child: Image.asset(item.isLike == 0 ? "lib/assets/images/icon_like.png" : "lib/assets/images/icon_like_active.png",
+                        height: ThemeSize.smallIcon, width: ThemeSize.smallIcon)),
                     SizedBox(width: ThemeSize.containerPadding),
                     Image.asset("lib/assets/images/icon_music_menu.png",
                         height: ThemeSize.smallIcon, width: ThemeSize.smallIcon),

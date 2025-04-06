@@ -12,13 +12,13 @@ String formatTime(String data) {
   if(minutes < 1){
     return '刚刚';
   }else if(minutes >= 1 && minutes < 60){
-    return minutes.toString() + '分钟前';
+    return '$minutes分钟前';
   }else if(minutes >= 60 && minutes < 60*24){
-    return (minutes/60).truncate().toString() + '小时前';
+    return '${(minutes/60).truncate()}小时前';
   }else if(minutes > 60 * 24 && minutes <  60 * 24 *30){
-    return (minutes/60/24).truncate().toString() + '天前';
+    return '${(minutes/60/24).truncate()}天前';
   }else if(minutes > 60 * 24 * 30 && minutes <  60 * 24 *30 *12){
-    return (minutes/60 / 24 / 30).truncate().toString() + '个月前';
+    return '${(minutes/60 / 24 / 30).truncate()}个月前';
   }else{
     return data;
   }

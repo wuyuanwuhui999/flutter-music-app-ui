@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_music_app/model/MusicAuthorModel.dart';
@@ -12,7 +11,6 @@ import '../theme/ThemeStyle.dart';
 import '../theme/ThemeSize.dart';
 import '../theme/ThemeColors.dart';
 import '../common/constant.dart';
-import '../model/MuiscMySingerModel.dart';
 import '../model/MusicModel.dart';
 import '../component/MusicTitleComponent.dart';
 
@@ -108,6 +106,7 @@ class _MusicUserPageState extends State<MusicUserPage>
     super.build(context);
     return SingleChildScrollView(
         child: Column(children: [
+          SizedBox(height: MediaQuery.of(context).padding.top + ThemeSize.containerPadding),
       buildUserInfoWidget(),
       buildFavoriteDirectoryWidget(),
       buildMusicLikeWidget(),

@@ -356,7 +356,10 @@ class _MusicCirclePageState extends State<MusicCirclePage>
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ClipOval(
-                child: Image.network(
+                child: circleModel.useravater == null ?
+                Image.asset("lib/assets/images/default_avater.png", height: ThemeSize.middleAvater,
+                    width: ThemeSize.middleAvater,)
+                    :Image.network(
               //从全局的provider中获取用户信息
               "$HOST${circleModel.useravater}",
               height: ThemeSize.middleAvater,
@@ -489,7 +492,7 @@ class _MusicCirclePageState extends State<MusicCirclePage>
   // 评论
   Widget buildCircleCommentList(
       List<CommentModel> circleComments, List<CircleLikeModel> circleLikes) {
-    if (circleComments.length > 0 || circleLikes.length > 0) {
+    if (circleComments.isNotEmpty || circleLikes.isNotEmpty) {
       List<CommentModel> topComments =
           circleComments.where((element) => element.topId == null).toList();
       return Column(
@@ -503,10 +506,10 @@ class _MusicCirclePageState extends State<MusicCirclePage>
   List<Widget> buildCircleCommentItems(
       List<CommentModel> circleComments,
       List<CircleLikeModel> circleLikes) {
-    if (circleComments.length == 0) return [];
+    if (circleComments.isEmpty) return [];
     List<Widget> circleCommentWidget = [
       SizedBox(
-          height: (circleLikes.length > 0 || replyCommentModel != null)
+          height: (circleLikes.isNotEmpty || replyCommentModel != null)
               ? ThemeSize.containerPadding
               : 0)
     ];
@@ -530,7 +533,7 @@ class _MusicCirclePageState extends State<MusicCirclePage>
               height: ThemeSize.middleIcon,
             )),
         SizedBox(width: ThemeSize.smallMargin),
-        Column(
+        Expanded(flex: 1,child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
@@ -541,7 +544,7 @@ class _MusicCirclePageState extends State<MusicCirclePage>
                   style: TextStyle(color: ThemeColors.subTitle)),
               SizedBox(height: ThemeSize.smallMargin),
               GestureDetector(
-                child: Text(circleComment.content),
+                child: Text(circleComment.content,softWrap: true,),
                 onTap: () {
                   setState(() {
                     if(circleComment.topId == null){// 如果不是二级评论
@@ -561,7 +564,7 @@ class _MusicCirclePageState extends State<MusicCirclePage>
               ...buildCircleCommentItems(
                   circleComment.replyList!,
                   [])
-            ])
+            ]))
       ]));
     }
     return circleCommentWidget;
