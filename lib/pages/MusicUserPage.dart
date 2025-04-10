@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:flutter_music_app/model/MusicAuthorModel.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
+import '../model/MusicAuthorModel.dart';
 import '../model/FavoriteDirectoryModel.dart';
 import '../router/index.dart';
 import '../service/serverMethod.dart';
@@ -13,6 +15,7 @@ import '../theme/ThemeColors.dart';
 import '../common/constant.dart';
 import '../model/MusicModel.dart';
 import '../component/MusicTitleComponent.dart';
+import '../utils/common.dart';
 
 class MusicUserPage extends StatefulWidget {
   const MusicUserPage({super.key});
@@ -101,12 +104,49 @@ class _MusicUserPageState extends State<MusicUserPage>
     super.dispose();
   }
 
+  ///@author: wuwenqiang
+  ///@description: 删除喜欢的歌曲
+  ///@date: 2025-04-10 21:34
+  useDeleteFavoriteMusic(String musicName,int musicId, int index) {
+    showCustomDialog(context, SizedBox(), '确定删除《$musicName》？', () {
+      deleteMusicLikeService(musicId).then((res) {
+        Fluttertoast.showToast(
+            msg: "删除成功",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+            timeInSecForIosWeb: 1,
+            backgroundColor: ThemeColors.disableColor,
+            fontSize: ThemeSize.middleFontSize);
+      });
+    });
+  }
+
+  ///@author: wuwenqiang
+  ///@description: 删除喜欢的歌手
+  ///@date: 2025-04-10 21:34
+  useDeleteFavoriteAuthor(String authoName,String authorId,int index){
+    showCustomDialog(context, SizedBox(), '确定删除歌手$authoName？', () {
+      deleteFavoriteAuthorService(authorId).then((res){
+        Fluttertoast.showToast(
+            msg: "删除成功",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+            timeInSecForIosWeb: 1,
+            backgroundColor: ThemeColors.disableColor,
+            fontSize: ThemeSize.middleFontSize);
+      });
+    });
+
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
     return SingleChildScrollView(
         child: Column(children: [
-          SizedBox(height: MediaQuery.of(context).padding.top + ThemeSize.containerPadding),
+      SizedBox(
+          height:
+              MediaQuery.of(context).padding.top + ThemeSize.containerPadding),
       buildUserInfoWidget(),
       buildFavoriteDirectoryWidget(),
       buildMusicLikeWidget(),
@@ -325,51 +365,70 @@ class _MusicUserPageState extends State<MusicUserPage>
                 offstage: isFoldFavoriteMusic,
                 child: Column(
                   children: musicLikeList.asMap().entries.map((entry) {
-                    return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(height: ThemeSize.containerPadding),
-                          entry.key != 0
-                              ? Divider(
-                                  height: 1, color: ThemeColors.disableColor)
-                              : const SizedBox(),
-                          SizedBox(
-                              height: entry.key != 0
-                                  ? ThemeSize.containerPadding
-                                  : 0),
-                          Row(
-                            children: [
-                              ClipOval(
-                                  child: Image.network(
-                                HOST + entry.value.cover,
-                                width: ThemeSize.bigAvater,
-                                height: ThemeSize.bigAvater,
-                              )),
-                              SizedBox(width: ThemeSize.containerPadding),
-                              Expanded(
-                                flex: 1,
-                                child: Text(entry.value.songName),
+                    return Container(
+                        decoration: BoxDecoration(
+                          border: Border(
+                            bottom: BorderSide(
+                              width: 1, //宽度
+                              color: entry.key == musicLikeList.length - 1
+                                  ? Colors.white
+                                  : ThemeColors.disableColor, //边框颜色
+                            ),
+                          ),
+                        ),
+                        child: Slidable(
+                            endActionPane: ActionPane(
+                              motion: ScrollMotion(),
+                              children: [
+                                SlidableAction(
+                                  padding: EdgeInsets.only(
+                                      top: ThemeSize.containerPadding),
+                                  onPressed: (context) {
+                                    useDeleteFavoriteMusic(
+                                        entry.value.songName,
+                                        entry.value.id, entry.key);
+                                  },
+                                  backgroundColor: Colors.red,
+                                  foregroundColor: Colors.white,
+                                  icon: Icons.delete,
+                                  label: '删除',
+                                ),
+                              ],
+                            ),
+                            child: Container(
+                              padding: EdgeInsets.only(
+                                  top: ThemeSize.containerPadding,
+                                  bottom: entry.key == musicLikeList.length - 1
+                                      ? 0
+                                      : ThemeSize.containerPadding),
+                              child: Row(
+                                children: [
+                                  ClipOval(
+                                      child: Image.network(
+                                    HOST + entry.value.cover,
+                                    width: ThemeSize.bigAvater,
+                                    height: ThemeSize.bigAvater,
+                                  )),
+                                  SizedBox(width: ThemeSize.containerPadding),
+                                  Expanded(
+                                    flex: 1,
+                                    child: Text(entry.value.songName),
+                                  ),
+                                  Image.asset(
+                                    "lib/assets/images/icon_music_play.png",
+                                    width: ThemeSize.smallIcon,
+                                    height: ThemeSize.smallIcon,
+                                  ),
+                                  SizedBox(
+                                      width: ThemeSize.containerPadding * 2),
+                                  Image.asset(
+                                    "lib/assets/images/icon_music_menu.png",
+                                    width: ThemeSize.smallIcon,
+                                    height: ThemeSize.smallIcon,
+                                  )
+                                ],
                               ),
-                              Image.asset(
-                                "lib/assets/images/icon_music_play.png",
-                                width: ThemeSize.smallIcon,
-                                height: ThemeSize.smallIcon,
-                              ),
-                              SizedBox(width: ThemeSize.containerPadding * 2),
-                              Image.asset(
-                                "lib/assets/images/icon_delete.png",
-                                width: ThemeSize.smallIcon,
-                                height: ThemeSize.smallIcon,
-                              ),
-                              SizedBox(width: ThemeSize.containerPadding * 2),
-                              Image.asset(
-                                "lib/assets/images/icon_music_menu.png",
-                                width: ThemeSize.smallIcon,
-                                height: ThemeSize.smallIcon,
-                              )
-                            ],
-                          )
-                        ]);
+                            )));
                   }).toList(),
                 ))
           ],
@@ -406,90 +465,112 @@ class _MusicUserPageState extends State<MusicUserPage>
                         colorBlendMode: BlendMode.srcIn,
                         height: ThemeSize.smallIcon),
                   ),
-                  SizedBox(width: totalFavoriteAuthor > 5 ? ThemeSize.containerPadding : 0),
-                  totalFavoriteAuthor > 5 ? Text("更多",
-                      style: TextStyle(
-                          color: ThemeColors.disableColor,
-                          decoration: TextDecoration.underline,
-                          decorationColor: ThemeColors.disableColor)) : const SizedBox()
+                  SizedBox(
+                      width: totalFavoriteAuthor > 5
+                          ? ThemeSize.containerPadding
+                          : 0),
+                  totalFavoriteAuthor > 5
+                      ? Text("更多",
+                          style: TextStyle(
+                              color: ThemeColors.disableColor,
+                              decoration: TextDecoration.underline,
+                              decorationColor: ThemeColors.disableColor))
+                      : const SizedBox()
                 ],
               )),
           Offstage(
               offstage: isFoldFavoriteAuthor,
               child: Column(
                   children: authorList.asMap().entries.map((entry) {
-                return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(height: ThemeSize.containerPadding),
-                      entry.key != 0
-                          ? Divider(height: 1, color: ThemeColors.disableColor)
-                          : const SizedBox(),
-                      SizedBox(
-                          height:
-                              entry.key != 0 ? ThemeSize.containerPadding : 0),
-                      Row(
-                        children: [
-                          entry.value.avatar != null
-                              ? ClipOval(
-                                  child: Image.network(
-                                  entry.value.avatar!.contains("http")
-                                      ? entry.value.avatar!
-                                          .replaceAll("{size}", "240")
-                                      : "$HOST${entry.value.avatar}",
-                                  width: ThemeSize.bigAvater,
-                                  height: ThemeSize.bigAvater,
-                                ))
-                              : Container(
-                                  width: ThemeSize.bigAvater,
-                                  height: ThemeSize.bigAvater,
-                                  //超出部分，可裁剪
-                                  clipBehavior: Clip.hardEdge,
-                                  decoration: BoxDecoration(
-                                    color: ThemeColors.colorBg,
-                                    borderRadius: BorderRadius.circular(
-                                        ThemeSize.bigAvater),
-                                  ),
-                                  child: Center(
-                                      child: Text(
-                                    entry.value.authorName!.substring(0, 1),
-                                    style: TextStyle(
-                                        fontSize: ThemeSize.bigFontSize),
-                                  ))),
-                          SizedBox(width: ThemeSize.containerPadding),
-                          Expanded(
-                            flex: 1,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(entry.value.authorName!),
-                                SizedBox(height: ThemeSize.smallMargin),
-                                Text("${entry.value.total}首",
-                                    style:
-                                        TextStyle(color: ThemeColors.subTitle))
-                              ],
+                return Container(
+                    decoration: BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(
+                          width: 1, //宽度
+                          color: entry.key == authorList.length - 1
+                              ? Colors.white
+                              : ThemeColors.disableColor, //边框颜色
+                        ),
+                      ),
+                    ),
+                    child: Slidable(
+                        endActionPane: ActionPane(
+                          motion: ScrollMotion(),
+                          children: [
+                            SlidableAction(
+                              padding: EdgeInsets.only(
+                                  top: ThemeSize.containerPadding),
+                              onPressed: (context) {
+                                useDeleteFavoriteAuthor(
+                                  entry.value.authorName!,
+                                    entry.value.authorId, entry.key);
+                              },
+                              backgroundColor: Colors.red,
+                              foregroundColor: Colors.white,
+                              icon: Icons.delete,
+                              label: '删除',
                             ),
+                          ],
+                        ),
+                        child: Container(
+                          padding: EdgeInsets.only(
+                              top: ThemeSize.containerPadding,
+                              bottom: entry.key == musicLikeList.length - 1
+                                  ? 0
+                                  : ThemeSize.containerPadding),
+                          child: Row(
+                            children: [
+                              entry.value.avatar != null
+                                  ? ClipOval(
+                                      child: Image.network(
+                                      getMusicCover(entry.value.avatar!),
+                                      width: ThemeSize.bigAvater,
+                                      height: ThemeSize.bigAvater,
+                                    ))
+                                  : Container(
+                                      width: ThemeSize.bigAvater,
+                                      height: ThemeSize.bigAvater,
+                                      //超出部分，可裁剪
+                                      clipBehavior: Clip.hardEdge,
+                                      decoration: BoxDecoration(
+                                        color: ThemeColors.colorBg,
+                                        borderRadius: BorderRadius.circular(
+                                            ThemeSize.bigAvater),
+                                      ),
+                                      child: Center(
+                                          child: Text(
+                                        entry.value.authorName!.substring(0, 1),
+                                        style: TextStyle(
+                                            fontSize: ThemeSize.bigFontSize),
+                                      ))),
+                              SizedBox(width: ThemeSize.containerPadding),
+                              Expanded(
+                                flex: 1,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(entry.value.authorName!),
+                                    SizedBox(height: ThemeSize.smallMargin),
+                                    Text("${entry.value.total}首",
+                                        style: TextStyle(
+                                            color: ThemeColors.subTitle))
+                                  ],
+                                ),
+                              ),
+                              Image.asset(
+                                "lib/assets/images/icon_music_play.png",
+                                width: ThemeSize.smallIcon,
+                                height: ThemeSize.smallIcon,
+                              ),
+                              SizedBox(width: ThemeSize.containerPadding * 2),
+                              Image.asset(
+                                "lib/assets/images/icon_music_menu.png",
+                                width: ThemeSize.smallIcon,
+                                height: ThemeSize.smallIcon,
+                              )
+                            ],
                           ),
-                          Image.asset(
-                            "lib/assets/images/icon_music_play.png",
-                            width: ThemeSize.smallIcon,
-                            height: ThemeSize.smallIcon,
-                          ),
-                          SizedBox(width: ThemeSize.containerPadding * 2),
-                          Image.asset(
-                            "lib/assets/images/icon_delete.png",
-                            width: ThemeSize.smallIcon,
-                            height: ThemeSize.smallIcon,
-                          ),
-                          SizedBox(width: ThemeSize.containerPadding * 2),
-                          Image.asset(
-                            "lib/assets/images/icon_music_menu.png",
-                            width: ThemeSize.smallIcon,
-                            height: ThemeSize.smallIcon,
-                          )
-                        ],
-                      )
-                    ]);
+                        )));
               }).toList()))
         ]));
   }
@@ -529,11 +610,13 @@ class _MusicUserPageState extends State<MusicUserPage>
                     SizedBox(
                         width:
                             totalRecord > 5 ? ThemeSize.containerPadding : 0),
-                    totalRecord > 10 ? Text("更多",
-                        style: TextStyle(
-                            color: ThemeColors.disableColor,
-                            decoration: TextDecoration.underline,
-                            decorationColor: ThemeColors.disableColor)) : const SizedBox()
+                    totalRecord > 10
+                        ? Text("更多",
+                            style: TextStyle(
+                                color: ThemeColors.disableColor,
+                                decoration: TextDecoration.underline,
+                                decorationColor: ThemeColors.disableColor))
+                        : const SizedBox()
                   ],
                 )),
             Offstage(
