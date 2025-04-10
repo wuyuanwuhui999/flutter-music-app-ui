@@ -107,7 +107,7 @@ class _MusicUserPageState extends State<MusicUserPage>
   ///@author: wuwenqiang
   ///@description: 删除喜欢的歌曲
   ///@date: 2025-04-10 21:34
-  useDeleteFavoriteMusic(String musicName,int musicId, int index) {
+  useDeleteFavoriteMusic(String musicName, int musicId, int index) {
     showCustomDialog(context, SizedBox(), '确定删除《$musicName》？', () {
       deleteMusicLikeService(musicId).then((res) {
         Fluttertoast.showToast(
@@ -117,16 +117,16 @@ class _MusicUserPageState extends State<MusicUserPage>
             timeInSecForIosWeb: 1,
             backgroundColor: ThemeColors.disableColor,
             fontSize: ThemeSize.middleFontSize);
+        setState(() {
+          musicLikeList.removeAt(index);
+        });
       });
     });
   }
 
-  ///@author: wuwenqiang
-  ///@description: 删除喜欢的歌手
-  ///@date: 2025-04-10 21:34
-  useDeleteFavoriteAuthor(String authoName,String authorId,int index){
-    showCustomDialog(context, SizedBox(), '确定删除歌手$authoName？', () {
-      deleteFavoriteAuthorService(authorId).then((res){
+  useDeleteFavoriteDirectory(String name,int id,int index){
+    showCustomDialog(context, SizedBox(), '确定删除收藏夹 $name？', () {
+      deleteFavoriteDirectoryService(id).then((res) {
         Fluttertoast.showToast(
             msg: "删除成功",
             toastLength: Toast.LENGTH_SHORT,
@@ -134,9 +134,31 @@ class _MusicUserPageState extends State<MusicUserPage>
             timeInSecForIosWeb: 1,
             backgroundColor: ThemeColors.disableColor,
             fontSize: ThemeSize.middleFontSize);
+        setState(() {
+          favoriteDirectoryList.removeAt(index);
+        });
       });
     });
+  }
 
+  ///@author: wuwenqiang
+  ///@description: 删除喜欢的歌手
+  ///@date: 2025-04-10 21:34
+  useDeleteFavoriteAuthor(String authoName, String authorId, int index) {
+    showCustomDialog(context, SizedBox(), '确定删除歌手$authoName？', () {
+      deleteFavoriteAuthorService(authorId).then((res) {
+        Fluttertoast.showToast(
+            msg: "删除成功",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+            timeInSecForIosWeb: 1,
+            backgroundColor: ThemeColors.disableColor,
+            fontSize: ThemeSize.middleFontSize);
+        setState(() {
+          authorList.removeAt(index);
+        });
+      });
+    });
   }
 
   @override
@@ -246,70 +268,103 @@ class _MusicUserPageState extends State<MusicUserPage>
               offstage: isFoldFavoriteDirectory,
               child: Column(
                   children: favoriteDirectoryList.asMap().entries.map((entry) {
-                return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(height: ThemeSize.containerPadding),
-                      InkWell(
-                        child: Row(
+                return Container(
+                    decoration: BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(
+                          width: 1, //宽度
+                          color: entry.key == favoriteDirectoryList.length - 1
+                              ? Colors.white
+                              : ThemeColors.disableColor, //边框颜色
+                        ),
+                      ),
+                    ),
+                    child: Slidable(
+                        endActionPane: ActionPane(
+                          motion: ScrollMotion(),
                           children: [
-                            entry.value.cover != null
-                                ? ClipOval(
-                                    child: Image.network(
-                                    "$HOST${entry.value.cover}",
-                                    width: ThemeSize.bigAvater,
-                                    height: ThemeSize.bigAvater,
-                                  ))
-                                : Container(
-                                    width: ThemeSize.bigAvater,
-                                    height: ThemeSize.bigAvater,
-                                    //超出部分，可裁剪
-                                    clipBehavior: Clip.hardEdge,
-                                    decoration: BoxDecoration(
-                                      color: ThemeColors.colorBg,
-                                      borderRadius: BorderRadius.circular(
-                                          ThemeSize.bigAvater),
-                                    ),
-                                    child: Center(
-                                        child: Text(
-                                      entry.value.name.substring(0, 1),
-                                      style: TextStyle(
-                                          fontSize: ThemeSize.bigFontSize),
-                                    ))),
-                            SizedBox(width: ThemeSize.containerPadding),
-                            Expanded(
-                              flex: 1,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(entry.value.name),
-                                  SizedBox(height: ThemeSize.smallMargin),
-                                  Text("${entry.value.total}首",
-                                      style: TextStyle(
-                                          color: ThemeColors.subTitle))
-                                ],
-                              ),
+                            SlidableAction(
+                              padding: EdgeInsets.only(
+                                  top: ThemeSize.containerPadding),
+                              onPressed: (context) {
+                                useDeleteFavoriteDirectory(
+                                    entry.value.name,
+                                    entry.value.id!,
+                                    entry.key);
+                              },
+                              backgroundColor: Colors.red,
+                              foregroundColor: Colors.white,
+                              icon: Icons.delete,
+                              label: '删除',
                             ),
-                            Image.asset(
-                              "lib/assets/images/icon_music_play.png",
-                              width: ThemeSize.smallIcon,
-                              height: ThemeSize.smallIcon,
-                            ),
-                            SizedBox(width: ThemeSize.containerPadding * 2),
-                            SizedBox(width: ThemeSize.containerPadding * 2),
-                            Image.asset(
-                              "lib/assets/images/icon_music_menu.png",
-                              width: ThemeSize.smallIcon,
-                              height: ThemeSize.smallIcon,
-                            )
                           ],
                         ),
-                        onTap: () {
-                          Routes.router.navigateTo(context,
-                              '/MusicFavoriteListPage?favoriteDirectoryModel=${Uri.encodeComponent(FavoriteDirectoryModel.stringify(entry.value))}');
-                        },
-                      )
-                    ]);
+                        child: Container(
+                            padding: EdgeInsets.only(
+                                top: ThemeSize.containerPadding,
+                                bottom: entry.key == favoriteDirectoryList.length - 1
+                                    ? 0
+                                    : ThemeSize.containerPadding),
+                            child: Row(
+                              children: [
+                                entry.value.cover != null
+                                    ? ClipOval(
+                                        child: Image.network(
+                                        "$HOST${entry.value.cover}",
+                                        width: ThemeSize.bigAvater,
+                                        height: ThemeSize.bigAvater,
+                                      ))
+                                    : Container(
+                                        width: ThemeSize.bigAvater,
+                                        height: ThemeSize.bigAvater,
+                                        //超出部分，可裁剪
+                                        clipBehavior: Clip.hardEdge,
+                                        decoration: BoxDecoration(
+                                          color: ThemeColors.colorBg,
+                                          borderRadius: BorderRadius.circular(
+                                              ThemeSize.bigAvater),
+                                        ),
+                                        child: Center(
+                                            child: Text(
+                                          entry.value.name.substring(0, 1),
+                                          style: TextStyle(
+                                              fontSize: ThemeSize.bigFontSize),
+                                        ))),
+                                SizedBox(width: ThemeSize.containerPadding),
+                                Expanded(
+                                  flex: 1,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(entry.value.name),
+                                      SizedBox(height: ThemeSize.smallMargin),
+                                      Text("${entry.value.total}首",
+                                          style: TextStyle(
+                                              color: ThemeColors.subTitle))
+                                    ],
+                                  ),
+                                ),
+                                InkWell(
+                                    onTap: () {
+                                      Routes.router.navigateTo(context,
+                                          '/MusicFavoriteListPage?favoriteDirectoryModel=${Uri.encodeComponent(FavoriteDirectoryModel.stringify(entry.value))}');
+                                    },
+                                    child: Image.asset(
+                                      "lib/assets/images/icon_music_play.png",
+                                      width: ThemeSize.smallIcon,
+                                      height: ThemeSize.smallIcon,
+                                    )),
+                                SizedBox(width: ThemeSize.containerPadding * 2),
+                                SizedBox(width: ThemeSize.containerPadding * 2),
+                                Image.asset(
+                                  "lib/assets/images/icon_music_menu.png",
+                                  width: ThemeSize.smallIcon,
+                                  height: ThemeSize.smallIcon,
+                                )
+                              ],
+                            )
+                            )));
               }).toList()),
             )
           ],
@@ -384,8 +439,7 @@ class _MusicUserPageState extends State<MusicUserPage>
                                   padding: EdgeInsets.only(
                                       top: ThemeSize.containerPadding),
                                   onPressed: (context) {
-                                    useDeleteFavoriteMusic(
-                                        entry.value.songName,
+                                    useDeleteFavoriteMusic(entry.value.songName,
                                         entry.value.id, entry.key);
                                   },
                                   backgroundColor: Colors.red,
@@ -501,8 +555,7 @@ class _MusicUserPageState extends State<MusicUserPage>
                               padding: EdgeInsets.only(
                                   top: ThemeSize.containerPadding),
                               onPressed: (context) {
-                                useDeleteFavoriteAuthor(
-                                  entry.value.authorName!,
+                                useDeleteFavoriteAuthor(entry.value.authorName!,
                                     entry.value.authorId, entry.key);
                               },
                               backgroundColor: Colors.red,
@@ -515,7 +568,7 @@ class _MusicUserPageState extends State<MusicUserPage>
                         child: Container(
                           padding: EdgeInsets.only(
                               top: ThemeSize.containerPadding,
-                              bottom: entry.key == musicLikeList.length - 1
+                              bottom: entry.key == authorList.length - 1
                                   ? 0
                                   : ThemeSize.containerPadding),
                           child: Row(

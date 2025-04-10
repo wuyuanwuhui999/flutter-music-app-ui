@@ -410,7 +410,7 @@ Future<ResponseModel<Map>> insertFavoriteDirectoryService (FavoriteDirectoryMode
 ///@description: 删除音乐收藏
 ///@date: 2025-03-04 00:04
 ///@author wuwenqiang
-Future<ResponseModel<Map>> deleteFavoriteDirectoryService (int favoriteId)async {
+Future<ResponseModel<int>> deleteFavoriteDirectoryService (int favoriteId)async {
   try {
     Response response = await dio.delete("${servicePath['deleteFavoriteDirectory']}/$favoriteId");
     return ResponseModel.fromJson(response.data);
