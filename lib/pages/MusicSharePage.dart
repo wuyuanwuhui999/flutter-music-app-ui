@@ -223,6 +223,7 @@ class _MusicSharePageState extends State<MusicSharePage>
  /// @date: 2024-07-13 21:23
  void buildModalBottomSheet(){
    showModalBottomSheet(
+       backgroundColor:Colors.white,
      context: context,
      isScrollControlled: false,
      builder: (ctx) {

@@ -6,6 +6,7 @@ import '../service/serverMethod.dart';
 import '../theme/ThemeStyle.dart';
 import '../theme/ThemeColors.dart';
 import '../model/FavoriteDirectoryModel.dart';
+import '../component/CreateDirectoryComponent.dart';
 
 class FavoriteComponent extends StatefulWidget {
   final int musicId;
@@ -324,7 +325,11 @@ class _FavoriteComponentState extends State<FavoriteComponent> {
             child: Padding(
               padding: ThemeStyle.padding,
               child: isCreateFavoriteDirectory
-                  ? buildCreateFavoriteDirectory()
+                  ? CreateDirectoryComponent(onCancle: (){
+                isCreateFavoriteDirectory = false;
+              },onCreate: (res){
+                favoriteDirectory.insert(0, res);
+              },)
                   : buildFavoriteDirectory(),
             )),
         isCreateFavoriteDirectory ? SizedBox() : buildAddBtnWidget(),

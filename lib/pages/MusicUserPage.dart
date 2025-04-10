@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_music_app/component/CreateDirectoryComponent.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import '../component/FavoriteComponent.dart';
 import '../model/MusicAuthorModel.dart';
 import '../model/FavoriteDirectoryModel.dart';
 import '../router/index.dart';
@@ -161,6 +163,26 @@ class _MusicUserPageState extends State<MusicUserPage>
     });
   }
 
+  ///@author: wuwenqiang
+  ///@description: 创建底部弹窗
+  /// @date: 2024-06-23 22:29
+  void buildModalBottomSheet(Widget component) {
+    showModalBottomSheet(
+        backgroundColor:Colors.white,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(ThemeSize.middleRadius),
+                topRight: Radius.circular(ThemeSize.middleRadius))),
+        isScrollControlled: true,
+        context: context,
+        builder: (BuildContext context) {
+          return Container(
+            padding: ThemeStyle.padding,
+              height: MediaQuery.of(context).size.height * 0.7,
+              child: component);
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -245,11 +267,26 @@ class _MusicUserPageState extends State<MusicUserPage>
                 title: "我的收藏夹",
                 operateWidget: Row(
                   children: [
-                    Image.asset("lib/assets/images/icon_add.png",
+                    InkWell(
+                      onTap:(){
+                        buildModalBottomSheet(CreateDirectoryComponent(
+                          onCreate: (res){
+                            setState(() {
+                              favoriteDirectoryList.insert(0, res);
+                            });
+                            Navigator.pop(context);
+                          },
+                          onCancle: (){
+                            Navigator.pop(context);
+                          },
+                        ));
+                      },
+                      child:  Image.asset("lib/assets/images/icon_add.png",
                         width: ThemeSize.smallIcon,
                         color: ThemeColors.disableColor,
                         colorBlendMode: BlendMode.srcIn,
-                        height: ThemeSize.smallIcon),
+                        height: ThemeSize.smallIcon),)
+                   ,
                     SizedBox(width: ThemeSize.containerPadding),
                     InkWell(
                         onTap: () async {

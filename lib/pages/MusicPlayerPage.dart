@@ -289,6 +289,7 @@ class MusicPlayerPageState extends State<MusicPlayerPage>
   /// @date: 2024-06-23 22:29
   void buildModalBottomSheet(Widget component) {
     showModalBottomSheet(
+        backgroundColor:Colors.white,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(ThemeSize.middleRadius),

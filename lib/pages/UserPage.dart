@@ -509,6 +509,7 @@ class UserPageState extends State<UserPage> {
       }
     });
     showModalBottomSheet(
+      backgroundColor:Colors.white,
       context: context,
       isScrollControlled: false,
       builder: (ctx) {
