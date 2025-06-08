@@ -24,7 +24,8 @@ Future<ResponseModel<dynamic>> getUserDataService() async {
     return ResponseModel.fromJson(response.data);
   } catch (e) {
     print('ERROR:======>${e}');
-    return ResponseModel.fromJson(null);
+    throw Error();
+    // return ResponseModel.fromJson(null);
   }
 }
 
@@ -505,6 +506,20 @@ Future<ResponseModel<dynamic>> insertCommentService(Map commentMap) async {
   } catch (e) {
     print('ERROR:======>${e}');
     return ResponseModel.fromJson(null);
+  }
+}
+
+///@author: wuwenqiang
+///@description: 获取模型列表
+/// @date: 2025-06-08 20:21
+Future<ResponseModel<List<dynamic>>> getModelListService() async {
+  try {
+    Response response =
+    await dio.get(servicePath['getModelList']!,);
+    return ResponseModel.fromJson(response.data);
+  } catch (e) {
+    print('ERROR:======>${e}');
+    throw Error();
   }
 }
 

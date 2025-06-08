@@ -34,11 +34,15 @@
 ![重置密码](注册页面.png)
 ![重置密码](音乐播放器-收藏页.png)
 ![重置密码](音乐播放器-评论页面.png)
+![重置密码](音乐播放器-评论页面.png)
+![ai智能聊天助手](ai智能聊天助手.png)
 =============================界面预览（如果无法预览，请查看项目根目录png文件）==========================   
 
 使用uni-vue3-vite-ts+pinia+router搭建的音乐混合app
 
-后端接口使用springboot开发，所有音乐数据来自于python爬虫程序，爬取第三方音乐网站数据
+后端接口使用springboot开发，所有音乐数据来自于python爬虫程序，爬取第三方音乐网站数据   
+ 
+新增ai智能对话功能，连接qwen3:8b本地大模型
 
 后端接口项目和sql语句：   
 https://github.com/wuyuanwuhui99/springboot-app-service   

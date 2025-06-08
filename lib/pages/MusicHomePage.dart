@@ -73,7 +73,11 @@ class MusicHomePageState extends State<MusicHomePage>
   Widget build(BuildContext context) {
     return Container(
         width: MediaQuery.of(context).size.width,
-        padding: EdgeInsets.only(left: ThemeSize.containerPadding,right: ThemeSize.containerPadding,top: ThemeSize.containerPadding + MediaQuery.of(context).padding.top),
+        padding: EdgeInsets.only(
+            left: ThemeSize.containerPadding,
+            right: ThemeSize.containerPadding,
+            top: ThemeSize.containerPadding +
+                MediaQuery.of(context).padding.top),
         child: Column(children: <Widget>[
           buildSearchWidget(),
           Expanded(
@@ -105,7 +109,8 @@ class MusicHomePageState extends State<MusicHomePage>
                 },
                 child: Column(
                   children: [
-                    buildClassifyWidget(), ...buildCurrentClassifiesWidget(),
+                    buildClassifyWidget(),
+                    ...buildCurrentClassifiesWidget(),
                   ],
                 ),
               ))
@@ -123,7 +128,8 @@ class MusicHomePageState extends State<MusicHomePage>
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             MusicAvaterComponent(
-                type:'music',name:'',
+                type: 'music',
+                name: '',
                 avater: Provider.of<UserInfoProvider>(context).userInfo.avater,
                 size: ThemeSize.middleAvater),
             Expanded(
@@ -172,7 +178,15 @@ class MusicHomePageState extends State<MusicHomePage>
                                     keyword,
                                     style: TextStyle(color: ThemeColors.grey),
                                   )));
-                        })))
+                        }))),
+            SizedBox(width: ThemeSize.containerPadding),
+            InkWell(
+              child: Image.asset("lib/assets/images/icon_ai.png",
+                  width: ThemeSize.middleIcon, height: ThemeSize.middleIcon),
+              onTap: () {
+                Routes.router.navigateTo(context, '/ChatPage');
+              },
+            )
           ],
         ));
   }
@@ -204,18 +218,19 @@ class MusicHomePageState extends State<MusicHomePage>
           ),
           Expanded(
             child: InkWell(
-              onTap: (){
+              onTap: () {
                 Routes.router.navigateTo(context, '/MusicCategoryPage');
               },
               child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset("lib/assets/images/icon_music_classify.png",
-                    width: ThemeSize.bigAvater, height: ThemeSize.bigAvater),
-                SizedBox(height: ThemeSize.smallMargin),
-                Text("分类歌曲")
-              ],
-            ),),
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset("lib/assets/images/icon_music_classify.png",
+                      width: ThemeSize.bigAvater, height: ThemeSize.bigAvater),
+                  SizedBox(height: ThemeSize.smallMargin),
+                  Text("分类歌曲")
+                ],
+              ),
+            ),
             flex: 1,
           ),
           Expanded(
@@ -264,7 +279,13 @@ class MusicHomePageState extends State<MusicHomePage>
                 Text(musicClassifyModel.classifyName),
                 const Expanded(flex: 1, child: SizedBox()),
                 InkWell(
-                  child:Text("更多",style: TextStyle(color: ThemeColors.disableColor,decoration: TextDecoration.underline,decorationColor:ThemeColors.disableColor),),
+                  child: Text(
+                    "更多",
+                    style: TextStyle(
+                        color: ThemeColors.disableColor,
+                        decoration: TextDecoration.underline,
+                        decorationColor: ThemeColors.disableColor),
+                  ),
                   onTap: () {
                     if (musicClassifyModel.classifyName == "推荐歌手") {
                       Routes.router
@@ -312,8 +333,10 @@ class MusicHomePageState extends State<MusicHomePage>
                   child: Row(
                     children: [
                       MusicAvaterComponent(
-                          type:'music',name:'',
-                          size: ThemeSize.middleAvater, avater: musicItem.cover),
+                          type: 'music',
+                          name: '',
+                          size: ThemeSize.middleAvater,
+                          avater: musicItem.cover),
                       SizedBox(width: ThemeSize.containerPadding),
                       Expanded(
                         flex: 1,
@@ -321,15 +344,14 @@ class MusicHomePageState extends State<MusicHomePage>
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(musicItem.songName,
-                                style:
-                                    TextStyle(fontSize: ThemeSize.middleFontSize)),
+                                style: TextStyle(
+                                    fontSize: ThemeSize.middleFontSize)),
                             Text(
                               "${musicItem.authorName} - ${musicItem.albumName}",
                               softWrap: false,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                  color: ThemeColors.disableColor),
+                              style: TextStyle(color: ThemeColors.disableColor),
                             )
                           ],
                         ),
@@ -370,7 +392,9 @@ class MusicHomePageState extends State<MusicHomePage>
                           }),
                       SizedBox(width: ThemeSize.containerPadding),
                       Image.asset(
-                        musicItem.isLike == 1 ? "lib/assets/images/icon_like_active.png" : "lib/assets/images/icon_like.png" ,
+                        musicItem.isLike == 1
+                            ? "lib/assets/images/icon_like_active.png"
+                            : "lib/assets/images/icon_like.png",
                         width: ThemeSize.smallIcon,
                         height: ThemeSize.smallIcon,
                       ),
@@ -414,7 +438,11 @@ class MusicHomePageState extends State<MusicHomePage>
                         },
                         child: Column(
                           children: [
-                            MusicAvaterComponent(type:'author',avater:authorModel.avatar,size:ThemeSize.middleAvater,name:authorModel.authorName![0]),
+                            MusicAvaterComponent(
+                                type: 'author',
+                                avater: authorModel.avatar,
+                                size: ThemeSize.middleAvater,
+                                name: authorModel.authorName![0]),
                             SizedBox(height: ThemeSize.containerPadding),
                             Text(authorModel.authorName!)
                           ],

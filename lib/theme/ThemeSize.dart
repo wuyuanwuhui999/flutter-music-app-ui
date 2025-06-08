@@ -36,4 +36,5 @@ class ThemeSize {
   static double menuHeight = 40;// 弹出点赞和评论菜单的高度
   static double bottomBarHeight = 85;// 底部导航条高度
   static double borderSize = 3;
+  static double opacity = 0.5;// 图标透明度
 }

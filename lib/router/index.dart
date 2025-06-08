@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
+import '../pages/ChatPage.dart';
 import '../pages/MusicCategoryPage.dart';
 import '../model/MusicAuthorModel.dart';
 import '../pages/MusicAuthorListPage.dart';
@@ -84,6 +85,9 @@ class Routes {
     }));
     router.define('/RecordMusicPage', handler: Handler(handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
       return const RecordMusicPage();
+    }));
+    router.define('/ChatPage', handler: Handler(handlerFunc: (BuildContext? context, Map<String, List<String>> params) {
+      return const ChatPage();
     }));
   }
 }

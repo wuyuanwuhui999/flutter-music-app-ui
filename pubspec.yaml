@@ -162,7 +162,8 @@ flutter:
     - lib/assets/images/default_cover.jpg
     - lib/assets/images/icon_code.png
     - lib/assets/images/icon_send.png
-
+    - lib/assets/images/icon_ai.png
+    - lib/assets/images/icon_menu.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 

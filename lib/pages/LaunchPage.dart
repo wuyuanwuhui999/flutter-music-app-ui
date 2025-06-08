@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import '../provider/PlayerMusicProvider.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -42,6 +41,8 @@ class LaunchPageState extends State<LaunchPage> {
               userInfoprovider.setUserInfo(UserInfoModel.fromJson(data.data));
             }
             Routes.router.navigateTo(context, '/MusicIndexPage',replace: true);
+          }).catchError((err){
+            Routes.router.navigateTo(context, '/LoginPage',replace: true);
           });
         }else{// 没有登录
           Routes.router.navigateTo(context, '/LoginPage',replace: true);
