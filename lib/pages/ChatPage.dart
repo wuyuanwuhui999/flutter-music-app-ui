@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
 import '../model/AiModel.dart';
+import '../model/ChatHistoryGroupModel.dart';
+import '../model/ChatHistoryModel.dart';
 import '../service/serverMethod.dart';
 import '../provider/UserInfoProvider.dart';
 import '../model/UserInfoModel.dart';
 import '../theme/ThemeStyle.dart';
 import '../theme/ThemeSize.dart';
 import '../theme/ThemeColors.dart';
+import '../common/constant.dart';
+import '../utils/common.dart';
 
 class ChatPage extends StatefulWidget {
   const ChatPage({super.key});
@@ -20,6 +25,11 @@ class ChatPage extends StatefulWidget {
 class ChatPageState extends State<ChatPage> {
   List<AiModel> modelList = [];
   AiModel? activeModel;
+  int pageNum = 1;
+  int total = 0;
+  Map<String, List<List<ChatHistoryModel>>> timeAgoGroupMap = {};
+  bool showHistory = false;
+  EasyRefreshController easyRefreshController = EasyRefreshController();
 
   @override
   void initState() {
@@ -33,6 +43,122 @@ class ChatPageState extends State<ChatPage> {
     super.initState();
   }
 
+  useHistory() {
+    getChatHistoryService(pageNum, PAGE_SIZE).then((res) {
+      List<dynamic> items =
+          res.data.map((item) => ChatHistoryModel.fromJson(item)).toList();
+
+      // 计算时间差
+      for (var item in items) {
+        item.timeAgo = formatTimeAgo(item.createTime);
+      }
+
+      // 按chatId分组
+      final chatIdGroup = <String, List<ChatHistoryModel>>{};
+      for (var item in items) {
+        chatIdGroup.putIfAbsent(item.chatId, () => []);
+        chatIdGroup[item.chatId]!.add(item);
+      }
+
+      // 反转每个chatId组内的顺序
+      for (var key in chatIdGroup.keys) {
+        chatIdGroup[key] = chatIdGroup[key]!.reversed.toList();
+      }
+
+      // 按timeAgo分组
+      final mTimeAgoGroupMap = <String, List<List<ChatHistoryModel>>>{};
+      for (var chatIdList in chatIdGroup.values) {
+        if (chatIdList.isNotEmpty) {
+          final timeAgo = chatIdList.first.timeAgo;
+          mTimeAgoGroupMap.putIfAbsent(timeAgo, () => []);
+          mTimeAgoGroupMap[timeAgo]!.add(chatIdList);
+        }
+      }
+
+      // 转换为最终分组结构
+      final groups = mTimeAgoGroupMap.entries
+          .map((entry) => ChatHistoryGroupModel(
+                timeAgo: entry.key,
+                list: entry.value,
+              ))
+          .toList();
+
+      // 按时间倒序排序
+      groups.sort((a, b) {
+        // 这里简化排序逻辑，实际应根据时间值排序
+        return b.timeAgo.compareTo(a.timeAgo);
+      });
+      setState(() {
+        total = res.total!;
+        timeAgoGroupMap = mTimeAgoGroupMap;
+      });
+    });
+  }
+
+  // 历史记录弹窗
+  Widget buildHistoryWidget(){
+    return showHistory
+        ? Positioned(
+      left: 0,
+      top: 0,
+      bottom: 0,
+      child: SizedBox(
+          width: double.infinity,
+          height: double.infinity,
+          child: Row(children: [
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.7,
+              height: MediaQuery.of(context).size.height,
+              child: EasyRefresh(
+                  controller: easyRefreshController,
+                  footer: ClassicalFooter(
+                    loadText: '上拉加载',
+                    loadReadyText: '准备加载',
+                    loadingText: '加载中...',
+                    loadedText: '加载完成',
+                    noMoreText: '没有更多',
+                    bgColor: Colors.transparent,
+                    textColor: ThemeColors.disableColor,
+                  ),
+                  onLoad: () async {
+                    pageNum++;
+                    if (total <= pageNum * PAGE_SIZE) {
+                      Fluttertoast.showToast(
+                          msg: "已经到底了",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.CENTER,
+                          timeInSecForIosWeb: 1,
+                          backgroundColor: Colors.blue,
+                          textColor: Colors.white,
+                          fontSize: ThemeSize.middleFontSize);
+                    } else {}
+                  },
+                  child: Padding(padding: ThemeStyle.padding,child: Column(
+                    children:  timeAgoGroupMap.entries.map((item){
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(item.key),
+                          ...item.value.map((bItem){
+                            return Text(bItem.first.prompt);
+                          })
+                        ],);
+                    }).toList(),))
+              ),
+            ),
+            Expanded(
+              flex: 1,
+              child: Container(
+                decoration: BoxDecoration(
+                    color: ThemeColors.popupMenuColor),
+                height: MediaQuery.of(context).size.height,
+              ),
+            )
+          ])),
+    )
+        : SizedBox();
+  }
+
   @override
   Widget build(BuildContext context) {
     UserInfoModel userInfoModel =
@@ -41,8 +167,7 @@ class ChatPageState extends State<ChatPage> {
       backgroundColor: ThemeColors.colorBg,
       body: SafeArea(
           top: true,
-          child: Container(
-              child: Stack(
+          child: Stack(
             children: [
               SizedBox(
                 width: double.infinity,
@@ -65,22 +190,31 @@ class ChatPageState extends State<ChatPage> {
                               child: Text(
                             "当前接入模型：${activeModel?.modelName ?? ''}",
                             textAlign: TextAlign.center,
-                              )),
+                          )),
                           Opacity(
                             opacity: ThemeSize.opacity,
-                            child: Image.asset(
-                                'lib/assets/images/icon_menu.png',
-                                width: ThemeSize.smallIcon,
-                                height: ThemeSize.smallIcon),
+                            child: InkWell(
+                              child: Image.asset(
+                                  'lib/assets/images/icon_menu.png',
+                                  width: ThemeSize.smallIcon,
+                                  height: ThemeSize.smallIcon),
+                              onTap: () {
+                                setState(() {
+                                  showHistory = true;
+                                });
+                                useHistory();
+                              },
+                            ),
                           ),
                         ],
                       ),
                     )
                   ],
                 ),
-              )
+              ),
+              buildHistoryWidget()
             ],
-          ))),
+          )),
     );
   }
 }

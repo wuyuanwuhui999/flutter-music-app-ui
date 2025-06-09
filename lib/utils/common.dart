@@ -81,3 +81,26 @@ Future showCustomDialog(BuildContext context,Widget body,String name,Function ok
     default:
   }
 }
+
+// 时间格式化工具
+String formatTimeAgo(String dateString) {
+  final date = DateTime.parse(dateString);
+  final now = DateTime.now();
+  final difference = now.difference(date);
+
+  if (difference.inMinutes < 1) {
+    return "刚刚";
+  } else if (difference.inMinutes < 60) {
+    return "${difference.inMinutes}分钟前";
+  } else if (difference.inHours < 24) {
+    return "${difference.inHours}小时前";
+  } else if (difference.inDays < 30) {
+    return "${difference.inDays}天前";
+  } else if(difference.inDays < 365){
+    final months = (difference.inDays / 30).floor();
+    return "$months月前";
+  }else{
+    final years = (difference.inDays / 365).floor();
+    return "$years年前";
+  }
+}

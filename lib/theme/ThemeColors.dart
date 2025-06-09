@@ -10,7 +10,7 @@ class ThemeColors {
   static Color blueColor = const Color.fromRGBO(62,125,155,1);
   static Color opcityColor = const Color.fromRGBO(0,0,0,0.1);
   static Color opcityWhiteColor = const Color.fromRGBO(255,255,255,0.3);
-  static Color popupMenuColor = const Color.fromRGBO(0,0,0,0.8);
+  static Color popupMenuColor = const Color.fromRGBO(0,0,0,0.5);
   static Color warnColor = const Color.fromRGBO(247, 69, 59, 1);
   static Color orange = Colors.orange;
   static Color grey = Colors.grey;

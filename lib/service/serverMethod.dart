@@ -523,3 +523,16 @@ Future<ResponseModel<List<dynamic>>> getModelListService() async {
   }
 }
 
+///@author: wuwenqiang
+///@description: 获取历史对话
+/// @date: 2025-06-09 19:39
+Future<ResponseModel<List<dynamic>>> getChatHistoryService(int pageNum,int pageSize) async {
+  try {
+    Response response =
+    await dio.get(servicePath['getChatHistory']!,queryParameters:{"pageNum":pageNum,"pageSize":pageSize});
+    return ResponseModel.fromJson(response.data);
+  } catch (e) {
+    print('ERROR:======>${e}');
+    throw Error();
+  }
+}
