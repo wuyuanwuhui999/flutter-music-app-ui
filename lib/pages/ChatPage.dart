@@ -48,10 +48,10 @@ class ChatPageState extends State<ChatPage> {
       List<dynamic> items =
           res.data.map((item) => ChatHistoryModel.fromJson(item)).toList();
 
-      // 计算时间差
-      for (var item in items) {
-        item.timeAgo = formatTimeAgo(item.createTime);
-      }
+      // // 计算时间差
+      // for (var item in items) {
+      //   item.timeAgo = formatTimeAgo(item.createTime);
+      // }
 
       // 按chatId分组
       final chatIdGroup = <String, List<ChatHistoryModel>>{};
@@ -69,7 +69,7 @@ class ChatPageState extends State<ChatPage> {
       final mTimeAgoGroupMap = <String, List<List<ChatHistoryModel>>>{};
       for (var chatIdList in chatIdGroup.values) {
         if (chatIdList.isNotEmpty) {
-          final timeAgo = chatIdList.first.timeAgo;
+          final timeAgo = chatIdList.first.timeAgo ?? "";
           mTimeAgoGroupMap.putIfAbsent(timeAgo, () => []);
           mTimeAgoGroupMap[timeAgo]!.add(chatIdList);
         }
@@ -102,13 +102,15 @@ class ChatPageState extends State<ChatPage> {
       left: 0,
       top: 0,
       bottom: 0,
-      child: SizedBox(
-          width: double.infinity,
-          height: double.infinity,
+      right: 0,
+      child: Container(
+          width: MediaQuery.of(context).size.width, // 使用实际屏幕宽度
+          height: MediaQuery.of(context).size.height,
           child: Row(children: [
-            SizedBox(
+            Container(
               width: MediaQuery.of(context).size.width * 0.7,
               height: MediaQuery.of(context).size.height,
+              decoration: BoxDecoration(color: Colors.white),
               child: EasyRefresh(
                   controller: easyRefreshController,
                   footer: ClassicalFooter(
@@ -133,15 +135,24 @@ class ChatPageState extends State<ChatPage> {
                           fontSize: ThemeSize.middleFontSize);
                     } else {}
                   },
-                  child: Padding(padding: ThemeStyle.padding,child: Column(
-                    children:  timeAgoGroupMap.entries.map((item){
+                  child: Container(
+                      padding: ThemeStyle.padding,
+                      child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children:  timeAgoGroupMap.entries.toList().asMap().entries.map((indexedEntry) {
+                      final index = indexedEntry.key;
+                      final item = indexedEntry.value;
+                      final isLast = index == timeAgoGroupMap.entries.length - 1;
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Text(item.key),
+                          Text(item.key,style: TextStyle(color: ThemeColors.disableColor),),
                           ...item.value.map((bItem){
                             return Text(bItem.first.prompt);
-                          })
+                          }),
+                          SizedBox(height: isLast?0:ThemeSize.containerPadding)
                         ],);
                     }).toList(),))
               ),
@@ -170,8 +181,8 @@ class ChatPageState extends State<ChatPage> {
           child: Stack(
             children: [
               SizedBox(
-                width: double.infinity,
-                height: double.infinity,
+                width: MediaQuery.of(context).size.width, // 使用实际屏幕宽度
+                height: MediaQuery.of(context).size.height,
                 child: Column(
                   children: [
                     Container(

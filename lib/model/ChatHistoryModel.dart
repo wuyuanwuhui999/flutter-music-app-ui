@@ -1,3 +1,5 @@
+import '../utils/common.dart';
+
 class ChatHistoryModel {
   final int id;
   final int modelId;
@@ -37,7 +39,7 @@ class ChatHistoryModel {
         content:json["content"],
         thinkContent:json["thinkContent"],
         responseContent:json["responseContent"],
-        timeAgo:json["timeAgo"],
+        timeAgo:formatTimeAgo(json["createTime"]),
         createTime: json["createTime"]
     );
   }
