@@ -3,26 +3,26 @@ import './ThemeSize.dart';
 import './ThemeColors.dart';
 
 class ThemeStyle {
-  static BoxDecoration boxDecoration = BoxDecoration(
+  static const BoxDecoration boxDecoration = BoxDecoration(
     color: Colors.white,
     borderRadius: BorderRadius.all(Radius.circular(ThemeSize.middleRadius)),
   );
 
-  static EdgeInsets margin = EdgeInsets.only(bottom: ThemeSize.containerPadding);
+  static const EdgeInsets margin = EdgeInsets.only(bottom: ThemeSize.containerPadding);
 
-  static EdgeInsets padding = EdgeInsets.all(ThemeSize.containerPadding);
+  static const EdgeInsets padding = EdgeInsets.all(ThemeSize.containerPadding);
 
-  static EdgeInsets paddingBox = EdgeInsets.only(left: ThemeSize.containerPadding,right: ThemeSize.containerPadding);
+  static const EdgeInsets paddingBox = EdgeInsets.only(left: ThemeSize.containerPadding,right: ThemeSize.containerPadding);
 
-  static TextStyle mainTitleStyle = TextStyle(
+  static const TextStyle mainTitleStyle = TextStyle(
       color: ThemeColors.mainTitle,
       fontSize: ThemeSize.bigFontSize,
       fontWeight: FontWeight.bold);
 
-  static TextStyle subTitleStyle =
+  static const TextStyle subTitleStyle =
       TextStyle(color: ThemeColors.subTitle, fontSize: ThemeSize.smallFontSize);
 
-  static BoxDecoration bottomDecoration = BoxDecoration(
+  static const BoxDecoration bottomDecoration = BoxDecoration(
       border: Border(
           bottom: BorderSide(
             // 设置单侧边框的样式
@@ -31,5 +31,5 @@ class ThemeStyle {
               style: BorderStyle.solid)));
 
   //列边距
-  static EdgeInsets columnPadding = EdgeInsets.only(top: ThemeSize.columnPadding,bottom: ThemeSize.columnPadding);
+  static const EdgeInsets columnPadding = EdgeInsets.only(top: ThemeSize.columnPadding,bottom: ThemeSize.columnPadding);
 }

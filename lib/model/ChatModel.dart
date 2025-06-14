@@ -7,8 +7,8 @@ class ChatModel {
 
   ChatModel({
     required this.position,
-    this.thinkContent,
-    this.responseContent,
+    this.thinkContent = "",
+    this.responseContent = "",
   });
 
   //工厂模式-用这种模式可以省略New关键字

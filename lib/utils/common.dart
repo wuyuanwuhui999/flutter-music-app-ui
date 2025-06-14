@@ -1,4 +1,6 @@
 // md5 加密
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 
 import '../common/constant.dart';
@@ -103,4 +105,13 @@ String formatTimeAgo(String dateString) {
     final years = (difference.inDays / 365).floor();
     return "$years年前";
   }
+}
+
+String generateSecureID() {
+  final random = Random.secure();
+  final values = List<int>.generate(16, (i) => random.nextInt(256));
+  return values
+      .map((v) => v.toRadixString(16).padLeft(2, '0'))
+      .join('')
+      .substring(0, 32);
 }
