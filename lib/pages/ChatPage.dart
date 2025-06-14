@@ -181,6 +181,7 @@ class ChatPageState extends State<ChatPage> {
     }
     setState(() {
       chatList.add(ChatModel(
+        thinkContent: "",
           position: PositionEnum.right,
           responseContent: controller.text));
     });
@@ -404,7 +405,7 @@ class ChatPageState extends State<ChatPage> {
                                       children: [
                                         thinkContent != ""
                                             ? Text(
-                                                thinkContent ?? "",
+                                                thinkContent,
                                                 style: const TextStyle(
                                                     color: ThemeColors
                                                         .disableColor),
