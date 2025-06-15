@@ -1,15 +1,13 @@
 import 'dart:async';
 import 'dart:math';
 import 'dart:convert';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_music_app/component/MusicAvaterComponent.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
-import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:web_socket_channel/io.dart';
+import 'package:web_socket_channel/web_socket_channel.dart';
 import '../api/api.dart';
 import '../component/TriangleComponent.dart';
 import '../enum/ConnectionStatus.dart';
@@ -44,9 +42,9 @@ class ChatPageState extends State<ChatPage> {
   bool loading = false;
   String token = "";
   String chatId = generateSecureID();
-  WebSocketChannel? _channel;
+  WebSocketChannel? channel;
   String message = "";
-  StreamSubscription? _subscription; // 保存订阅对象
+  StreamSubscription? subscription; // 保存订阅对象
   String thinkContent = "";
   String responseContent = "";
   ConnectionStatus _connectionStatus = ConnectionStatus.disconnected;
@@ -54,7 +52,8 @@ class ChatPageState extends State<ChatPage> {
     ChatModel(
         position: PositionEnum.left,
         thinkContent: "",
-        responseContent: "你好，我是智能音乐助手小吴同学，请问有什么可以帮助您？")
+        responseContent: "你好，我是智能音乐助手小吴同学，请问有什么可以帮助您？"
+    )
   ];
   Map<String, List<List<ChatHistoryModel>>> timeAgoGroupMap = {};
   bool showHistory = false;
@@ -64,6 +63,7 @@ class ChatPageState extends State<ChatPage> {
   final RegExp startThinkPattern = RegExp(r'^<think>');
   final RegExp endThinkPattern = RegExp(r'</think>');
   bool showClearIcon = false;
+  ScrollController scrollController = ScrollController();
 
   @override
   void initState() {
@@ -83,15 +83,16 @@ class ChatPageState extends State<ChatPage> {
 
   @override
   void dispose() {
+    scrollController.dispose();
     // 1. 取消订阅（停止监听消息）
-    _subscription?.cancel();
+    subscription?.cancel();
 
     // 2. 关闭连接
-    _channel?.sink.close();
+    channel?.sink.close();
 
     // 3. 释放资源
-    _subscription = null;
-    _channel = null;
+    subscription = null;
+    channel = null;
 
     super.dispose(); // 最后调用父类dispose
   }
@@ -143,23 +144,34 @@ class ChatPageState extends State<ChatPage> {
     });
   }
 
+  void scrollToBottom() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (scrollController.hasClients) {
+        scrollController.animateTo(
+          scrollController.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeOut,
+        );
+      }
+    });
+  }
+
   /// 关闭 WebSocket 连接
   closeWebSocket() {
-    if (_subscription != null) {
-      _subscription!.cancel();
-      _subscription = null;
+    if (subscription != null) {
+      subscription!.cancel();
+      subscription = null;
     }
 
-    if (_channel != null) {
+    if (channel != null) {
       try {
-        _channel!.sink.close();
+        channel!.sink.close();
       } catch (e) {
         debugPrint('关闭 WebSocket 时出错: $e');
       } finally {
-        _channel = null;
+        channel = null;
       }
     }
-
     setState(() {
       _connectionStatus = ConnectionStatus.disconnected;
       loading = false;
@@ -185,20 +197,20 @@ class ChatPageState extends State<ChatPage> {
           position: PositionEnum.right,
           responseContent: controller.text));
     });
+    scrollToBottom();
     // 如果已有连接但未连接成功，先关闭旧连接
-    if (_channel != null && _connectionStatus != ConnectionStatus.connected) {
+    if (_connectionStatus != ConnectionStatus.connected) {
       closeWebSocket();
     }
 
-    _channel ??= IOWebSocketChannel.connect(
+    channel ??= IOWebSocketChannel.connect(
       "${HOST.replaceAll("http", "ws")}${servicePath['chatWs']}", // 免费测试服务器
       pingInterval: const Duration(seconds: 30), // 心跳检测
     );
 
-    _subscription ??= _channel?.stream.listen((value) {
+    subscription ??= channel?.stream.listen((value) {
       message += value;
       setState(() {
-        print(value);
         loading = true;
         _connectionStatus = ConnectionStatus.connected;
         if (value != "[completed]") {
@@ -225,6 +237,7 @@ class ChatPageState extends State<ChatPage> {
           thinkContent = responseContent = "";
         }
       });
+      scrollToBottom();
     }, onError: (error) {
       setState(() {
         _connectionStatus = ConnectionStatus.error;
@@ -246,10 +259,12 @@ class ChatPageState extends State<ChatPage> {
       "files": [] // 如果需要上传文件，请根据实际情况调整
     };
     controller.text = "";
+
+    channel?.sink.add(json.encode(payload));
     setState(() {
       prompt = "";
+      loading = true;
     });
-    _channel?.sink.add(json.encode(payload));
   }
 
   // 头部
@@ -291,6 +306,7 @@ class ChatPageState extends State<ChatPage> {
     return Expanded(
         flex: 1,
         child: ListView(
+            controller: scrollController, // 绑定控制器
             scrollDirection: Axis.vertical,
             padding: const EdgeInsets.only(
                 bottom: ThemeSize.containerPadding,
@@ -324,7 +340,7 @@ class ChatPageState extends State<ChatPage> {
                         Expanded(
                             flex: 1,
                             child: Wrap(
-                              alignment: WrapAlignment.end,
+                              alignment: PositionEnum.left == item.position ? WrapAlignment.start : WrapAlignment.end,
                               children: [
                                 Container(
                                     padding: ThemeStyle.padding,
@@ -371,7 +387,7 @@ class ChatPageState extends State<ChatPage> {
                       ],
                     ));
               }),
-              loading && (thinkContent != "" || responseContent != "")
+              loading
                   ? Padding(
                       padding: const EdgeInsets.only(
                           top: ThemeSize.containerPadding),
@@ -403,14 +419,12 @@ class ChatPageState extends State<ChatPage> {
                                     decoration: ThemeStyle.boxDecoration,
                                     child: Column(
                                       children: [
-                                        thinkContent != ""
-                                            ? Text(
-                                                thinkContent,
+                                            Text(
+                                                thinkContent.isEmpty  ? "正在思考中" : thinkContent,
                                                 style: const TextStyle(
                                                     color: ThemeColors
                                                         .disableColor),
-                                              )
-                                            : const SizedBox(),
+                                              ),
                                         Text(responseContent ?? ""),
                                       ],
                                     ),
