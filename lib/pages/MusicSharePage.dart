@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'dart:ui';
+import '../component/SelectDialogComponent.dart';
 import '../service/serverMethod.dart';
 import '../model/CircleModel.dart';
 import '../theme/ThemeStyle.dart';
@@ -163,7 +164,18 @@ class _MusicSharePageState extends State<MusicSharePage>
     return Container(
       decoration: ThemeStyle.boxDecoration,
       padding: ThemeStyle.padding,
-      child: InkWell(onTap: buildModalBottomSheet, child: Row(children: [
+      child: InkWell(
+        onTap:(){
+          BottomSelectionDialog.show(
+            context:context,
+            options:["私密", "公开"],
+            onTap:(String value) {
+              Navigator.pop(context);
+              setState(() {
+                circleModel.permission = value == "私密" ? 0 : 1;
+              });
+            });
+      }, child: Row(children: [
         Image.asset(
           'lib/assets/images/icon_permission.png',
           height: ThemeSize.middleIcon,
@@ -207,89 +219,4 @@ class _MusicSharePageState extends State<MusicSharePage>
       loading = false;
     });
   }
-
- Widget itemCreat(BuildContext context, String title) {
-   return Center(
-       child: Text(
-         title,
-         style: TextStyle(
-             fontSize: ThemeSize.middleFontSize),
-         textAlign: TextAlign.center,
-       ));
- }
-
- ///@author: wuwenqiang
- ///@description: 创建底部弹窗
- /// @date: 2024-07-13 21:23
- void buildModalBottomSheet(){
-   showModalBottomSheet(
-       backgroundColor:Colors.white,
-     context: context,
-     isScrollControlled: false,
-     builder: (ctx) {
-       return Container(
-         color: ThemeColors.opcityColor,
-         height: 160,
-         child: Column(
-           crossAxisAlignment: CrossAxisAlignment.center,
-           children: <Widget>[
-             Container(
-                 margin: EdgeInsets.only(
-                     left: ThemeSize.containerPadding,
-                     right: ThemeSize.containerPadding),
-                 decoration: BoxDecoration(
-                   color: ThemeColors.colorWhite,
-                   borderRadius: BorderRadius.all(
-                       Radius.circular(ThemeSize.middleRadius)),
-                 ),
-                 child: Column(children: [
-                   SizedBox(
-                     height: ThemeSize.buttonHeight,
-                     child: InkWell(
-                       child: itemCreat(context, '私密'),
-                       onTap: () {
-                         Navigator.pop(context);
-                         setState(() {
-                           circleModel.permission = 0;
-                         });
-                       },
-                     ),
-                   ),
-                   Container(
-                       height: 1,
-                       width: double.infinity,
-                       color: ThemeColors.colorBg),
-                   Container(
-                       height: ThemeSize.buttonHeight,
-                       child: InkWell(
-                         child: itemCreat(context, '公开'),
-                         onTap: () {
-                            Navigator.pop(context);
-                            setState(() {
-                              circleModel.permission = 1;
-                            });
-                         },
-                       ))
-                 ])),
-             InkWell(
-               child: Container(
-                 margin: EdgeInsets.all(ThemeSize.containerPadding),
-                 decoration: BoxDecoration(
-                   color: ThemeColors.colorWhite,
-                   borderRadius: BorderRadius.all(
-                       Radius.circular(ThemeSize.middleRadius)),
-                 ),
-                 padding: EdgeInsets.all(ThemeSize.containerPadding),
-                 child: itemCreat(context, '取消'),
-               ),
-               onTap: () {
-                 Navigator.pop(context);
-               },
-             )
-           ],
-         ),
-       );
-     }
-   );
- }
 }

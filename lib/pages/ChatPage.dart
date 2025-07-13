@@ -4,11 +4,14 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_music_app/component/MusicAvaterComponent.dart';
+import 'package:flutter_music_app/model/DocModel.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import '../api/api.dart';
+import '../component/SelectDialogComponent.dart';
 import '../component/TriangleComponent.dart';
 import '../enum/ConnectionStatus.dart';
 import '../enum/PositionEnum.dart';
@@ -35,7 +38,7 @@ class ChatPage extends StatefulWidget {
 
 class ChatPageState extends State<ChatPage> {
   List<AiModel> modelList = [];
-  AiModel? activeModel;
+  String activeModelName = "";
   int pageNum = 1;
   int total = 0;
   String prompt = "";
@@ -47,16 +50,19 @@ class ChatPageState extends State<ChatPage> {
   StreamSubscription? subscription; // 保存订阅对象
   String thinkContent = "";
   String responseContent = "";
+  String type = "";
+  bool showThink = false;
   ConnectionStatus _connectionStatus = ConnectionStatus.disconnected;
   List<ChatModel> chatList = [
     ChatModel(
         position: PositionEnum.left,
         thinkContent: "",
-        responseContent: "你好，我是智能音乐助手小吴同学，请问有什么可以帮助您？"
-    )
+        responseContent: "你好，我是智能音乐助手小吴同学，请问有什么可以帮助您？"),
   ];
   Map<String, List<List<ChatHistoryModel>>> timeAgoGroupMap = {};
   bool showHistory = false;
+  bool showMyDoc = false;
+  List<DocModel> myDocList = [];
   EasyRefreshController easyRefreshController = EasyRefreshController();
   TextEditingController controller = TextEditingController(); // 姓名
   // 使用正则表达式进行匹配
@@ -75,7 +81,7 @@ class ChatPageState extends State<ChatPage> {
       final models = res.data.map((item) => AiModel.fromJson(item)).toList();
       setState(() {
         modelList = models;
-        activeModel = models.first; // 确保首次赋值
+        activeModelName = models.first.modelName; // 确保首次赋值
       });
     });
     super.initState();
@@ -193,7 +199,7 @@ class ChatPageState extends State<ChatPage> {
     }
     setState(() {
       chatList.add(ChatModel(
-        thinkContent: "",
+          thinkContent: "",
           position: PositionEnum.right,
           responseContent: controller.text));
     });
@@ -245,17 +251,16 @@ class ChatPageState extends State<ChatPage> {
         Fluttertoast.showToast(msg: "连接错误: $error");
       });
     }, onDone: () {
-      setState(() {
-        _connectionStatus = ConnectionStatus.disconnected;
-        loading = false;
-      });
+      closeWebSocket();
     });
     chatId = chatId.isNotEmpty ? chatId : generateSecureID();
     Map<String, dynamic> payload = {
-      "modelId": activeModel?.id,
+      "modelName": activeModelName,
       "token": token, // 替换为实际用户ID
       "chatId": chatId, // 替换为实际聊天ID
       "prompt": prompt,
+      "type": type,
+      "showThink": showThink,
       "files": [] // 如果需要上传文件，请根据实际情况调整
     };
     controller.text = "";
@@ -267,6 +272,27 @@ class ChatPageState extends State<ChatPage> {
     });
   }
 
+  useMyDocList() {
+    getMyDocListService().then((res) {
+      setState(() {
+        myDocList = res.data.map((item) => DocModel.fromJson(item)).toList();
+      });
+    });
+  }
+
+  useTabModel(){
+    BottomSelectionDialog.show(
+      context: context,
+      options: modelList.map((item){
+        return item.modelName;
+      }).toList(),
+      onTap: (selectedOption) {
+        setState(() {
+          activeModelName = selectedOption;
+        });
+      },
+    );
+  }
   // 头部
   Widget buildHeaderWidget() {
     return Container(
@@ -276,27 +302,64 @@ class ChatPageState extends State<ChatPage> {
         children: [
           Opacity(
             opacity: ThemeSize.opacity,
-            child: Image.asset('lib/assets/images/icon_back.png',
-                width: ThemeSize.smallIcon, height: ThemeSize.smallIcon),
+            child: GestureDetector(
+              onTap: (){
+                Navigator.of(context).pop();
+              },
+              child: Image.asset('lib/assets/images/icon_back.png',
+                width: ThemeSize.smallIcon, height: ThemeSize.smallIcon),),
           ),
           Expanded(
               child: Text(
-            "当前接入模型：${activeModel?.modelName ?? ''}",
+            "当前接入模型：${activeModelName}",
             textAlign: TextAlign.center,
           )),
-          Opacity(
-            opacity: ThemeSize.opacity,
-            child: InkWell(
-              child: Image.asset('lib/assets/images/icon_menu.png',
-                  width: ThemeSize.smallIcon, height: ThemeSize.smallIcon),
-              onTap: () {
+          PopupMenuButton<String>(
+            color: ThemeColors.popupMenuColor.withOpacity(1),
+            child: Image.asset('lib/assets/images/icon_menu.png',
+                width: ThemeSize.smallIcon, height: ThemeSize.smallIcon),
+            onSelected: (String item) {
+              if (item == "上传文档") {
+              } else if (item == "我的文档") {
+                setState(() {
+                  showMyDoc = true;
+                });
+                useMyDocList();
+              } else if (item == "会话记录") {
                 setState(() {
                   showHistory = true;
                 });
                 useHistory();
-              },
-            ),
-          ),
+              } else if (item == "切换模型") {
+                useTabModel();
+              }
+            },
+            itemBuilder: (context) {
+              return <PopupMenuEntry<String>>[
+                const PopupMenuItem<String>(
+                    value: "上传文档",
+                    child: Text(
+                      "上传文档",
+                      style: TextStyle(color: ThemeColors.colorWhite),
+                    )),
+                const PopupMenuDivider(height: 1),
+                const PopupMenuItem<String>(
+                    value: "我的文档",
+                    child: Text("我的文档",
+                        style: TextStyle(color: ThemeColors.disableColor))),
+                const PopupMenuDivider(height: 1),
+                const PopupMenuItem<String>(
+                    value: "会话记录",
+                    child: Text("会话记录",
+                        style: TextStyle(color: ThemeColors.disableColor))),
+                const PopupMenuDivider(height: 1),
+                const PopupMenuItem<String>(
+                    value: "切换模型",
+                    child: Text("切换模型",
+                        style: TextStyle(color: ThemeColors.disableColor))),
+              ];
+            },
+          )
         ],
       ),
     );
@@ -340,24 +403,23 @@ class ChatPageState extends State<ChatPage> {
                         Expanded(
                             flex: 1,
                             child: Wrap(
-                              alignment: PositionEnum.left == item.position ? WrapAlignment.start : WrapAlignment.end,
+                              alignment: PositionEnum.left == item.position
+                                  ? WrapAlignment.start
+                                  : WrapAlignment.end,
                               children: [
                                 Container(
                                     padding: ThemeStyle.padding,
                                     decoration: ThemeStyle.boxDecoration,
-                                    child: item.thinkContent != ""
-                                        ? Column(
-                                            children: [
-                                              Text(
-                                                item.thinkContent ?? "",
-                                                style: const TextStyle(
-                                                    color:
-                                                        ThemeColors.subTitle),
-                                              ),
-                                              Text(item.responseContent ?? ""),
-                                            ],
-                                          )
-                                        : Text(item.responseContent ?? ""))
+                                    child: Column(
+                                      children: [
+                                        item.thinkContent != "" ? Text(
+                                          item.thinkContent ?? "",
+                                          style: const TextStyle(
+                                              color: ThemeColors.subTitle),
+                                        ) :const SizedBox(),
+                                        Text(item.responseContent ?? ""),
+                                      ],
+                                    ))
                               ],
                             )),
                         PositionEnum.right == item.position
@@ -412,20 +474,21 @@ class ChatPageState extends State<ChatPage> {
                           Expanded(
                               flex: 1,
                               child: Wrap(
-                                alignment: WrapAlignment.end,
+                                alignment: WrapAlignment.start,
                                 children: [
                                   Container(
                                     padding: ThemeStyle.padding,
                                     decoration: ThemeStyle.boxDecoration,
                                     child: Column(
                                       children: [
-                                            Text(
-                                                thinkContent.isEmpty  ? "正在思考中" : thinkContent,
-                                                style: const TextStyle(
-                                                    color: ThemeColors
-                                                        .disableColor),
-                                              ),
-                                        Text(responseContent ?? ""),
+                                        Text(
+                                          thinkContent.isEmpty
+                                              ? "正在思考中"
+                                              : thinkContent,
+                                          style: const TextStyle(
+                                              color: ThemeColors.disableColor),
+                                        ),
+                                        responseContent.isNotEmpty ? Text(responseContent) : const SizedBox(),
                                       ],
                                     ),
                                   )
@@ -435,6 +498,101 @@ class ChatPageState extends State<ChatPage> {
                       ))
                   : const SizedBox()
             ]));
+  }
+
+  Widget buildTypeWidget() {
+    return Container(
+      padding: const EdgeInsets.all(ThemeSize.smallMargin),
+      decoration: const BoxDecoration(color: ThemeColors.colorBg),
+      child: Row(
+        children: [
+          OutlinedButton(
+              onPressed: () {
+                setState(() {
+                  showThink = !showThink;
+                });
+              },
+
+              ///圆角
+              style: OutlinedButton.styleFrom(
+                backgroundColor: ThemeColors.colorWhite,
+                foregroundColor: ThemeColors.colorWhite,
+                side: BorderSide(
+                    color: showThink ? Colors.orange : ThemeColors.subTitle),
+                shape: RoundedRectangleBorder(
+                  borderRadius:
+                      BorderRadius.circular(ThemeSize.bigRadius), // 圆角
+                ),
+              ),
+              child: Text(
+                '深度思考',
+                style: TextStyle(
+                    fontSize: ThemeSize.middleFontSize,
+                    color: showThink ? Colors.orange : ThemeColors.subTitle),
+              )),
+          const SizedBox(width: ThemeSize.containerPadding),
+          OutlinedButton(
+              onPressed: () {
+                setState(() {
+                  type = type == "document" ? "" : "document";
+                });
+              },
+
+              ///圆角
+              style: OutlinedButton.styleFrom(
+                backgroundColor: ThemeColors.colorWhite,
+                // 背景色（可选）
+                foregroundColor: ThemeColors.colorWhite,
+                // 文字颜色
+                side: BorderSide(
+                    color: type == "document"
+                        ? Colors.orange
+                        : ThemeColors.subTitle),
+                // 设置边框颜色（这里是黑色）
+                shape: RoundedRectangleBorder(
+                  borderRadius:
+                      BorderRadius.circular(ThemeSize.bigRadius), // 圆角
+                ),
+              ),
+              child: Text(
+                '查询文档',
+                style: TextStyle(
+                    fontSize: ThemeSize.middleFontSize,
+                    color: type == "document"
+                        ? Colors.orange
+                        : ThemeColors.subTitle),
+              )),
+          SizedBox(width: ThemeSize.containerPadding),
+          OutlinedButton(
+              onPressed: () {
+                setState(() {
+                  type = type == "db" ? "" : "db";
+                });
+              },
+
+              ///圆角
+              style: OutlinedButton.styleFrom(
+                backgroundColor: ThemeColors.colorWhite,
+                // 背景色（可选）
+                foregroundColor: ThemeColors.colorWhite,
+                // 文字颜色
+                side: BorderSide(
+                    color: type == "db" ? Colors.orange : ThemeColors.subTitle),
+                // 设置边框颜色（这里是黑色）
+                shape: RoundedRectangleBorder(
+                  borderRadius:
+                      BorderRadius.circular(ThemeSize.bigRadius), // 圆角
+                ),
+              ),
+              child: Text(
+                '查询数据库',
+                style: TextStyle(
+                    fontSize: ThemeSize.middleFontSize,
+                    color: type == "db" ? Colors.orange : ThemeColors.subTitle),
+              ))
+        ],
+      ),
+    );
   }
 
   Widget buildInputWidget() {
@@ -538,7 +696,12 @@ class ChatPageState extends State<ChatPage> {
       width: MediaQuery.of(context).size.width, // 使用实际屏幕宽度
       height: MediaQuery.of(context).size.height,
       child: Column(
-        children: [buildHeaderWidget(), buildChatList(), buildInputWidget()],
+        children: [
+          buildHeaderWidget(),
+          buildChatList(),
+          buildTypeWidget(),
+          buildInputWidget()
+        ],
       ),
     );
   }
@@ -661,6 +824,117 @@ class ChatPageState extends State<ChatPage> {
         : const SizedBox();
   }
 
+  Widget buildDocListWidget() {
+    return showMyDoc
+        ? Positioned(
+            left: 0,
+            top: 0,
+            bottom: 0,
+            right: 0,
+            child: SizedBox(
+                width: MediaQuery.of(context).size.width, // 使用实际屏幕宽度
+                height: MediaQuery.of(context).size.height,
+                child: Row(children: [
+                  Container(
+                      width: MediaQuery.of(context).size.width * 0.7,
+                      height: MediaQuery.of(context).size.height,
+                      decoration: const BoxDecoration(color: Colors.white),
+                      child: EasyRefresh(
+                          child: Container(
+                        padding: ThemeStyle.padding,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: myDocList.asMap().entries.map((entry) {
+                            return Container(
+                                padding: EdgeInsets.only(
+                                    bottom: entry.key != myDocList.length - 1
+                                        ? ThemeSize.containerPadding
+                                        : 0),
+                                decoration: BoxDecoration(
+                                    border: Border(
+                                        bottom: BorderSide(
+                                  width: entry.key != myDocList.length - 1
+                                      ? 1
+                                      : 0, //宽度
+                                  color: entry.key != myDocList.length - 1
+                                      ? ThemeColors.disableColor
+                                      : ThemeColors.colorWhite, //边框颜色
+                                ))),
+                                child: Slidable(
+                                    endActionPane: ActionPane(
+                                      motion: ScrollMotion(),
+                                      children: [
+                                        SlidableAction(
+                                          onPressed: (context) {
+                                            showCustomDialog(
+                                                context,
+                                                SizedBox(),
+                                                '确定删除文档:${entry.value.name}',
+                                                () {
+                                              deleteMyDocumentService(
+                                                      entry.value.id)
+                                                  .then((res) {
+                                                Fluttertoast.showToast(
+                                                    msg: "删除成功",
+                                                    toastLength:
+                                                        Toast.LENGTH_SHORT,
+                                                    gravity:
+                                                        ToastGravity.CENTER,
+                                                    timeInSecForIosWeb: 1,
+                                                    backgroundColor: ThemeColors
+                                                        .disableColor,
+                                                    fontSize: ThemeSize
+                                                        .middleFontSize);
+                                                setState(() {
+                                                  myDocList.removeAt(entry.key);
+                                                });
+                                              });
+                                            });
+                                          },
+                                          backgroundColor: Colors.red,
+                                          foregroundColor: Colors.white,
+                                          icon: Icons.delete,
+                                          label: '删除',
+                                        ),
+                                      ],
+                                    ),
+                                    child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            formatTimeAgo(
+                                                entry.value.createTime),
+                                            style: TextStyle(
+                                                color:
+                                                    ThemeColors.disableColor),
+                                          ),
+                                          Text(entry.value.name)
+                                        ])));
+                          }).toList(),
+                        ),
+                      ))),
+                  Expanded(
+                    flex: 1,
+                    child: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          showMyDoc = false;
+                        });
+                      },
+                      child: Container(
+                        decoration:
+                            BoxDecoration(color: ThemeColors.popupMenuColor),
+                        height: MediaQuery.of(context).size.height,
+                      ),
+                    ),
+                  )
+                ])),
+          )
+        : const SizedBox();
+  }
+
   @override
   Widget build(BuildContext context) {
     UserInfoModel userInfoModel =
@@ -670,7 +944,11 @@ class ChatPageState extends State<ChatPage> {
       body: SafeArea(
           top: true,
           child: Stack(
-            children: [buildChatWidget(), buildHistoryWidget()],
+            children: [
+              buildChatWidget(),
+              buildDocListWidget(),
+              buildHistoryWidget()
+            ],
           )),
     );
   }

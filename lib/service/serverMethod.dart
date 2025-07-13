@@ -1,15 +1,11 @@
 import 'dart:async';
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_music_app/theme/ThemeColors.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import '../model/CircleModel.dart';
 import '../common/config.dart';
 import '../model/CircleLikeModel.dart';
 import '../model/FavoriteDirectoryModel.dart';
 import '../model/MusicRecordModel.dart';
 import '../api/api.dart';
-import '../theme/ThemeSize.dart';
 import '../utils/HttpUtil.dart';
 import '../utils/LocalStorageUtils.dart';
 import '../utils/crypto.dart';
@@ -536,3 +532,32 @@ Future<ResponseModel<List<dynamic>>> getChatHistoryService(int pageNum,int pageS
     throw Error();
   }
 }
+
+///@author: wuwenqiang
+///@description: 获取文档列表
+/// @date: 2025-06-09 19:39
+Future<ResponseModel<List<dynamic>>> getMyDocListService() async {
+  try {
+    Response response =
+    await dio.get(servicePath['getDocList']!);
+    return ResponseModel.fromJson(response.data);
+  } catch (e) {
+    print('ERROR:======>${e}');
+    throw Error();
+  }
+}
+
+///@author: wuwenqiang
+///@description: 获取文档列表
+/// @date: 2025-06-09 19:39
+Future<ResponseModel<void>> deleteMyDocumentService(String docId) async {
+  try {
+    Response response =
+    await dio.delete("${servicePath['getDocList']}$docId");
+    return ResponseModel.fromJson(response.data);
+  } catch (e) {
+    print('ERROR:======>${e}');
+    throw Error();
+  }
+}
+

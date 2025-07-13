@@ -6,6 +6,7 @@ import '../common/config.dart';
 import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
 import '../common/constant.dart';
+import '../component/SelectDialogComponent.dart';
 import '../provider/UserInfoProvider.dart';
 import '../router/index.dart';
 import 'LoginPage.dart';
@@ -329,8 +330,10 @@ class UserPageState extends State<UserPage> {
                                       padding: ThemeStyle.columnPadding,
                                       child: InkWell(
                                         onTap: () {
-                                          showSelectionDialog(["男", "女"],
-                                              (String value) {
+                                          BottomSelectionDialog.show(
+                                              context:context,
+                                              options:["男", "女"],
+                                              onTap:(String value) {
                                             hasChange = true;
                                             useSave(SexNameMap[value], 'sex',
                                                 '性别', false);
@@ -483,81 +486,5 @@ class UserPageState extends State<UserPage> {
     //   provider.userInfo.avater = res.data;
     //   provider.setUserInfo(provider.userInfo);
     // });
-  }
-
-  ///@author: wuwenqiang
-  ///@description: 底部弹出选项
-  /// @date: 2024-07-31 23:07
-  void showSelectionDialog(List<String> options, Function onTap) {
-    List<Widget> optionWidgetList = [];
-    int index = -1;
-    options.forEach((element) {
-      index++;
-      optionWidgetList.add(Container(
-        height: ThemeSize.buttonHeight,
-        child: InkWell(
-          child: _itemCreat(context, element),
-          onTap: () {
-            Navigator.pop(context);
-            onTap(element);
-          },
-        ),
-      ));
-      if (index != options.length) {
-        optionWidgetList.add(Container(
-            height: 1, width: double.infinity, color: ThemeColors.colorBg));
-      }
-    });
-    showModalBottomSheet(
-      backgroundColor:Colors.white,
-      context: context,
-      isScrollControlled: false,
-      builder: (ctx) {
-        return Container(
-          color: ThemeColors.grey,
-          height: 160,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Container(
-                  margin: EdgeInsets.only(
-                      left: ThemeSize.containerPadding,
-                      right: ThemeSize.containerPadding),
-                  decoration: BoxDecoration(
-                    color: ThemeColors.colorWhite,
-                    borderRadius: BorderRadius.all(
-                        Radius.circular(ThemeSize.middleRadius)),
-                  ),
-                  child: Column(children: optionWidgetList)),
-              InkWell(
-                child: Container(
-                  margin: EdgeInsets.all(ThemeSize.containerPadding),
-                  decoration: BoxDecoration(
-                    color: ThemeColors.colorWhite,
-                    borderRadius: BorderRadius.all(
-                        Radius.circular(ThemeSize.middleRadius)),
-                  ),
-                  padding: EdgeInsets.all(ThemeSize.containerPadding),
-                  child: _itemCreat(context, '取消'),
-                ),
-                onTap: () {
-                  Navigator.pop(context);
-                },
-              )
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _itemCreat(BuildContext context, String title) {
-    return Center(
-        child: Text(
-      title,
-      style: TextStyle(
-          fontSize: ThemeSize.middleFontSize, color: ThemeColors.activeColor),
-      textAlign: TextAlign.center,
-    ));
   }
 }
