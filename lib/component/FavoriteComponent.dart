@@ -57,7 +57,7 @@ class _FavoriteComponentState extends State<FavoriteComponent> {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(ThemeSize.middleRadius),
                     child: Container(
-                        decoration: BoxDecoration(color: ThemeColors.colorBg),
+                        decoration: const BoxDecoration(color: ThemeColors.colorBg),
                         width: ThemeSize.bigAvater,
                         height: ThemeSize.bigAvater,
                         child: Center(
@@ -67,7 +67,7 @@ class _FavoriteComponentState extends State<FavoriteComponent> {
                           height: ThemeSize.middleIcon,
                         ))),
                   ),
-                  Text('新建收藏夹')
+                  const Text('新建收藏夹')
                 ],
               ),
               onTap: () {

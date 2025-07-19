@@ -70,6 +70,7 @@ class ChatPageState extends State<ChatPage> {
   final RegExp endThinkPattern = RegExp(r'</think>');
   bool showClearIcon = false;
   ScrollController scrollController = ScrollController();
+  String language = "zh";
 
   @override
   void initState() {
@@ -99,7 +100,6 @@ class ChatPageState extends State<ChatPage> {
     // 3. 释放资源
     subscription = null;
     channel = null;
-
     super.dispose(); // 最后调用父类dispose
   }
 
@@ -205,16 +205,12 @@ class ChatPageState extends State<ChatPage> {
     });
     scrollToBottom();
     // 如果已有连接但未连接成功，先关闭旧连接
-    if (_connectionStatus != ConnectionStatus.connected) {
-      closeWebSocket();
-    }
-
-    channel ??= IOWebSocketChannel.connect(
+    channel = IOWebSocketChannel.connect(
       "${HOST.replaceAll("http", "ws")}${servicePath['chatWs']}", // 免费测试服务器
       pingInterval: const Duration(seconds: 30), // 心跳检测
     );
 
-    subscription ??= channel?.stream.listen((value) {
+    subscription = channel?.stream.listen((value) {
       message += value;
       setState(() {
         loading = true;
@@ -261,7 +257,7 @@ class ChatPageState extends State<ChatPage> {
       "prompt": prompt,
       "type": type,
       "showThink": showThink,
-      "files": [] // 如果需要上传文件，请根据实际情况调整
+      "language":language
     };
     controller.text = "";
 
@@ -280,10 +276,10 @@ class ChatPageState extends State<ChatPage> {
     });
   }
 
-  useTabModel(){
+  useTabModel() {
     BottomSelectionDialog.show(
       context: context,
-      options: modelList.map((item){
+      options: modelList.map((item) {
         return item.modelName;
       }).toList(),
       onTap: (selectedOption) {
@@ -293,6 +289,7 @@ class ChatPageState extends State<ChatPage> {
       },
     );
   }
+
   // 头部
   Widget buildHeaderWidget() {
     return Container(
@@ -303,11 +300,12 @@ class ChatPageState extends State<ChatPage> {
           Opacity(
             opacity: ThemeSize.opacity,
             child: GestureDetector(
-              onTap: (){
+              onTap: () {
                 Navigator.of(context).pop();
               },
               child: Image.asset('lib/assets/images/icon_back.png',
-                width: ThemeSize.smallIcon, height: ThemeSize.smallIcon),),
+                  width: ThemeSize.smallIcon, height: ThemeSize.smallIcon),
+            ),
           ),
           Expanded(
               child: Text(
@@ -412,11 +410,14 @@ class ChatPageState extends State<ChatPage> {
                                     decoration: ThemeStyle.boxDecoration,
                                     child: Column(
                                       children: [
-                                        item.thinkContent != "" ? Text(
-                                          item.thinkContent ?? "",
-                                          style: const TextStyle(
-                                              color: ThemeColors.subTitle),
-                                        ) :const SizedBox(),
+                                        item.thinkContent != ""
+                                            ? Text(
+                                                item.thinkContent ?? "",
+                                                style: const TextStyle(
+                                                    color:
+                                                        ThemeColors.subTitle),
+                                              )
+                                            : const SizedBox(),
                                         Text(item.responseContent ?? ""),
                                       ],
                                     ))
@@ -488,7 +489,9 @@ class ChatPageState extends State<ChatPage> {
                                           style: const TextStyle(
                                               color: ThemeColors.disableColor),
                                         ),
-                                        responseContent.isNotEmpty ? Text(responseContent) : const SizedBox(),
+                                        responseContent.isNotEmpty
+                                            ? Text(responseContent)
+                                            : const SizedBox(),
                                       ],
                                     ),
                                   )
@@ -501,98 +504,148 @@ class ChatPageState extends State<ChatPage> {
   }
 
   Widget buildTypeWidget() {
-    return Container(
-      padding: const EdgeInsets.all(ThemeSize.smallMargin),
-      decoration: const BoxDecoration(color: ThemeColors.colorBg),
-      child: Row(
-        children: [
-          OutlinedButton(
-              onPressed: () {
-                setState(() {
-                  showThink = !showThink;
-                });
-              },
+    return SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Container(
+          padding: const EdgeInsets.all(ThemeSize.smallMargin),
+          decoration: const BoxDecoration(color: ThemeColors.colorBg),
+          child: Row(
+            children: [
+              OutlinedButton(
+                  onPressed: () {
+                    setState(() {
+                      showThink = !showThink;
+                    });
+                  },
 
-              ///圆角
-              style: OutlinedButton.styleFrom(
-                backgroundColor: ThemeColors.colorWhite,
-                foregroundColor: ThemeColors.colorWhite,
-                side: BorderSide(
-                    color: showThink ? Colors.orange : ThemeColors.subTitle),
-                shape: RoundedRectangleBorder(
-                  borderRadius:
-                      BorderRadius.circular(ThemeSize.bigRadius), // 圆角
-                ),
-              ),
-              child: Text(
-                '深度思考',
-                style: TextStyle(
-                    fontSize: ThemeSize.middleFontSize,
-                    color: showThink ? Colors.orange : ThemeColors.subTitle),
-              )),
-          const SizedBox(width: ThemeSize.containerPadding),
-          OutlinedButton(
-              onPressed: () {
-                setState(() {
-                  type = type == "document" ? "" : "document";
-                });
-              },
+                  ///圆角
+                  style: OutlinedButton.styleFrom(
+                    backgroundColor: ThemeColors.colorWhite,
+                    foregroundColor: ThemeColors.colorWhite,
+                    side: BorderSide(
+                        color:
+                            showThink ? Colors.orange : ThemeColors.subTitle),
+                    shape: RoundedRectangleBorder(
+                      borderRadius:
+                          BorderRadius.circular(ThemeSize.bigRadius), // 圆角
+                    ),
+                  ),
+                  child: Text(
+                    '深度思考',
+                    style: TextStyle(
+                        fontSize: ThemeSize.middleFontSize,
+                        color:
+                            showThink ? Colors.orange : ThemeColors.subTitle),
+                  )),
+              const SizedBox(width: ThemeSize.containerPadding),
+              OutlinedButton(
+                  onPressed: () {
+                    setState(() {
+                      type = type == "document" ? "" : "document";
+                    });
+                  },
 
-              ///圆角
-              style: OutlinedButton.styleFrom(
-                backgroundColor: ThemeColors.colorWhite,
-                // 背景色（可选）
-                foregroundColor: ThemeColors.colorWhite,
-                // 文字颜色
-                side: BorderSide(
-                    color: type == "document"
-                        ? Colors.orange
-                        : ThemeColors.subTitle),
-                // 设置边框颜色（这里是黑色）
-                shape: RoundedRectangleBorder(
-                  borderRadius:
-                      BorderRadius.circular(ThemeSize.bigRadius), // 圆角
-                ),
-              ),
-              child: Text(
-                '查询文档',
-                style: TextStyle(
-                    fontSize: ThemeSize.middleFontSize,
-                    color: type == "document"
-                        ? Colors.orange
-                        : ThemeColors.subTitle),
-              )),
-          SizedBox(width: ThemeSize.containerPadding),
-          OutlinedButton(
-              onPressed: () {
-                setState(() {
-                  type = type == "db" ? "" : "db";
-                });
-              },
+                  ///圆角
+                  style: OutlinedButton.styleFrom(
+                    backgroundColor: ThemeColors.colorWhite,
+                    // 背景色（可选）
+                    foregroundColor: ThemeColors.colorWhite,
+                    // 文字颜色
+                    side: BorderSide(
+                        color: type == "document"
+                            ? Colors.orange
+                            : ThemeColors.subTitle),
+                    // 设置边框颜色（这里是黑色）
+                    shape: RoundedRectangleBorder(
+                      borderRadius:
+                          BorderRadius.circular(ThemeSize.bigRadius), // 圆角
+                    ),
+                  ),
+                  child: Text(
+                    '查询文档',
+                    style: TextStyle(
+                        fontSize: ThemeSize.middleFontSize,
+                        color: type == "document"
+                            ? Colors.orange
+                            : ThemeColors.subTitle),
+                  )),
+              SizedBox(width: ThemeSize.containerPadding),
+              OutlinedButton(
+                  onPressed: () {
+                    setState(() {
+                      type = type == "db" ? "" : "db";
+                    });
+                  },
 
-              ///圆角
-              style: OutlinedButton.styleFrom(
-                backgroundColor: ThemeColors.colorWhite,
-                // 背景色（可选）
-                foregroundColor: ThemeColors.colorWhite,
-                // 文字颜色
-                side: BorderSide(
-                    color: type == "db" ? Colors.orange : ThemeColors.subTitle),
-                // 设置边框颜色（这里是黑色）
-                shape: RoundedRectangleBorder(
-                  borderRadius:
-                      BorderRadius.circular(ThemeSize.bigRadius), // 圆角
-                ),
-              ),
-              child: Text(
-                '查询数据库',
-                style: TextStyle(
-                    fontSize: ThemeSize.middleFontSize,
-                    color: type == "db" ? Colors.orange : ThemeColors.subTitle),
-              ))
-        ],
-      ),
-    );
+                  ///圆角
+                  style: OutlinedButton.styleFrom(
+                    backgroundColor: ThemeColors.colorWhite,
+                    // 背景色（可选）
+                    foregroundColor: ThemeColors.colorWhite,
+                    // 文字颜色
+                    side: BorderSide(
+                        color: type == "db"
+                            ? Colors.orange
+                            : ThemeColors.subTitle),
+                    // 设置边框颜色（这里是黑色）
+                    shape: RoundedRectangleBorder(
+                      borderRadius:
+                          BorderRadius.circular(ThemeSize.bigRadius), // 圆角
+                    ),
+                  ),
+                  child: Text(
+                    '查询数据库',
+                    style: TextStyle(
+                        fontSize: ThemeSize.middleFontSize,
+                        color: type == "db"
+                            ? Colors.orange
+                            : ThemeColors.subTitle),
+                  )),
+              SizedBox(width: ThemeSize.containerPadding),
+              OutlinedButton(
+                  onPressed: () {
+                    setState(() {
+                      language = language == "zh" ? "en" : "zh";
+                    });
+                  },
+
+                  ///圆角
+                  style: OutlinedButton.styleFrom(
+                    backgroundColor: ThemeColors.colorWhite,
+                    // 背景色（可选）
+                    foregroundColor: ThemeColors.colorWhite,
+                    // 文字颜色
+                    side: BorderSide(
+                        color: type == "db"
+                            ? Colors.orange
+                            : ThemeColors.subTitle),
+                    // 设置边框颜色（这里是黑色）
+                    shape: RoundedRectangleBorder(
+                      borderRadius:
+                          BorderRadius.circular(ThemeSize.bigRadius), // 圆角
+                    ),
+                  ),
+                  child: Row(children: [
+                    Text(language == "zh" ? "中文" : "英文",
+                        style: const TextStyle(
+                            color: ThemeColors.mainTitle,
+                            fontSize: ThemeSize.middleFontSize)),
+                    const SizedBox(width: ThemeSize.miniMargin),
+                    Transform(
+                      alignment: Alignment.center,
+                      transform: Matrix4.identity()
+                        ..scale(language == "zh" ? 1.0 : -1.0, 1.0),
+                      // 根据参数决定是否翻转
+                      child: Image.asset(
+                        "lib/assets/images/icon_switch.png",
+                        width: ThemeSize.smallIcon,
+                        height: ThemeSize.smallIcon,
+                      ),
+                    )
+                  ]))
+            ],
+          ),
+        ));
   }
 
   Widget buildInputWidget() {
@@ -663,9 +716,7 @@ class ChatPageState extends State<ChatPage> {
                   ))),
           const SizedBox(width: ThemeSize.containerPadding),
           GestureDetector(
-              onTap: () {
-                useWebsocket();
-              },
+              onTap:useWebsocket,
               child: Container(
                 height: ThemeSize.buttonHeight,
                 width: ThemeSize.buttonHeight,

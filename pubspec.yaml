@@ -166,6 +166,7 @@ flutter:
     - lib/assets/images/icon_ai.png
     - lib/assets/images/icon_menu.png
     - lib/assets/images/icon_chat.png
+    - lib/assets/images/icon_switch.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 
