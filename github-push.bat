@@ -18,7 +18,7 @@ set /a retry_count+=1
 echo 第!retry_count!次尝试推送...
 
 :: 尝试推送
-git push origin master --progress
+git push origin main --progress
 if !errorlevel! equ 0 (
     set push_success=1
     echo 推送成功！
