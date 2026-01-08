@@ -321,7 +321,8 @@ class LoginPageState extends State<LoginPage> {
                         if (tabIndex == 0) {
                           loginService(userAccount, password).then((res) async {
                             if (res.data != null) {
-                              await LocalStorageUtils.setToken(res.token!);
+                              String token = 'Bearer ${res.token}'
+                              await LocalStorageUtils.setToken(token);
                               await Fluttertoast.showToast(
                                   msg: "登录成功",
                                   toastLength: Toast.LENGTH_SHORT,
@@ -334,7 +335,7 @@ class LoginPageState extends State<LoginPage> {
                                   .setUserInfo(
                                       UserInfoModel.fromJson(res.data));
                               Routes.router.navigateTo(
-                                  context, '/MusicIndexPage',
+                                  context, '/ChatPage',
                                   replace: true);
 
                             } else {
@@ -375,7 +376,8 @@ class LoginPageState extends State<LoginPage> {
                           await EasyLoading.show();
                           loginByEmailService(emailController.text,codeController.text).then((res) async {
                             if (res.data != null) {
-                              await LocalStorageUtils.setToken(res.token!);
+                              String token = 'Bearer ${res.token}'
+                              await LocalStorageUtils.setToken(token);
                               await Fluttertoast.showToast(
                                   msg: "登录成功",
                                   toastLength: Toast.LENGTH_SHORT,
@@ -389,7 +391,7 @@ class LoginPageState extends State<LoginPage> {
                                   .setUserInfo(
                                   UserInfoModel.fromJson(res.data));
                               Routes.router.navigateTo(
-                                  context, '/MusicIndexPage',
+                                  context, '/ChatPage',
                                   replace: true);
                             } else {
                               Fluttertoast.showToast(

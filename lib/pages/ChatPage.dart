@@ -3,25 +3,31 @@ import 'dart:math';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
-import 'package:flutter_music_app/component/MusicAvaterComponent.dart';
+import 'package:flutter_music_app/component/DocListComponent.dart';
+import 'package:flutter_music_app/model/DirectoryModel.dart';
 import 'package:flutter_music_app/model/DocModel.dart';
+import 'package:flutter_music_app/provider/ChatProvider.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
 import 'package:web_socket_channel/io.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import '../api/api.dart';
+import '../component/CustomDialogComponent.dart';
+import '../component/DialogComponent.dart';
+import '../component/DocumentListComponent.dart';
 import '../component/SelectDialogComponent.dart';
 import '../component/TriangleComponent.dart';
+import '../component/UploadDirectoryComponent.dart';
 import '../enum/ConnectionStatus.dart';
 import '../enum/PositionEnum.dart';
 import '../model/AiModel.dart';
+import '../component/AvaterComponent.dart';
 import '../model/ChatHistoryGroupModel.dart';
 import '../model/ChatHistoryModel.dart';
 import '../model/ChatModel.dart';
+import '../model/TenantUserModel.dart';
 import '../service/serverMethod.dart';
 import '../provider/UserInfoProvider.dart';
-import '../model/UserInfoModel.dart';
 import '../theme/ThemeStyle.dart';
 import '../theme/ThemeSize.dart';
 import '../theme/ThemeColors.dart';
@@ -52,7 +58,6 @@ class ChatPageState extends State<ChatPage> {
   String responseContent = "";
   String type = "";
   bool showThink = false;
-  ConnectionStatus _connectionStatus = ConnectionStatus.disconnected;
   List<ChatModel> chatList = [
     ChatModel(
         position: PositionEnum.left,
@@ -60,17 +65,20 @@ class ChatPageState extends State<ChatPage> {
         responseContent: "你好，我是智能音乐助手小吴同学，请问有什么可以帮助您？"),
   ];
   Map<String, List<List<ChatHistoryModel>>> timeAgoGroupMap = {};
+  late UserInfoProvider userInfoProvider;
   bool showHistory = false;
-  bool showMyDoc = false;
-  List<DocModel> myDocList = [];
-  EasyRefreshController easyRefreshController = EasyRefreshController();
+  EasyRefreshController historyEasyRefreshController = EasyRefreshController();
   TextEditingController controller = TextEditingController(); // 姓名
+
   // 使用正则表达式进行匹配
   final RegExp startThinkPattern = RegExp(r'^<think>');
   final RegExp endThinkPattern = RegExp(r'</think>');
   bool showClearIcon = false;
   ScrollController scrollController = ScrollController();
   String language = "zh";
+  String directoryId = "";
+  String uploadDirId = "";
+  List<String>docIds = [];
 
   @override
   void initState() {
@@ -85,8 +93,11 @@ class ChatPageState extends State<ChatPage> {
         activeModelName = models.first.modelName; // 确保首次赋值
       });
     });
+    userInfoProvider = Provider.of<UserInfoProvider>(context, listen: false);
+    getStorageTenant();
     super.initState();
   }
+
 
   @override
   void dispose() {
@@ -106,7 +117,7 @@ class ChatPageState extends State<ChatPage> {
   useHistory() {
     getChatHistoryService(pageNum, PAGE_SIZE).then((res) {
       List<dynamic> items =
-          res.data.map((item) => ChatHistoryModel.fromJson(item)).toList();
+      res.data.map((item) => ChatHistoryModel.fromJson(item)).toList();
 
       // 按chatId分组
       final chatIdGroup = <String, List<ChatHistoryModel>>{};
@@ -133,9 +144,9 @@ class ChatPageState extends State<ChatPage> {
       // 转换为最终分组结构
       final groups = mTimeAgoGroupMap.entries
           .map((entry) => ChatHistoryGroupModel(
-                timeAgo: entry.key,
-                list: entry.value,
-              ))
+        timeAgo: entry.key,
+        list: entry.value,
+      ))
           .toList();
 
       // 按时间倒序排序
@@ -179,7 +190,6 @@ class ChatPageState extends State<ChatPage> {
       }
     }
     setState(() {
-      _connectionStatus = ConnectionStatus.disconnected;
       loading = false;
     });
   }
@@ -206,7 +216,7 @@ class ChatPageState extends State<ChatPage> {
     scrollToBottom();
     // 如果已有连接但未连接成功，先关闭旧连接
     channel = IOWebSocketChannel.connect(
-      "${HOST.replaceAll("http", "ws")}${servicePath['chatWs']}", // 免费测试服务器
+      "${HOST.replaceAll("http", "ws")}${servicePath['chatWs']}?token=${token}", // 免费测试服务器
       pingInterval: const Duration(seconds: 30), // 心跳检测
     );
 
@@ -214,7 +224,6 @@ class ChatPageState extends State<ChatPage> {
       message += value;
       setState(() {
         loading = true;
-        _connectionStatus = ConnectionStatus.connected;
         if (value != "[completed]") {
           // 使用正则提取内容
           // 检查当前消息是否符合条件
@@ -242,7 +251,6 @@ class ChatPageState extends State<ChatPage> {
       scrollToBottom();
     }, onError: (error) {
       setState(() {
-        _connectionStatus = ConnectionStatus.error;
         loading = false;
         Fluttertoast.showToast(msg: "连接错误: $error");
       });
@@ -252,12 +260,11 @@ class ChatPageState extends State<ChatPage> {
     chatId = chatId.isNotEmpty ? chatId : generateSecureID();
     Map<String, dynamic> payload = {
       "modelName": activeModelName,
-      "token": token, // 替换为实际用户ID
       "chatId": chatId, // 替换为实际聊天ID
       "prompt": prompt,
       "type": type,
       "showThink": showThink,
-      "language":language
+      "language": language
     };
     controller.text = "";
 
@@ -268,21 +275,13 @@ class ChatPageState extends State<ChatPage> {
     });
   }
 
-  useMyDocList() {
-    getMyDocListService().then((res) {
-      setState(() {
-        myDocList = res.data.map((item) => DocModel.fromJson(item)).toList();
-      });
-    });
-  }
-
   useTabModel() {
     BottomSelectionDialog.show(
       context: context,
       options: modelList.map((item) {
         return item.modelName;
       }).toList(),
-      onTap: (selectedOption) {
+      onTap: (String selectedOption, int index) {
         setState(() {
           activeModelName = selectedOption;
         });
@@ -297,33 +296,20 @@ class ChatPageState extends State<ChatPage> {
       decoration: const BoxDecoration(color: ThemeColors.colorWhite),
       child: Row(
         children: [
-          Opacity(
-            opacity: ThemeSize.opacity,
-            child: GestureDetector(
-              onTap: () {
-                Navigator.of(context).pop();
-              },
-              child: Image.asset('lib/assets/images/icon_back.png',
-                  width: ThemeSize.smallIcon, height: ThemeSize.smallIcon),
-            ),
-          ),
+          AvaterComponent(
+              size: ThemeSize.smallAvater,
+              avater: userInfoProvider.userInfo.avater ?? ""),
           Expanded(
               child: Text(
-            "当前接入模型：${activeModelName}",
-            textAlign: TextAlign.center,
-          )),
+                "当前接入模型：${activeModelName}",
+                textAlign: TextAlign.center,
+              )),
           PopupMenuButton<String>(
             color: ThemeColors.popupMenuColor.withOpacity(1),
             child: Image.asset('lib/assets/images/icon_menu.png',
                 width: ThemeSize.smallIcon, height: ThemeSize.smallIcon),
             onSelected: (String item) {
-              if (item == "上传文档") {
-              } else if (item == "我的文档") {
-                setState(() {
-                  showMyDoc = true;
-                });
-                useMyDocList();
-              } else if (item == "会话记录") {
+              if (item == "会话记录") {
                 setState(() {
                   showHistory = true;
                 });
@@ -334,18 +320,6 @@ class ChatPageState extends State<ChatPage> {
             },
             itemBuilder: (context) {
               return <PopupMenuEntry<String>>[
-                const PopupMenuItem<String>(
-                    value: "上传文档",
-                    child: Text(
-                      "上传文档",
-                      style: TextStyle(color: ThemeColors.colorWhite),
-                    )),
-                const PopupMenuDivider(height: 1),
-                const PopupMenuItem<String>(
-                    value: "我的文档",
-                    child: Text("我的文档",
-                        style: TextStyle(color: ThemeColors.disableColor))),
-                const PopupMenuDivider(height: 1),
                 const PopupMenuItem<String>(
                     value: "会话记录",
                     child: Text("会话记录",
@@ -377,26 +351,26 @@ class ChatPageState extends State<ChatPage> {
               ...chatList.map((item) {
                 return Padding(
                     padding:
-                        const EdgeInsets.only(top: ThemeSize.containerPadding),
+                    const EdgeInsets.only(top: ThemeSize.containerPadding),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         PositionEnum.left == item.position
                             ? Container(
-                                margin: const EdgeInsets.only(
-                                    top: ThemeSize.smallMargin),
-                                child: Row(
-                                  children: [
-                                    Image.asset('lib/assets/images/icon_ai.png',
-                                        width: ThemeSize.middleIcon,
-                                        height: ThemeSize.middleIcon),
-                                    const SizedBox(width: ThemeSize.miniMargin),
-                                    const TriangleComponent(
-                                        size: ThemeSize.miniIcon,
-                                        color: Colors.white),
-                                  ],
-                                ),
-                              )
+                          margin: const EdgeInsets.only(
+                              top: ThemeSize.smallMargin),
+                          child: Row(
+                            children: [
+                              Image.asset('lib/assets/images/icon_ai.png',
+                                  width: ThemeSize.middleIcon,
+                                  height: ThemeSize.middleIcon),
+                              const SizedBox(width: ThemeSize.miniMargin),
+                              const TriangleComponent(
+                                  size: ThemeSize.miniIcon,
+                                  color: Colors.white),
+                            ],
+                          ),
+                        )
                             : const SizedBox(),
                         Expanded(
                             flex: 1,
@@ -412,11 +386,11 @@ class ChatPageState extends State<ChatPage> {
                                       children: [
                                         item.thinkContent != ""
                                             ? Text(
-                                                item.thinkContent ?? "",
-                                                style: const TextStyle(
-                                                    color:
-                                                        ThemeColors.subTitle),
-                                              )
+                                          item.thinkContent ?? "",
+                                          style: const TextStyle(
+                                              color:
+                                              ThemeColors.subTitle),
+                                        )
                                             : const SizedBox(),
                                         Text(item.responseContent ?? ""),
                                       ],
@@ -425,80 +399,78 @@ class ChatPageState extends State<ChatPage> {
                             )),
                         PositionEnum.right == item.position
                             ? Container(
-                                margin: const EdgeInsets.only(
-                                    top: ThemeSize.smallMargin),
-                                child: Row(
-                                  children: [
-                                    Transform.rotate(
-                                      angle: pi, // 旋转-90度（π/2弧度）
-                                      child: const TriangleComponent(
-                                          size: ThemeSize.miniIcon,
-                                          color: Colors.white),
-                                    ),
-                                    MusicAvaterComponent(
-                                        type: 'music',
-                                        name: '',
-                                        avater: Provider.of<UserInfoProvider>(
-                                                context)
-                                            .userInfo
-                                            .avater,
-                                        size: ThemeSize.middleIcon)
-                                  ],
-                                ),
+                          margin: const EdgeInsets.only(
+                              top: ThemeSize.smallMargin),
+                          child: Row(
+                            children: [
+                              Transform.rotate(
+                                angle: pi, // 旋转-90度（π/2弧度）
+                                child: const TriangleComponent(
+                                    size: ThemeSize.miniIcon,
+                                    color: Colors.white),
+                              ),
+                              AvaterComponent(
+                                size: ThemeSize.middleIcon,
+                                avater:
+                                userInfoProvider.userInfo.avater ??
+                                    "",
                               )
+                            ],
+                          ),
+                        )
                             : const SizedBox(),
                       ],
                     ));
               }),
               loading
                   ? Padding(
-                      padding: const EdgeInsets.only(
-                          top: ThemeSize.containerPadding),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            margin: const EdgeInsets.only(
-                                top: ThemeSize.smallMargin),
-                            child: Row(
-                              children: [
-                                Image.asset('lib/assets/images/icon_ai.png',
-                                    width: ThemeSize.middleIcon,
-                                    height: ThemeSize.middleIcon),
-                                const SizedBox(width: ThemeSize.miniMargin),
-                                const TriangleComponent(
-                                    size: ThemeSize.miniIcon,
-                                    color: Colors.white),
-                              ],
-                            ),
-                          ),
-                          Expanded(
-                              flex: 1,
-                              child: Wrap(
-                                alignment: WrapAlignment.start,
-                                children: [
-                                  Container(
-                                    padding: ThemeStyle.padding,
-                                    decoration: ThemeStyle.boxDecoration,
-                                    child: Column(
-                                      children: [
-                                        Text(
-                                          thinkContent.isEmpty
-                                              ? "正在思考中"
-                                              : thinkContent,
-                                          style: const TextStyle(
-                                              color: ThemeColors.disableColor),
-                                        ),
-                                        responseContent.isNotEmpty
-                                            ? Text(responseContent)
-                                            : const SizedBox(),
-                                      ],
+                  padding: const EdgeInsets.only(
+                      top: ThemeSize.containerPadding),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.only(
+                            top: ThemeSize.smallMargin),
+                        child: Row(
+                          children: [
+                            Image.asset('lib/assets/images/icon_ai.png',
+                                width: ThemeSize.middleIcon,
+                                height: ThemeSize.middleIcon),
+                            const SizedBox(width: ThemeSize.miniMargin),
+                            const TriangleComponent(
+                                size: ThemeSize.miniIcon,
+                                color: Colors.white),
+                          ],
+                        ),
+                      ),
+                      Expanded(
+                          flex: 1,
+                          child: Wrap(
+                            alignment: WrapAlignment.start,
+                            children: [
+                              Container(
+                                padding: ThemeStyle.padding,
+                                decoration: ThemeStyle.boxDecoration,
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      thinkContent.isEmpty
+                                          ? "正在思考中"
+                                          : thinkContent,
+                                      style: const TextStyle(
+                                          color: ThemeColors.disableColor),
                                     ),
-                                  )
-                                ],
-                              ))
-                        ],
-                      ))
+                                    responseContent.isNotEmpty
+                                        ? Text(responseContent)
+                                        : const SizedBox(),
+                                  ],
+                                ),
+                              )
+                            ],
+                          ))
+                    ],
+                  ))
                   : const SizedBox()
             ]));
   }
@@ -524,10 +496,10 @@ class ChatPageState extends State<ChatPage> {
                     foregroundColor: ThemeColors.colorWhite,
                     side: BorderSide(
                         color:
-                            showThink ? Colors.orange : ThemeColors.subTitle),
+                        showThink ? Colors.orange : ThemeColors.subTitle),
                     shape: RoundedRectangleBorder(
                       borderRadius:
-                          BorderRadius.circular(ThemeSize.bigRadius), // 圆角
+                      BorderRadius.circular(ThemeSize.bigRadius), // 圆角
                     ),
                   ),
                   child: Text(
@@ -535,73 +507,9 @@ class ChatPageState extends State<ChatPage> {
                     style: TextStyle(
                         fontSize: ThemeSize.middleFontSize,
                         color:
-                            showThink ? Colors.orange : ThemeColors.subTitle),
+                        showThink ? Colors.orange : ThemeColors.subTitle),
                   )),
               const SizedBox(width: ThemeSize.containerPadding),
-              OutlinedButton(
-                  onPressed: () {
-                    setState(() {
-                      type = type == "document" ? "" : "document";
-                    });
-                  },
-
-                  ///圆角
-                  style: OutlinedButton.styleFrom(
-                    backgroundColor: ThemeColors.colorWhite,
-                    // 背景色（可选）
-                    foregroundColor: ThemeColors.colorWhite,
-                    // 文字颜色
-                    side: BorderSide(
-                        color: type == "document"
-                            ? Colors.orange
-                            : ThemeColors.subTitle),
-                    // 设置边框颜色（这里是黑色）
-                    shape: RoundedRectangleBorder(
-                      borderRadius:
-                          BorderRadius.circular(ThemeSize.bigRadius), // 圆角
-                    ),
-                  ),
-                  child: Text(
-                    '查询文档',
-                    style: TextStyle(
-                        fontSize: ThemeSize.middleFontSize,
-                        color: type == "document"
-                            ? Colors.orange
-                            : ThemeColors.subTitle),
-                  )),
-              SizedBox(width: ThemeSize.containerPadding),
-              OutlinedButton(
-                  onPressed: () {
-                    setState(() {
-                      type = type == "db" ? "" : "db";
-                    });
-                  },
-
-                  ///圆角
-                  style: OutlinedButton.styleFrom(
-                    backgroundColor: ThemeColors.colorWhite,
-                    // 背景色（可选）
-                    foregroundColor: ThemeColors.colorWhite,
-                    // 文字颜色
-                    side: BorderSide(
-                        color: type == "db"
-                            ? Colors.orange
-                            : ThemeColors.subTitle),
-                    // 设置边框颜色（这里是黑色）
-                    shape: RoundedRectangleBorder(
-                      borderRadius:
-                          BorderRadius.circular(ThemeSize.bigRadius), // 圆角
-                    ),
-                  ),
-                  child: Text(
-                    '查询数据库',
-                    style: TextStyle(
-                        fontSize: ThemeSize.middleFontSize,
-                        color: type == "db"
-                            ? Colors.orange
-                            : ThemeColors.subTitle),
-                  )),
-              SizedBox(width: ThemeSize.containerPadding),
               OutlinedButton(
                   onPressed: () {
                     setState(() {
@@ -622,7 +530,7 @@ class ChatPageState extends State<ChatPage> {
                     // 设置边框颜色（这里是黑色）
                     shape: RoundedRectangleBorder(
                       borderRadius:
-                          BorderRadius.circular(ThemeSize.bigRadius), // 圆角
+                      BorderRadius.circular(ThemeSize.bigRadius), // 圆角
                     ),
                   ),
                   child: Row(children: [
@@ -676,7 +584,7 @@ class ChatPageState extends State<ChatPage> {
                   ),
                   alignment: Alignment.center,
                   padding:
-                      const EdgeInsets.only(left: ThemeSize.smallMargin * 2),
+                  const EdgeInsets.only(left: ThemeSize.smallMargin * 2),
                   child: Row(
                     children: <Widget>[
                       Expanded(
@@ -700,42 +608,42 @@ class ChatPageState extends State<ChatPage> {
                               ))),
                       prompt != ""
                           ? InkWell(
-                              onTap: () {
-                                setState(() {
-                                  controller.text = ""; //清除输入框的值
-                                });
-                              },
-                              child: Image.asset(
-                                "lib/assets/images/icon_clear.png",
-                                height: ThemeSize.smallIcon,
-                                width: ThemeSize.smallIcon,
-                              ))
+                          onTap: () {
+                            setState(() {
+                              controller.text = ""; //清除输入框的值
+                            });
+                          },
+                          child: Image.asset(
+                            "lib/assets/images/icon_clear.png",
+                            height: ThemeSize.smallIcon,
+                            width: ThemeSize.smallIcon,
+                          ))
                           : const SizedBox(),
                       const SizedBox(width: ThemeSize.smallMargin)
                     ],
                   ))),
           const SizedBox(width: ThemeSize.containerPadding),
           GestureDetector(
-              onTap:useWebsocket,
+              onTap: useWebsocket,
               child: Container(
                 height: ThemeSize.buttonHeight,
                 width: ThemeSize.buttonHeight,
                 decoration: const BoxDecoration(
                   color: ThemeColors.colorBg,
                   borderRadius:
-                      BorderRadius.all(Radius.circular(ThemeSize.superRadius)),
+                  BorderRadius.all(Radius.circular(ThemeSize.superRadius)),
                 ),
                 child: Center(
                   child: loading
                       ? Container(
-                          width: ThemeSize.miniIcon,
-                          height: ThemeSize.miniIcon,
-                          decoration: const BoxDecoration(
-                              color: ThemeColors.disableColor),
-                        )
+                    width: ThemeSize.miniIcon,
+                    height: ThemeSize.miniIcon,
+                    decoration: const BoxDecoration(
+                        color: ThemeColors.disableColor),
+                  )
                       : Image.asset("lib/assets/images/icon_send.png",
-                          width: ThemeSize.smallIcon,
-                          height: ThemeSize.smallIcon),
+                      width: ThemeSize.smallIcon,
+                      height: ThemeSize.smallIcon),
                 ),
               ))
         ]));
@@ -761,245 +669,128 @@ class ChatPageState extends State<ChatPage> {
   Widget buildHistoryWidget() {
     return showHistory
         ? Positioned(
-            left: 0,
-            top: 0,
-            bottom: 0,
-            right: 0,
-            child: SizedBox(
-                width: MediaQuery.of(context).size.width, // 使用实际屏幕宽度
-                height: MediaQuery.of(context).size.height,
-                child: Row(children: [
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.7,
-                    height: MediaQuery.of(context).size.height,
-                    decoration: const BoxDecoration(color: Colors.white),
-                    child: EasyRefresh(
-                        controller: easyRefreshController,
-                        footer: ClassicalFooter(
-                          loadText: '上拉加载',
-                          loadReadyText: '准备加载',
-                          loadingText: '加载中...',
-                          loadedText: '加载完成',
-                          noMoreText: '没有更多',
-                          bgColor: Colors.transparent,
-                          textColor: ThemeColors.disableColor,
-                        ),
-                        onLoad: () async {
-                          pageNum++;
-                          if (total <= pageNum * PAGE_SIZE) {
-                            Fluttertoast.showToast(
-                                msg: "已经到底了",
-                                toastLength: Toast.LENGTH_SHORT,
-                                gravity: ToastGravity.CENTER,
-                                timeInSecForIosWeb: 1,
-                                backgroundColor: Colors.blue,
-                                textColor: Colors.white,
-                                fontSize: ThemeSize.middleFontSize);
-                          } else {}
-                        },
-                        child: Container(
-                            padding: ThemeStyle.padding,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: timeAgoGroupMap.entries
-                                  .toList()
-                                  .asMap()
-                                  .entries
-                                  .map((indexedEntry) {
-                                final index = indexedEntry.key;
-                                final item = indexedEntry.value;
-                                final isLast =
-                                    index == timeAgoGroupMap.entries.length - 1;
-                                return Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      item.key,
-                                      style: const TextStyle(
-                                          color: ThemeColors.disableColor),
-                                    ),
-                                    ...item.value.map((bItem) {
-                                      return GestureDetector(
-                                        onTap: () {
-                                          setState(() {
-                                            chatList.clear();
-                                            chatId = bItem.first.chatId;
-                                            showHistory = false;
-                                            for (var cItem in bItem) {
-                                              chatList
-                                                ..add(ChatModel(
-                                                    position:
-                                                        PositionEnum.right,
-                                                    responseContent:
-                                                        cItem.prompt))
-                                                ..add(ChatModel(
-                                                    position: PositionEnum.left,
-                                                    thinkContent:
-                                                        cItem.thinkContent,
-                                                    responseContent:
-                                                        cItem.responseContent));
-                                            }
-                                          });
-                                        },
-                                        child: Text(bItem.first.prompt),
-                                      );
-                                    }),
-                                    SizedBox(
-                                        height: isLast
-                                            ? 0
-                                            : ThemeSize.containerPadding)
-                                  ],
-                                );
-                              }).toList(),
-                            ))),
+      left: 0,
+      top: 0,
+      bottom: 0,
+      right: 0,
+      child: SizedBox(
+          width: MediaQuery.of(context).size.width, // 使用实际屏幕宽度
+          height: MediaQuery.of(context).size.height,
+          child: Row(children: [
+            Container(
+              width: MediaQuery.of(context).size.width * 0.7,
+              height: MediaQuery.of(context).size.height,
+              decoration: const BoxDecoration(color: Colors.white),
+              child: EasyRefresh(
+                  controller: historyEasyRefreshController,
+                  footer: ClassicalFooter(
+                    loadText: '上拉加载',
+                    loadReadyText: '准备加载',
+                    loadingText: '加载中...',
+                    loadedText: '加载完成',
+                    noMoreText: '没有更多',
+                    bgColor: Colors.transparent,
+                    textColor: ThemeColors.disableColor,
                   ),
-                  Expanded(
-                    flex: 1,
-                    child: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          showHistory = false;
-                        });
-                      },
-                      child: Container(
-                        decoration:
-                            BoxDecoration(color: ThemeColors.popupMenuColor),
-                        height: MediaQuery.of(context).size.height,
-                      ),
-                    ),
-                  )
-                ])),
-          )
-        : const SizedBox();
-  }
-
-  Widget buildDocListWidget() {
-    return showMyDoc
-        ? Positioned(
-            left: 0,
-            top: 0,
-            bottom: 0,
-            right: 0,
-            child: SizedBox(
-                width: MediaQuery.of(context).size.width, // 使用实际屏幕宽度
-                height: MediaQuery.of(context).size.height,
-                child: Row(children: [
-                  Container(
-                      width: MediaQuery.of(context).size.width * 0.7,
-                      height: MediaQuery.of(context).size.height,
-                      decoration: const BoxDecoration(color: Colors.white),
-                      child: EasyRefresh(
-                          child: Container(
-                        padding: ThemeStyle.padding,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: myDocList.asMap().entries.map((entry) {
-                            return Container(
-                                padding: EdgeInsets.only(
-                                    bottom: entry.key != myDocList.length - 1
-                                        ? ThemeSize.containerPadding
-                                        : 0),
-                                decoration: BoxDecoration(
-                                    border: Border(
-                                        bottom: BorderSide(
-                                  width: entry.key != myDocList.length - 1
-                                      ? 1
-                                      : 0, //宽度
-                                  color: entry.key != myDocList.length - 1
-                                      ? ThemeColors.disableColor
-                                      : ThemeColors.colorWhite, //边框颜色
-                                ))),
-                                child: Slidable(
-                                    endActionPane: ActionPane(
-                                      motion: ScrollMotion(),
-                                      children: [
-                                        SlidableAction(
-                                          onPressed: (context) {
-                                            showCustomDialog(
-                                                context,
-                                                SizedBox(),
-                                                '确定删除文档:${entry.value.name}',
-                                                () {
-                                              deleteMyDocumentService(
-                                                      entry.value.id)
-                                                  .then((res) {
-                                                Fluttertoast.showToast(
-                                                    msg: "删除成功",
-                                                    toastLength:
-                                                        Toast.LENGTH_SHORT,
-                                                    gravity:
-                                                        ToastGravity.CENTER,
-                                                    timeInSecForIosWeb: 1,
-                                                    backgroundColor: ThemeColors
-                                                        .disableColor,
-                                                    fontSize: ThemeSize
-                                                        .middleFontSize);
-                                                setState(() {
-                                                  myDocList.removeAt(entry.key);
-                                                });
-                                              });
-                                            });
-                                          },
-                                          backgroundColor: Colors.red,
-                                          foregroundColor: Colors.white,
-                                          icon: Icons.delete,
-                                          label: '删除',
-                                        ),
-                                      ],
-                                    ),
-                                    child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            formatTimeAgo(
-                                                entry.value.createTime),
-                                            style: TextStyle(
-                                                color:
-                                                    ThemeColors.disableColor),
-                                          ),
-                                          Text(entry.value.name)
-                                        ])));
-                          }).toList(),
-                        ),
+                  onLoad: () async {
+                    pageNum++;
+                    if (total <= pageNum * PAGE_SIZE) {
+                      Fluttertoast.showToast(
+                          msg: "已经到底了",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.CENTER,
+                          timeInSecForIosWeb: 1,
+                          backgroundColor: Colors.blue,
+                          textColor: Colors.white,
+                          fontSize: ThemeSize.middleFontSize);
+                    } else {}
+                  },
+                  child: Container(
+                      padding: ThemeStyle.padding,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: timeAgoGroupMap.entries
+                            .toList()
+                            .asMap()
+                            .entries
+                            .map((indexedEntry) {
+                          final index = indexedEntry.key;
+                          final item = indexedEntry.value;
+                          final isLast =
+                              index == timeAgoGroupMap.entries.length - 1;
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                item.key,
+                                style: const TextStyle(
+                                    color: ThemeColors.disableColor),
+                              ),
+                              ...item.value.map((bItem) {
+                                return GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      chatList.clear();
+                                      chatId = bItem.first.chatId;
+                                      showHistory = false;
+                                      for (var cItem in bItem) {
+                                        chatList
+                                          ..add(ChatModel(
+                                              position:
+                                              PositionEnum.right,
+                                              responseContent:
+                                              cItem.prompt))
+                                          ..add(ChatModel(
+                                              position: PositionEnum.left,
+                                              thinkContent:
+                                              cItem.thinkContent,
+                                              responseContent:
+                                              cItem.responseContent));
+                                      }
+                                    });
+                                  },
+                                  child: Text(bItem.first.prompt),
+                                );
+                              }),
+                              SizedBox(
+                                  height: isLast
+                                      ? 0
+                                      : ThemeSize.containerPadding)
+                            ],
+                          );
+                        }).toList(),
                       ))),
-                  Expanded(
-                    flex: 1,
-                    child: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          showMyDoc = false;
-                        });
-                      },
-                      child: Container(
-                        decoration:
-                            BoxDecoration(color: ThemeColors.popupMenuColor),
-                        height: MediaQuery.of(context).size.height,
-                      ),
-                    ),
-                  )
-                ])),
-          )
+            ),
+            Expanded(
+              flex: 1,
+              child: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    showHistory = false;
+                  });
+                },
+                child: Container(
+                  decoration:
+                  BoxDecoration(color: ThemeColors.popupMenuColor),
+                  height: MediaQuery.of(context).size.height,
+                ),
+              ),
+            )
+          ])),
+    )
         : const SizedBox();
   }
 
   @override
   Widget build(BuildContext context) {
-    UserInfoModel userInfoModel =
-        Provider.of<UserInfoProvider>(context).userInfo;
     return Scaffold(
       backgroundColor: ThemeColors.colorBg,
       body: SafeArea(
           top: true,
           child: Stack(
-            children: [
-              buildChatWidget(),
-              buildDocListWidget(),
-              buildHistoryWidget()
-            ],
+            children: [buildChatWidget(), buildHistoryWidget()],
           )),
     );
   }
