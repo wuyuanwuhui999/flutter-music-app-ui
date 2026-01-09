@@ -321,7 +321,7 @@ class LoginPageState extends State<LoginPage> {
                         if (tabIndex == 0) {
                           loginService(userAccount, password).then((res) async {
                             if (res.data != null) {
-                              String token = 'Bearer ${res.token}'
+                              String token = 'Bearer ${res.token}';
                               await LocalStorageUtils.setToken(token);
                               await Fluttertoast.showToast(
                                   msg: "登录成功",
@@ -376,7 +376,7 @@ class LoginPageState extends State<LoginPage> {
                           await EasyLoading.show();
                           loginByEmailService(emailController.text,codeController.text).then((res) async {
                             if (res.data != null) {
-                              String token = 'Bearer ${res.token}'
+                              String token = 'Bearer ${res.token}';
                               await LocalStorageUtils.setToken(token);
                               await Fluttertoast.showToast(
                                   msg: "登录成功",

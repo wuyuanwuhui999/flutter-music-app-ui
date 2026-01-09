@@ -333,7 +333,7 @@ class UserPageState extends State<UserPage> {
                                           BottomSelectionDialog.show(
                                               context:context,
                                               options:["男", "女"],
-                                              onTap:(String value) {
+                                              onTap:(String value,int index) {
                                             hasChange = true;
                                             useSave(SexNameMap[value], 'sex',
                                                 '性别', false);

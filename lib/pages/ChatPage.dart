@@ -3,10 +3,6 @@ import 'dart:math';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyrefresh/easy_refresh.dart';
-import 'package:flutter_music_app/component/DocListComponent.dart';
-import 'package:flutter_music_app/model/DirectoryModel.dart';
-import 'package:flutter_music_app/model/DocModel.dart';
-import 'package:flutter_music_app/provider/ChatProvider.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:web_socket_channel/io.dart';
@@ -14,10 +10,8 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 import '../api/api.dart';
 import '../component/CustomDialogComponent.dart';
 import '../component/DialogComponent.dart';
-import '../component/DocumentListComponent.dart';
 import '../component/SelectDialogComponent.dart';
 import '../component/TriangleComponent.dart';
-import '../component/UploadDirectoryComponent.dart';
 import '../enum/ConnectionStatus.dart';
 import '../enum/PositionEnum.dart';
 import '../model/AiModel.dart';
@@ -25,7 +19,6 @@ import '../component/AvaterComponent.dart';
 import '../model/ChatHistoryGroupModel.dart';
 import '../model/ChatHistoryModel.dart';
 import '../model/ChatModel.dart';
-import '../model/TenantUserModel.dart';
 import '../service/serverMethod.dart';
 import '../provider/UserInfoProvider.dart';
 import '../theme/ThemeStyle.dart';
@@ -94,7 +87,6 @@ class ChatPageState extends State<ChatPage> {
       });
     });
     userInfoProvider = Provider.of<UserInfoProvider>(context, listen: false);
-    getStorageTenant();
     super.initState();
   }
 

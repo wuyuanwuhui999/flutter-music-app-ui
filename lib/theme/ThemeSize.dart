@@ -37,4 +37,5 @@ class ThemeSize {
   static const double bottomBarHeight = 85;// 底部导航条高度
   static const double borderSize = 3;
   static const double opacity = 0.5;// 图标透明度
+  static const double titleBarHeight = 50;// 标题栏高度
 }

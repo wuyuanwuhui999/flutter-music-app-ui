@@ -169,7 +169,7 @@ class _MusicSharePageState extends State<MusicSharePage>
           BottomSelectionDialog.show(
             context:context,
             options:["私密", "公开"],
-            onTap:(String value) {
+            onTap:(String value,int index) {
               Navigator.pop(context);
               setState(() {
                 circleModel.permission = value == "私密" ? 0 : 1;
