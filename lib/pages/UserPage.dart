@@ -168,7 +168,6 @@ class UserPageState extends State<UserPage> {
   @override
   Widget build(BuildContext context) {
     provider = Provider.of<UserInfoProvider>(context, listen: true);
-    print(provider.userInfo.toMap());
     return Scaffold(
         backgroundColor: ThemeColors.colorBg,
         body: SafeArea(

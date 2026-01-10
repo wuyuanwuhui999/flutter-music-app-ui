@@ -37,7 +37,7 @@ class ChatPage extends StatefulWidget {
 
 class ChatPageState extends State<ChatPage> {
   List<AiModel> modelList = [];
-  String activeModelName = "";
+  AiModel activeModel = AiModel(id: "", modelName: "");
   int pageNum = 1;
   int total = 0;
   String prompt = "";
@@ -81,9 +81,10 @@ class ChatPageState extends State<ChatPage> {
 
     getModelListService().then((res) {
       final models = res.data.map((item) => AiModel.fromJson(item)).toList();
+      print(models);
       setState(() {
         modelList = models;
-        activeModelName = models.first.modelName; // 确保首次赋值
+        activeModel = models.first; // 确保首次赋值
       });
     });
     userInfoProvider = Provider.of<UserInfoProvider>(context, listen: false);
@@ -251,7 +252,7 @@ class ChatPageState extends State<ChatPage> {
     });
     chatId = chatId.isNotEmpty ? chatId : generateSecureID();
     Map<String, dynamic> payload = {
-      "modelName": activeModelName,
+      "modelId": activeModel.id,
       "chatId": chatId, // 替换为实际聊天ID
       "prompt": prompt,
       "type": type,
@@ -275,7 +276,7 @@ class ChatPageState extends State<ChatPage> {
       }).toList(),
       onTap: (String selectedOption, int index) {
         setState(() {
-          activeModelName = selectedOption;
+          activeModel = modelList[index];
         });
       },
     );
@@ -293,7 +294,7 @@ class ChatPageState extends State<ChatPage> {
               avater: userInfoProvider.userInfo.avater ?? ""),
           Expanded(
               child: Text(
-                "当前接入模型：${activeModelName}",
+                "当前接入模型：${activeModel.modelName}",
                 textAlign: TextAlign.center,
               )),
           PopupMenuButton<String>(
@@ -468,84 +469,85 @@ class ChatPageState extends State<ChatPage> {
   }
 
   Widget buildTypeWidget() {
-    return SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Container(
-          padding: const EdgeInsets.all(ThemeSize.smallMargin),
-          decoration: const BoxDecoration(color: ThemeColors.colorBg),
-          child: Row(
-            children: [
-              OutlinedButton(
-                  onPressed: () {
-                    setState(() {
-                      showThink = !showThink;
-                    });
-                  },
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(ThemeSize.smallMargin),
+      decoration: const BoxDecoration(color: ThemeColors.colorBg),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          OutlinedButton(
+              onPressed: () {
+                setState(() {
+                  showThink = !showThink;
+                });
+              },
 
-                  ///圆角
-                  style: OutlinedButton.styleFrom(
-                    backgroundColor: ThemeColors.colorWhite,
-                    foregroundColor: ThemeColors.colorWhite,
-                    side: BorderSide(
-                        color:
-                        showThink ? Colors.orange : ThemeColors.subTitle),
-                    shape: RoundedRectangleBorder(
-                      borderRadius:
-                      BorderRadius.circular(ThemeSize.bigRadius), // 圆角
-                    ),
-                  ),
-                  child: Text(
-                    '深度思考',
-                    style: TextStyle(
-                        fontSize: ThemeSize.middleFontSize,
-                        color:
-                        showThink ? Colors.orange : ThemeColors.subTitle),
-                  )),
-              const SizedBox(width: ThemeSize.containerPadding),
-              OutlinedButton(
-                  onPressed: () {
-                    setState(() {
-                      language = language == "zh" ? "en" : "zh";
-                    });
-                  },
+              ///圆角
+              style: OutlinedButton.styleFrom(
+                backgroundColor: ThemeColors.colorWhite,
+                foregroundColor: ThemeColors.colorWhite,
+                side: BorderSide(
+                    color:
+                    showThink ? Colors.orange : ThemeColors.subTitle),
+                shape: RoundedRectangleBorder(
+                  borderRadius:
+                  BorderRadius.circular(ThemeSize.bigRadius), // 圆角
+                ),
+              ),
+              child: Text(
+                '深度思考',
+                style: TextStyle(
+                    fontSize: ThemeSize.middleFontSize,
+                    color:
+                    showThink ? Colors.orange : ThemeColors.subTitle),
+              )),
+          const SizedBox(width: ThemeSize.containerPadding),
+          OutlinedButton(
+              onPressed: () {
+                setState(() {
+                  language = language == "zh" ? "en" : "zh";
+                });
+              },
 
-                  ///圆角
-                  style: OutlinedButton.styleFrom(
-                    backgroundColor: ThemeColors.colorWhite,
-                    // 背景色（可选）
-                    foregroundColor: ThemeColors.colorWhite,
-                    // 文字颜色
-                    side: BorderSide(
-                        color: type == "db"
-                            ? Colors.orange
-                            : ThemeColors.subTitle),
-                    // 设置边框颜色（这里是黑色）
-                    shape: RoundedRectangleBorder(
-                      borderRadius:
-                      BorderRadius.circular(ThemeSize.bigRadius), // 圆角
-                    ),
+              ///圆角
+              style: OutlinedButton.styleFrom(
+                backgroundColor: ThemeColors.colorWhite,
+                // 背景色（可选）
+                foregroundColor: ThemeColors.colorWhite,
+                // 文字颜色
+                side: BorderSide(
+                    color: type == "db"
+                        ? Colors.orange
+                        : ThemeColors.subTitle),
+                // 设置边框颜色（这里是黑色）
+                shape: RoundedRectangleBorder(
+                  borderRadius:
+                  BorderRadius.circular(ThemeSize.bigRadius), // 圆角
+                ),
+              ),
+              child: Row(children: [
+                Text(language == "zh" ? "中文" : "En",
+                    style: const TextStyle(
+                        color: ThemeColors.mainTitle,
+                        fontSize: ThemeSize.middleFontSize)),
+                const SizedBox(width: ThemeSize.miniMargin),
+                Transform(
+                  alignment: Alignment.center,
+                  transform: Matrix4.identity()
+                    ..scale(language == "zh" ? 1.0 : -1.0, 1.0),
+                  // 根据参数决定是否翻转
+                  child: Image.asset(
+                    "lib/assets/images/icon_switch.png",
+                    width: ThemeSize.smallIcon,
+                    height: ThemeSize.smallIcon,
                   ),
-                  child: Row(children: [
-                    Text(language == "zh" ? "中文" : "英文",
-                        style: const TextStyle(
-                            color: ThemeColors.mainTitle,
-                            fontSize: ThemeSize.middleFontSize)),
-                    const SizedBox(width: ThemeSize.miniMargin),
-                    Transform(
-                      alignment: Alignment.center,
-                      transform: Matrix4.identity()
-                        ..scale(language == "zh" ? 1.0 : -1.0, 1.0),
-                      // 根据参数决定是否翻转
-                      child: Image.asset(
-                        "lib/assets/images/icon_switch.png",
-                        width: ThemeSize.smallIcon,
-                        height: ThemeSize.smallIcon,
-                      ),
-                    )
-                  ]))
-            ],
-          ),
-        ));
+                )
+              ]))
+        ],
+      ),
+    );
   }
 
   Widget buildInputWidget() {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_music_app/utils/HttpUtil.dart';
 import '../router/index.dart';
 import '../service/serverMethod.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -28,6 +29,7 @@ class LoginPageState extends State<LoginPage> {
     String userAccount = userInfo?.userAccount ?? "";
     String email = "";
     String code = "";
+    bool loading = false;
     TextEditingController userController = TextEditingController(text: userAccount);
     TextEditingController pwdController = TextEditingController(text: "");
     TextEditingController emailController = TextEditingController(text: "");
@@ -319,9 +321,13 @@ class LoginPageState extends State<LoginPage> {
                     InkWell(
                       onTap: () async {
                         if (tabIndex == 0) {
+                          if(loading)return;
+                          loading = true;
                           loginService(userAccount, password).then((res) async {
+                            loading = false;
                             if (res.data != null) {
                               String token = 'Bearer ${res.token}';
+                              HttpUtil.getInstance().setToken(token);
                               await LocalStorageUtils.setToken(token);
                               await Fluttertoast.showToast(
                                   msg: "登录成功",
@@ -348,6 +354,7 @@ class LoginPageState extends State<LoginPage> {
                                   fontSize: ThemeSize.middleFontSize);
                             }
                           }).catchError((){
+                            loading = false;
                             Fluttertoast.showToast(
                                 msg: "登录失败，账号或密码错误",
                                 toastLength: Toast.LENGTH_SHORT,
@@ -378,6 +385,7 @@ class LoginPageState extends State<LoginPage> {
                             if (res.data != null) {
                               String token = 'Bearer ${res.token}';
                               await LocalStorageUtils.setToken(token);
+                              HttpUtil.getInstance().setToken(token);
                               await Fluttertoast.showToast(
                                   msg: "登录成功",
                                   toastLength: Toast.LENGTH_SHORT,

@@ -72,7 +72,7 @@ class HttpUtil {
           }
         },
         onRequest: (RequestOptions options, RequestInterceptorHandler handler){
-          options.headers['Authorization'] = token;
+          options.headers['Authorization'] =  token.contains("Bearer") ? token : 'Bearer $token';
           return handler.next(options); // 继续
         },
         onError: (DioException err, ErrorInterceptorHandler handler){
