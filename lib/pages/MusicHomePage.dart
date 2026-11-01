@@ -36,11 +36,16 @@ class MusicHomePageState extends State<MusicHomePage>
   void initState() {
     super.initState();
     getMusicClassifyService().then((res) {
-      allClassifies = res.data.map((item) {
-        return MusicClassifyModel.fromJson(item);
-      }).toList();
+      allClassifies = (res.data as List?)?.map((item) {
+            return MusicClassifyModel.fromJson(item);
+          }).toList() ??
+          [];
+      if (!mounted) return;
       setState(() {
-        currentClassifiesList.addAll(allClassifies.sublist(0, 4));
+        // 原来写死 sublist(0, 4)：接口失败返回空列表时会抛
+        // RangeError (end): Only valid value is 0: 4。
+        currentClassifiesList
+            .addAll(allClassifies.take(4).toList());
       });
     });
   }
@@ -130,7 +135,9 @@ class MusicHomePageState extends State<MusicHomePage>
             MusicAvaterComponent(
                 type: 'music',
                 name: '',
-                avater: Provider.of<UserInfoProvider>(context).userInfo.avater,
+                // userInfo 可能为 null（未登录或 Provider 尚未初始化），
+                // 直接取 .avater 会抛 NoSuchMethodError 让整页红屏。
+                avater: Provider.of<UserInfoProvider>(context).userInfo?.avater,
                 size: ThemeSize.middleAvater),
             Expanded(
                 flex: 1,

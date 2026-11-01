@@ -10,8 +10,8 @@ const servicePath = {
   'updatePassword': '/service/user/updatePassword',//更新密码
   'loginByEmail': '/service/user/loginByEmail',//邮箱登录
   'getKeywordMusic': '/service/music/getKeywordMusic',//获取搜索关键词
-  'getMusicClassify': '/service/music/getMusicClassify',//获取分类歌曲
-  'getMusicListByClassifyId': '/service/music/getMusicListByClassifyId',//获取推荐音乐列表
+  'getMusicClassify': '/service/music/getMusicCategory',//获取分类歌曲（后端实际路由名为 getMusicCategory）
+  'getMusicListByClassifyId': '/service/music/getMusicListByCategoryId',//获取推荐音乐列表（后端路由名为 getMusicListByCategoryId）
   'getMusicAuthorListByCategoryId': '/service/music/getMusicAuthorListByCategoryId',// 获取歌手列表
   'getCircleListByType': '/service/circle/getCircleListByType',// 获取歌手列表
   'getMusicPlayMenu': '/service/music/getMusicPlayMenu',// 获取我的歌单
@@ -24,7 +24,7 @@ const servicePath = {
   'deleteMusicLike': '/service/music/deleteMusicLike/',// 删除收藏
   'getMusicLike': '/service/music/getMusicLike',// 查询我喜欢的歌曲
   'searchMusic': '/service/music/searchMusic',// 音乐搜索
-  'getSingerCategory':'/service/music/getSingerCategory',// 获取歌手分类
+  'getSingerCategory':'/service/music/getMusicAuthorCategory',// 获取歌手分类（后端路由名为 getMusicAuthorCategory）
   'saveLike':'/service/social/saveLike',// 添加点赞
   'deleteLike':'/service/social/deleteLike',// 删除点赞
   'insertComment':'/service/social/insertComment',// 新增评论

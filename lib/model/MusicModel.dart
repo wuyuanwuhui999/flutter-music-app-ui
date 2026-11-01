@@ -72,35 +72,48 @@ class MusicModel extends ClassMusicParamsModel{
   //工厂模式-用这种模式可以省略New关键字
   factory MusicModel.fromJson(dynamic json) {
     return MusicModel(
-        id: json["id"],
-        albumId: json["albumId"],
-        songName: json["songName"],
-        authorName: json["authorName"],
-        authorId: json["authorId"],
+        id: _toInt(json["id"]) ?? 0,
+        albumId: _toInt(json["albumId"]) ?? 0,
+        songName: json["songName"] ?? "",
+        authorName: json["authorName"] ?? "",
+        // 后端 authorId 实测以字符串返回（如 "173618"），字段是 int?，
+        // 直接赋值会抛 type 'String' is not a subtype of type 'int?'，
+        // 导致首页整页红屏。这里统一走宽松转换。
+        authorId: _toInt(json["authorId"]),
         albumName: json["albumName"],
         version: json["version"],
         language: json["language"],
         publishDate: json["publishDate"],
-        wideAudioId: json["wideAudioId"],
-        isPublish: json["isPublish"],
-        bigPackId: json["isPublish"],
-        finalId: json["finalId"],
-        audioId: json["audioId"],
-        similarAudioId: json["similarAudioId"],
-        isHot: json["isHot"],
-        albumAudioId: json["albumAudioId"],
-        audioGroupId: json["audioGroupId"],
-        cover: json["cover"],
-        playUrl: json["playUrl"],
-        localPlayUrl: json["localPlayUrl"],
+        wideAudioId: _toInt(json["wideAudioId"]),
+        isPublish: _toInt(json["isPublish"]),
+        bigPackId: _toInt(json["isPublish"]),
+        finalId: _toInt(json["finalId"]),
+        audioId: _toInt(json["audioId"]) ?? 0,
+        similarAudioId: _toInt(json["similarAudioId"]),
+        isHot: _toInt(json["isHot"]),
+        albumAudioId: _toInt(json["albumAudioId"]) ?? 0,
+        audioGroupId: _toInt(json["audioGroupId"]),
+        cover: json["cover"] ?? "",
+        playUrl: json["playUrl"] ?? "",
+        localPlayUrl: json["localPlayUrl"] ?? "",
         sourceName: json["sourceName"],
         sourceUrl: json["sourceUrl"],
         createTime: json["createTime"],
         updateTime: json["updateTime"],
         label: json["label"],
         lyrics: json["lyrics"],
-        isLike: json["isLike"],
-        times: json["times"], classifyId: null, pageNum: null, pageSize: null);
+        isLike: _toInt(json["isLike"]) ?? 0,
+        times: _toInt(json["times"]) ?? 0,
+        classifyId: null, pageNum: null, pageSize: null);
+  }
+
+  /// 宽松地把后端返回值转成 int?，兼容 "173618" / 173618 / null 等情况。
+  static int? _toInt(dynamic v) {
+    if (v == null) return null;
+    if (v is int) return v;
+    if (v is num) return v.toInt();
+    if (v is String) return int.tryParse(v.trim());
+    return null;
   }
 
   static Map toMap(MusicModel musicModel) {

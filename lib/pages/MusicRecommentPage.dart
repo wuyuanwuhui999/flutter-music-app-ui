@@ -6,6 +6,7 @@ import '../component/MusicAvaterComponent.dart';
 import 'package:provider/provider.dart';
 import '../router/index.dart';
 import '../model/MusicModel.dart';
+import '../model/MusicClassifyModel.dart';
 import '../provider/PlayerMusicProvider.dart';
 import '../service/serverMethod.dart';
 import '../theme/ThemeStyle.dart';
@@ -24,6 +25,19 @@ class _MusicRecommentPageState extends State<MusicRecommentPage>
     with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
+
+  /// 推荐页取歌所用的分类 ID。
+  ///
+  /// 原来这里硬编码为 1，但后端 music_category 表的自增 ID 从 68 开始
+  /// （68=酷狗飙升榜、69=酷狗TOP500...），根本不存在 id=1 的分类，
+  /// 所以 getMusicListByCategoryId?categoryId=1 永远返回
+  /// {"status":"SUCCESS","total":0,"data":[]}——接口通、但没数据，
+  /// 表现为推荐页空白。
+  /// 现在改为从 getMusicCategory 动态取第一个有歌曲的分类。
+  static const int fallbackCategoryId = 68;
+  int recommendCategoryId = fallbackCategoryId;
+  bool _categoryResolved = false;
+
   int pageNum = 2; // 初始化加载两页共20条数据，后面每页加载10条
   int pageSize = 10;
   int total = 0;
@@ -55,19 +69,46 @@ class _MusicRecommentPageState extends State<MusicRecommentPage>
     });
   }
 
+  /// 解析出真正有歌曲的分类 ID，然后拉取列表。
+  /// 原来直接用硬编码的 1 请求，后端该分类不存在，返回空列表。
+  Future<void> _resolveCategoryAndLoad() async {
+    if (_categoryResolved) return;
+    try {
+      final res = await getMusicClassifyService();
+      final list = (res.data as List?) ?? [];
+      final enabled = list
+          .map((e) => MusicClassifyModel.fromJson(e))
+          .where((c) => c.disabled == 0)
+          .toList();
+      if (enabled.isNotEmpty) {
+        recommendCategoryId = enabled.first.id;
+      }
+    } catch (e) {
+      debugPrint("[RECOMMENT] 解析分类失败，回退到 $fallbackCategoryId: $e");
+    }
+    _categoryResolved = true;
+  }
+
   void getRecommendMusicList(int pageNum, pageSize) {
-    getMusicListByClassifyIdService(1, pageNum, pageSize, 1).then((res) {
-      setState(() {
-        total = res.total!;
-        for (var item in res.data) {
-          item['classifyId'] = 1;
-          item['pageNum'] = pageNum;
-          item['pageSize'] = pageSize;
-          item['isRedis'] = 0;
-          musicModelList.add(MusicModel.fromJson(item));
-        }
+    _resolveCategoryAndLoad().then((_) {
+      if (!mounted) return;
+      getMusicListByClassifyIdService(recommendCategoryId, pageNum, pageSize, 1)
+          .then((res) {
+        if (!mounted) return;
+        setState(() {
+          // total 可能是 null（接口失败时），原来是 res.total! 会崩
+          total = res.total ?? 0;
+          for (var item in res.data) {
+            item['classifyId'] = recommendCategoryId;
+            item['pageNum'] = pageNum;
+            item['pageSize'] = pageSize;
+            item['isRedis'] = 0;
+            musicModelList.add(MusicModel.fromJson(item));
+          }
+        });
+        easyRefreshController.finishLoad(
+            success: true, noMore: musicModelList.length >= total);
       });
-      easyRefreshController.finishLoad(success: true,noMore: musicModelList.length == total);
     });
   }
 
@@ -119,7 +160,7 @@ class _MusicRecommentPageState extends State<MusicRecommentPage>
               onTap: () async {
                 PlayerMusicProvider provider = Provider.of<PlayerMusicProvider>(context, listen: false);
                 if(provider.classifyName != '推荐歌曲'){
-                  await getMusicListByClassifyIdService(1, 1, MAX_FAVORITE_NUMBER, 1).then((value){
+                  await getMusicListByClassifyIdService(recommendCategoryId, 1, MAX_FAVORITE_NUMBER, 1).then((value){
                     provider.setClassifyMusic(value.data.map((element) => MusicModel.fromJson(element)).toList(),musicModel,index,'推荐歌曲');
                   });
                 }else if(musicModel.id != provider.musicModel?.id){
@@ -168,6 +209,9 @@ class _MusicRecommentPageState extends State<MusicRecommentPage>
 
   @override
   Widget build(BuildContext context) {
+    // AutomaticKeepAliveClientMixin 要求调用，否则 keep-alive 不生效，
+    // 切到其他 tab 再回来时页面状态会丢。
+    super.build(context);
     currentPlayingMusicModel =
         Provider.of<PlayerMusicProvider>(context).musicModel;
     playing = Provider.of<PlayerMusicProvider>(context).playing;

@@ -22,20 +22,47 @@ class LoginPage extends StatefulWidget {
 
 class LoginPageState extends State<LoginPage> {
   int tabIndex = 0;
+  // 登录进行中标志。必须作为 State 字段：原来声明在 build() 内部的局部变量
+  // 每次重建都会被重置为 false，导致防重复点击完全失效。
+  bool loading = false;
+
+  // 输入值同样必须是 State 字段。原来 userAccount/password 声明在 build() 内，
+  // onChanged 闭包只改到"当次 build"的变量；一旦重建（例如登录成功后
+  // setUserInfo 触发通知），password 会被重置回默认值 "123456"，
+  // 于是第二次登录就用错误密码，表现为"先提示成功、紧接着提示失败"。
+  String userAccount = "";
+  String password = "";
+  String email = "";
+  String code = "";
+
+  // 控制器也必须在 initState 创建。放在 build() 里每次重建都会新建一个，
+  // 导致输入内容/光标丢失。
+  late TextEditingController userController;
+  late TextEditingController pwdController;
+  final TextEditingController emailController = TextEditingController(text: "");
+  final TextEditingController codeController = TextEditingController(text: "");
+
+  @override
+  void initState() {
+    super.initState();
+    final UserInfoModel? userInfo =
+        Provider.of<UserInfoProvider>(context, listen: false).userInfo;
+    userAccount = userInfo?.userAccount ?? "";
+    userController = TextEditingController(text: userAccount);
+    pwdController = TextEditingController(text: "");
+  }
+
+  @override
+  void dispose() {
+    userController.dispose();
+    pwdController.dispose();
+    emailController.dispose();
+    codeController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    UserInfoModel? userInfo = Provider.of<UserInfoProvider>(context).userInfo;
-    String userAccount = userInfo?.userAccount ?? "";
-    String email = "";
-    String code = "";
-    bool loading = false;
-    TextEditingController userController = TextEditingController(text: userAccount);
-    TextEditingController pwdController = TextEditingController(text: "");
-    TextEditingController emailController = TextEditingController(text: "");
-    TextEditingController codeController = TextEditingController(text: "");
-
-    String password = "123456";
     return Scaffold(
         backgroundColor: ThemeColors.colorBg,
         body: SafeArea(
@@ -329,21 +356,33 @@ class LoginPageState extends State<LoginPage> {
                               String token = 'Bearer ${res.token}';
                               HttpUtil.getInstance().setToken(token);
                               await LocalStorageUtils.setToken(token);
-                              await Fluttertoast.showToast(
+                              if (!mounted) return;
+                              // Toast 不要 await：Android 上它的 Future 可能不 complete，
+                              // await 会让后面跳转的代码永远执行不到。
+                              Fluttertoast.showToast(
                                   msg: "登录成功",
                                   toastLength: Toast.LENGTH_SHORT,
                                   gravity: ToastGravity.BOTTOM,
                                   backgroundColor: Colors.green,
                                   textColor: Colors.white,
                                   fontSize: ThemeSize.middleFontSize);
-                              Provider.of<UserInfoProvider>(context,
-                                      listen: false)
-                                  .setUserInfo(
-                                      UserInfoModel.fromJson(res.data));
+                              // 写入用户信息。UserInfoModel.fromJson 曾经因后端把
+                              // sex 返回成字符串 "0" 而抛类型异常，中断整个流程导致
+                              // "提示登录成功却不跳转"——模型已做宽松转换。
+                              try {
+                                Provider.of<UserInfoProvider>(context,
+                                        listen: false)
+                                    .setUserInfo(
+                                        UserInfoModel.fromJson(res.data));
+                              } catch (e) {
+                                debugPrint("[LOGIN] 解析用户信息失败: $e");
+                              }
+                              // 等当前帧绘制完再跳转：setUserInfo 会同步触发
+                              // notifyListeners，同帧内直接跳转可能被打断。
+                              if (!mounted) return;
                               Routes.router.navigateTo(
-                                  context, '/ChatPage',
+                                  context, '/MusicIndexPage',
                                   replace: true);
-
                             } else {
                               Fluttertoast.showToast(
                                   msg: "登录失败，账号或密码错误",
@@ -353,7 +392,7 @@ class LoginPageState extends State<LoginPage> {
                                   textColor: Colors.white,
                                   fontSize: ThemeSize.middleFontSize);
                             }
-                          }).catchError((){
+                          }).catchError((err){
                             loading = false;
                             Fluttertoast.showToast(
                                 msg: "登录失败，账号或密码错误",
@@ -380,13 +419,16 @@ class LoginPageState extends State<LoginPage> {
                               backgroundColor: ThemeColors.disableColor,
                               fontSize: ThemeSize.middleFontSize);
                         }else{
-                          await EasyLoading.show();
+                          // EasyLoading.show() 的 Future 同样不应 await：
+                          // 它要等到 dismiss 才完成，await 会把自己锁死。
+                          EasyLoading.show();
                           loginByEmailService(emailController.text,codeController.text).then((res) async {
                             if (res.data != null) {
                               String token = 'Bearer ${res.token}';
                               await LocalStorageUtils.setToken(token);
                               HttpUtil.getInstance().setToken(token);
-                              await Fluttertoast.showToast(
+                              // 同账号密码登录：Toast 不可 await，否则跳转永不执行
+                              Fluttertoast.showToast(
                                   msg: "登录成功",
                                   toastLength: Toast.LENGTH_SHORT,
                                   gravity: ToastGravity.BOTTOM,
@@ -399,7 +441,7 @@ class LoginPageState extends State<LoginPage> {
                                   .setUserInfo(
                                   UserInfoModel.fromJson(res.data));
                               Routes.router.navigateTo(
-                                  context, '/ChatPage',
+                                  context, '/MusicIndexPage',
                                   replace: true);
                             } else {
                               Fluttertoast.showToast(

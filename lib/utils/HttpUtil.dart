@@ -17,12 +17,38 @@ class ResponseModel<T> {
 
   //工厂模式-用这种模式可以省略New关键字
   factory ResponseModel.fromJson(dynamic json) {
+    // json 为 null 时（接口失败/返回空体）不能直接 json["status"]，
+    // 否则抛 NoSuchMethodError: The method '[]' was called on null，
+    // 表现为首页红屏。这里统一返回 FAIL，让调用方走失败分支。
+    if (json == null) {
+      return ResponseModel(
+          status: FAIL,
+          msg: "接口无返回",
+          total: null,
+          token: null,
+          data: _emptyData<T>());
+    }
     return ResponseModel(
-        status:json["status"],
-        msg:json["msg"],
-        total:json["total"],
-        token:json["token"],
-        data:json["data"] as T);
+        status: json["status"],
+        msg: json["msg"],
+        total: json["total"],
+        token: json["token"],
+        data: json["data"] as T);
+  }
+
+  /// 为失败的响应提供一个类型安全的空值。
+  /// 不能直接写 `null as T`：当 T 是非空的 List<dynamic> 时，
+  /// 这会抛 "type 'Null' is not a subtype of type 'List<dynamic>'"，
+  /// 把本该安静走失败分支的调用变成未捕获异常。
+  static T _emptyData<T>() {
+    // 用 T.toString() 判断泛型实参，避免 List<dynamic> 这类泛型在
+    // 类型比较表达式里的语法限制。
+    final t = T.toString();
+    if (t.startsWith('List')) {
+      return <dynamic>[] as T;
+    }
+    // 其他泛型（如 dynamic / 可空类型）允许 null
+    return null as T;
   }
 }
 

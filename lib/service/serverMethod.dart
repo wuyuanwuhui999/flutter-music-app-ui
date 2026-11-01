@@ -35,8 +35,9 @@ Future<ResponseModel<dynamic>> loginService(
     return ResponseModel.fromJson(response.data);
   } catch (e) {
     print('ERROR:======>${e}');
+    // 原来这里 throw 之后还跟着一句 return ResponseModel.fromJson(null)，
+    // 永远执行不到（dead code），已删除。抛出异常让调用方 catchError 处理。
     throw Error();
-    return ResponseModel.fromJson(null);
   }
 }
 
@@ -135,12 +136,15 @@ Future<ResponseModel<List>> getMusicClassifyService() async {
 ///@author: wuwenqiang
 ///@description: 获取分类音乐列表
 /// @date: 2023-05-25 22:45
-/// @params isRedis是否从缓存中获取，首页数据没有是否喜欢字段，不用从缓存中获取，只有推荐页面才有
+/// @params isRedis 已废弃：后端 getMusicListByCategoryId 不再接受该参数
+///         （参考 docs/api/music.md 第 42 行差异说明），保留入参仅为兼容调用方。
 Future<ResponseModel<List<dynamic>>> getMusicListByClassifyIdService(
     int classifyId, int pageNum, int pageSize, int isRedis) async {
   try {
+    // 参数名必须是 categoryId（后端按此名取值），原来传 classifyId 会导致
+    // 后端取不到分类 ID 而返回空列表。
     Response response = await dio.get(
-        "${servicePath['getMusicListByClassifyId']}?classifyId=$classifyId&pageNum=$pageNum&pageSize=$pageSize&isRedis=$isRedis");
+        "${servicePath['getMusicListByClassifyId']}?categoryId=$classifyId&pageNum=$pageNum&pageSize=$pageSize");
     return ResponseModel.fromJson(response.data);
   } catch (e) {
     print('ERROR:======>${e}');
@@ -409,7 +413,9 @@ Future<ResponseModel<Map>> insertFavoriteDirectoryService (FavoriteDirectoryMode
 ///@author wuwenqiang
 Future<ResponseModel<int>> deleteFavoriteDirectoryService (int favoriteId)async {
   try {
-    Response response = await dio.delete("${servicePath['deleteFavoriteDirectory']}/$favoriteId");
+    // servicePath 已以 "/" 结尾，这里不能再加 "/"，否则路径变成
+    // deleteFavoriteDirectory//123，后端匹配不到路由（404）。
+    Response response = await dio.delete("${servicePath['deleteFavoriteDirectory']}$favoriteId");
     return ResponseModel.fromJson(response.data);
   } catch (e) {
     print('ERROR:======>${e}');
@@ -436,7 +442,9 @@ Future<ResponseModel<int>> isMusicFavoriteService (int musicId) async {
 ///@author wuwenqiang
 Future<ResponseModel<int>> insertMusicFavoriteService (int musicId,List<int>favoriteList) async {
   try {
-    Response response = await dio.post(servicePath['insertMusicFavorite']! + musicId.toString(),data: favoriteList.map((item) => {"favoriteId":item}).toList());
+    // 后端要求 body 直接是 int 数组 favoriteIds（见 docs/api/music.md #23），
+    // 原来传 [{"favoriteId":1}] 对象数组，后端解析失败。
+    Response response = await dio.post(servicePath['insertMusicFavorite']! + musicId.toString(),data: favoriteList);
     return ResponseModel.fromJson(response.data);
   } catch (e) {
     print('ERROR:======>${e}');

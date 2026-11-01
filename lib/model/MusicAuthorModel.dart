@@ -37,22 +37,34 @@ class MusicAuthorModel {
   //工厂模式-用这种模式可以省略New关键字
   factory MusicAuthorModel.fromJson(dynamic json) {
     return MusicAuthorModel(
-        id: json["id"],
-        authorId: json["authorId"],
+        id: _toInt(json["id"]) ?? 0,
+        // 后端 getMusicAuthorListByCategoryId 返回的 authorId 是 int
+        // （文档示例 "authorId":6051570），而字段是 String，直接赋值会抛
+        // "type 'int' is not a subtype of type 'String'"，导致歌手列表整块空白。
+        authorId: json["authorId"]?.toString() ?? "",
         authorName: json["authorName"],
         language: json["language"],
-        isPublish: json["isPublish"],
+        isPublish: _toInt(json["isPublish"]),
         avatar: json["avatar"],
-        type: json["type"],
+        type: _toInt(json["type"]),
         country: json["country"],
         birthday: json["birthday"],
-        identity: json["identity"],
-        rank: json["rank"],
-        createTime: json["createTime"],
-        updateTime: json["updateTime"],
-        total: json["total"],
-        isLike: json["isLike"]
+        identity: _toInt(json["identity"]),
+        rank: _toInt(json["rank"]),
+        createTime: json["createTime"] ?? "",
+        updateTime: json["updateTime"] ?? "",
+        total: _toInt(json["total"]) ?? 0,
+        isLike: _toInt(json["isLike"])
     );
+  }
+
+  /// 宽松地把后端返回值转成 int?，兼容 "6051570" / 6051570 / null。
+  static int? _toInt(dynamic v) {
+    if (v == null) return null;
+    if (v is int) return v;
+    if (v is num) return v.toInt();
+    if (v is String) return int.tryParse(v.trim());
+    return null;
   }
 
   Map<String, dynamic> toMap() {

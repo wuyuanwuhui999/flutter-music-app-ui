@@ -10,9 +10,9 @@ pluginManagement {
     includeBuild("$flutterSdkPath/packages/flutter_tools/gradle")
 
     repositories {
-        google()
-        mavenCentral()
-        gradlePluginPortal()
+        maven { url 'https://maven.aliyun.com/repository/public' }
+        maven { url 'https://maven.aliyun.com/repository/google' }
+        maven { url "https://www.jitpack.io" }
     }
 }
 
@@ -20,6 +20,20 @@ plugins {
     id "dev.flutter.flutter-plugin-loader" version "1.0.0"
     id "com.android.application" version "7.3.0" apply false
     id "org.jetbrains.kotlin.android" version "1.7.10" apply false
+}
+
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
+    repositories {
+        maven{ url 'https://maven.aliyun.com/repository/public' }
+        maven { url 'https://maven.aliyun.com/repository/google' }
+        maven { url "https://www.jitpack.io" }
+        // Flutter engine artifacts. Use the domestic mirror (storage.flutter-io.cn)
+        // instead of storage.googleapis.com/download.flutter.io which is very slow
+        // or blocked from mainland China / on macOS here.
+        maven { url "https://storage.flutter-io.cn/download.flutter.io" }
+        maven { url "https://storage.googleapis.com/download.flutter.io" }
+    }
 }
 
 include ":app"

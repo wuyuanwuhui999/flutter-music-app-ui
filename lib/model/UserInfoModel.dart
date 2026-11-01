@@ -36,19 +36,31 @@ class UserInfoModel{
     return UserInfoModel(
       avater: json["avater"],
       birthday: json["birthday"],
-      createDate: json["createDate"],
+      createDate: json["createDate"] ?? "",
       email: json["email"],
       role: json["role"],
-      sex: json["sex"],
+      // 后端把 sex 以字符串返回（实测为 "0"），而字段是 int?，
+      // 直接赋值会抛 "type 'String' is not a subtype of type 'int?'"。
+      // 这个异常会中断登录流程，导致"提示登录成功但不跳转"。
+      sex: _toInt(json["sex"]),
       telephone: json["telephone"],
-      updateDate: json["updateDate"],
-      userAccount: json["userAccount"],
-      username: json["username"],
+      updateDate: json["updateDate"] ?? "",
+      userAccount: json["userAccount"] ?? "",
+      username: json["username"] ?? "",
       sign: json["sign"],
       region: json["region"],
-      disabled:json["disabled"],
-      permission:json["permission"]
+      disabled: _toInt(json["disabled"]),
+      permission: _toInt(json["permission"])
     );
+  }
+
+  /// 宽松地把后端返回值转成 int?，兼容 "0" / 0 / null / "" 等情况。
+  static int? _toInt(dynamic v) {
+    if (v == null) return null;
+    if (v is int) return v;
+    if (v is num) return v.toInt();
+    if (v is String) return int.tryParse(v.trim());
+    return null;
   }
 
   Map<String, dynamic> toMap() {
