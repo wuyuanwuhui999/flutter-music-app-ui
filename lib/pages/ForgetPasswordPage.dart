@@ -17,7 +17,7 @@ class ForgetPasswordPage extends StatelessWidget {
   Widget build(BuildContext context) {
     TextEditingController emailController = TextEditingController(text: "405873717@qq.com");
     return Scaffold(
-        backgroundColor: ThemeColors.colorBg,
+        backgroundColor: ThemeColors.background,
         body: SafeArea(
           child: Container(
             height: double.infinity,
@@ -25,7 +25,7 @@ class ForgetPasswordPage extends StatelessWidget {
             child: Column(
               children: <Widget>[
                 const NavigatorTitleComponent(title: "忘记密码"),
-                SizedBox(height: ThemeSize.containerPadding),
+                SizedBox(height: ThemeSize.middleGap),
                 Column(
                   children: [
                     Container(
@@ -36,7 +36,7 @@ class ForgetPasswordPage extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Text("*",
-                                style: TextStyle(color: ThemeColors.warnColor)),
+                                style: TextStyle(color: ThemeColors.warn)),
                             Expanded(
                                 flex: 1,
                                 child: TextField(
@@ -46,15 +46,15 @@ class ForgetPasswordPage extends StatelessWidget {
                                     decoration: InputDecoration(
                                       hintText: "请输入邮箱",
                                       hintStyle: TextStyle(
-                                          fontSize: ThemeSize.smallFontSize,
+                                          fontSize: ThemeSize.smallFont,
                                           color: ThemeColors.grey),
                                       contentPadding: EdgeInsets.only(
-                                          left: ThemeSize.containerPadding),
+                                          left: ThemeSize.middleGap),
                                       border: InputBorder.none,
                                     )))
                           ],
                         )),
-                    SizedBox(height: ThemeSize.containerPadding),
+                    SizedBox(height: ThemeSize.middleGap),
                     Container(
                         margin: ThemeStyle.paddingBox,
                         child: InkWell(
@@ -67,7 +67,7 @@ class ForgetPasswordPage extends StatelessWidget {
                                   gravity: ToastGravity.BOTTOM,
                                   backgroundColor: Colors.green,
                                   textColor: Colors.white,
-                                  fontSize: ThemeSize.middleFontSize);
+                                  fontSize: ThemeSize.middleFont);
                             }else{
                               loading = true;
                               sendEmailVertifyCodeService(emailController.text)
@@ -80,7 +80,7 @@ class ForgetPasswordPage extends StatelessWidget {
                                       gravity: ToastGravity.BOTTOM,
                                       backgroundColor: Colors.green,
                                       textColor: Colors.white,
-                                      fontSize: ThemeSize.middleFontSize);
+                                      fontSize: ThemeSize.middleFont);
                                   Routes.router.navigateTo(context,
                                       '/ResetPasswordPage?email=${Uri.encodeComponent(json.encode(emailController.text))}');
                                 } else {
@@ -90,7 +90,7 @@ class ForgetPasswordPage extends StatelessWidget {
                                       gravity: ToastGravity.BOTTOM,
                                       backgroundColor: Colors.red,
                                       textColor: Colors.white,
-                                      fontSize: ThemeSize.middleFontSize);
+                                      fontSize: ThemeSize.middleFont);
                                 }
                               });
                             }
@@ -100,13 +100,13 @@ class ForgetPasswordPage extends StatelessWidget {
                             decoration: BoxDecoration(
                               color: Colors.red,
                               borderRadius: BorderRadius.all(
-                                  Radius.circular(ThemeSize.superRadius)),
+                                  Radius.circular(ThemeSize.buttonHeight / 2)),
                             ),
                             width: double.infinity,
                             child: Center(
                                 child: Text("提交",
                                     style: TextStyle(
-                                        color: ThemeColors.colorWhite))),
+                                        color: ThemeColors.white))),
                           ),
                         )),
                   ],

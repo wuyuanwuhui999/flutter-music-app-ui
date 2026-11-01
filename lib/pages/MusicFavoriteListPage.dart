@@ -62,7 +62,7 @@ class _MusicFavoriteListPageState extends State<MusicFavoriteListPage>
   Widget build(BuildContext context) {
     provider = Provider.of<PlayerMusicProvider>(context, listen: true);
     return Scaffold(
-        backgroundColor: ThemeColors.colorBg,
+        backgroundColor: ThemeColors.background,
         body: SafeArea(
           top: true,
           child: SizedBox(
@@ -82,7 +82,7 @@ class _MusicFavoriteListPageState extends State<MusicFavoriteListPage>
                         loadedText: '加载完成',
                         noMoreText: '没有更多',
                         bgColor: Colors.transparent,
-                        textColor: ThemeColors.disableColor,
+                        textColor: ThemeColors.gray,
                       ),
                       onLoad: () async {
                         if (total > pageNum * pageSize) {
@@ -95,7 +95,7 @@ class _MusicFavoriteListPageState extends State<MusicFavoriteListPage>
                         child: Column(
                           children: [
                             buildCoverWidget(),
-                            SizedBox(height: ThemeSize.containerPadding),
+                            SizedBox(height: ThemeSize.middleGap),
                             MusicListComponent(
                                 musicList: musicList,
                                 classifyName: MUSIC_FAVORITE_NAME +
@@ -130,17 +130,17 @@ class _MusicFavoriteListPageState extends State<MusicFavoriteListPage>
                 width: ThemeSize.bigAvater,
                 height: ThemeSize.bigAvater,
               )),
-          SizedBox(width: ThemeSize.containerPadding),
+          SizedBox(width: ThemeSize.middleGap),
           Expanded(
               flex: 1,
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(widget.favoriteDirectoryModel.name),
-                    SizedBox(height: ThemeSize.containerPadding),
+                    SizedBox(height: ThemeSize.middleGap),
                     Text(
                       '${widget.favoriteDirectoryModel.total.toString()}首',
-                      style: TextStyle(color: ThemeColors.disableColor),
+                      style: TextStyle(color: ThemeColors.gray),
                     )
                   ])),
           InkWell(

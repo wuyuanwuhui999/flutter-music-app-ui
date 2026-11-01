@@ -39,7 +39,7 @@ class CustomDialogComponent {
               onPressed: () {
                 Navigator.pop(context, Action.Cancel);
               },
-              child: const Text('取消', style: TextStyle(color: ThemeColors.warnColor)),
+              child: const Text('取消', style: TextStyle(color: ThemeColors.warn)),
             ),
           ],
         );

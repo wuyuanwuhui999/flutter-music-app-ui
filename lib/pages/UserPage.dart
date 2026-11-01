@@ -50,7 +50,7 @@ class UserPageState extends State<UserPage> {
             Expanded(
                 flex: 1,
                 child: Card(
-                    color: ThemeColors.disableColor,
+                    color: ThemeColors.gray,
                     shape: RoundedRectangleBorder(
                       borderRadius:
                           BorderRadius.circular(ThemeSize.middleRadius),
@@ -69,7 +69,7 @@ class UserPageState extends State<UserPage> {
                               EdgeInsets.only(left: ThemeSize.miniMargin),
                           hintText: '请输入$name',
                           hintStyle: TextStyle(
-                              fontSize: ThemeSize.smallFontSize,
+                              fontSize: ThemeSize.smallFont,
                               color: ThemeColors.grey),
                           border: InputBorder.none,
                         ))))
@@ -89,7 +89,7 @@ class UserPageState extends State<UserPage> {
           msg: "$name不能为空",
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
-          fontSize: ThemeSize.middleFontSize);
+          fontSize: ThemeSize.middleFont);
       loading = false;
     } else {
       await EasyLoading.show();
@@ -169,7 +169,7 @@ class UserPageState extends State<UserPage> {
   Widget build(BuildContext context) {
     provider = Provider.of<UserInfoProvider>(context, listen: true);
     return Scaffold(
-        backgroundColor: ThemeColors.colorBg,
+        backgroundColor: ThemeColors.background,
         body: SafeArea(
             top: true,
             child: Container(
@@ -193,7 +193,7 @@ class UserPageState extends State<UserPage> {
                                   Container(
                                       decoration: ThemeStyle.bottomDecoration,
                                       padding: EdgeInsets.only(
-                                          bottom: ThemeSize.containerPadding),
+                                          bottom: ThemeSize.middleGap),
                                       child: InkWell(
                                           onTap: () {
                                             // showSelectionDialog(["相机", "相册"],
@@ -395,7 +395,7 @@ class UserPageState extends State<UserPage> {
                                       padding: EdgeInsets.only(
                                           top: ThemeSize.columnPadding,
                                           bottom: ThemeSize.columnPadding -
-                                              ThemeSize.containerPadding),
+                                              ThemeSize.middleGap),
                                       child: InkWell(
                                         onTap: () {
                                           useDialog(
@@ -430,11 +430,11 @@ class UserPageState extends State<UserPage> {
                             ),
                             Container(
                               margin: EdgeInsets.only(
-                                  top: ThemeSize.containerPadding),
+                                  top: ThemeSize.middleGap),
                               decoration: BoxDecoration(
                                 color: Colors.red,
                                 borderRadius: BorderRadius.all(
-                                    Radius.circular(ThemeSize.superRadius)),
+                                    Radius.circular(ThemeSize.buttonHeight / 2)),
                               ),
                               width: double.infinity,
                               child: MaterialButton(
@@ -460,13 +460,13 @@ class UserPageState extends State<UserPage> {
                                 },
                                 child: Container(
                                     margin: EdgeInsets.only(
-                                        top: ThemeSize.containerPadding),
+                                        top: ThemeSize.middleGap),
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(
-                                                ThemeSize.superRadius)),
+                                                ThemeSize.buttonHeight / 2)),
                                         border: Border.all(
-                                            color: ThemeColors.borderColor)),
+                                            color: ThemeColors.gray)),
                                     width: double.infinity,
                                     height: ThemeSize.buttonHeight,
                                     child: const Center(child: Text("修改密码")))),

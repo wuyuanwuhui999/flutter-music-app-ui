@@ -52,7 +52,7 @@ class _EditPageState extends State<EditPage> {
         Provider.of<UserInfoProvider>(context).userInfo;
     return FlutterEasyLoading(
         child: Scaffold(
-      backgroundColor: ThemeColors.colorBg,
+      backgroundColor: ThemeColors.background,
       body: SafeArea(
           top: true,
           child: Container(
@@ -81,7 +81,7 @@ class _EditPageState extends State<EditPage> {
                                 msg: "${widget.title}不能为空",
                                 toastLength: Toast.LENGTH_SHORT,
                                 gravity: ToastGravity.CENTER,
-                                fontSize: ThemeSize.middleFontSize);
+                                fontSize: ThemeSize.middleFont);
                             return;
                           }
                           await EasyLoading.show();
@@ -98,14 +98,14 @@ class _EditPageState extends State<EditPage> {
                           }).catchError(() {});
                         },
                         child: Container(
-                            width: ThemeSize.middleBtnWidth,
-                            height: ThemeSize.middleBtnHeight,
+                            width: ThemeSize.btnWidth,
+                            height: ThemeSize.btnHeight,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.all(
                                   Radius.circular(ThemeSize.minBtnRadius)),
                               color: hasChange
                                   ? ThemeColors.activeColor
-                                  : ThemeColors.disableColor,
+                                  : ThemeColors.gray,
                             ),
                             child: Center(
                                 child: Text(
@@ -113,10 +113,10 @@ class _EditPageState extends State<EditPage> {
                               style: TextStyle(
                                   color: hasChange
                                       ? Colors.white
-                                      : ThemeColors.disableColor),
+                                      : ThemeColors.gray),
                             ))))
                   ]),
-                  SizedBox(height: ThemeSize.containerPadding),
+                  SizedBox(height: ThemeSize.middleGap),
                   Options()
                 ],
               ))),
@@ -145,13 +145,13 @@ class _EditPageState extends State<EditPage> {
                     Icons.check,
                     color: checkValue == "男"
                         ? ThemeColors.activeColor
-                        : ThemeColors.colorWhite,
+                        : ThemeColors.white,
                   )
                 ])),
           ),
           Container(
             height: 1,
-            decoration: BoxDecoration(color: ThemeColors.disableColor),
+            decoration: BoxDecoration(color: ThemeColors.gray),
           ),
           InkWell(
             onTap: () {
@@ -171,7 +171,7 @@ class _EditPageState extends State<EditPage> {
                       Icons.check,
                       color: checkValue == "女"
                           ? ThemeColors.activeColor
-                          : ThemeColors.colorWhite,
+                          : ThemeColors.white,
                     )
                   ],
                 )),
@@ -238,7 +238,7 @@ class _EditPageState extends State<EditPage> {
           //   });
           // },
           // child: Padding(
-          //   padding: EdgeInsets.all(20),
+          //   padding: EdgeInsets.all(ThemeSize.columnPadding),
           //   child: TextField(
           //     enabled: false,
           //     controller: myController,
@@ -247,7 +247,7 @@ class _EditPageState extends State<EditPage> {
         });
     } else {
       return Padding(
-        padding: EdgeInsets.all(20),
+        padding: EdgeInsets.all(ThemeSize.columnPadding),
         child: TextField(
           controller: myController,
           onChanged: (value) {

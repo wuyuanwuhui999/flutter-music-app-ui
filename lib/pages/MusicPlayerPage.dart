@@ -104,7 +104,7 @@ class MusicPlayerPageState extends State<MusicPlayerPage>
   Widget build(BuildContext context) {
     provider = Provider.of<PlayerMusicProvider>(context, listen: true);
     return Scaffold(
-        backgroundColor: ThemeColors.colorBg,
+        backgroundColor: ThemeColors.background,
         body: Stack(children: [
           /// 图片在Stack最底层
           ImageFiltered(
@@ -127,31 +127,31 @@ class MusicPlayerPageState extends State<MusicPlayerPage>
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                SizedBox(height: ThemeSize.containerPadding * 2),
+                SizedBox(height: ThemeSize.middleGap * 2),
                 Text(provider.musicModel.songName,
                     style: TextStyle(
-                        color: ThemeColors.colorWhite,
-                        fontSize: ThemeSize.bigFontSize,
+                        color: ThemeColors.white,
+                        fontSize: ThemeSize.bigFont,
                         fontWeight: FontWeight.bold)),
-                SizedBox(height: ThemeSize.containerPadding),
+                SizedBox(height: ThemeSize.middleGap),
                 buildPlayCircle(),
-                SizedBox(height: ThemeSize.containerPadding),
+                SizedBox(height: ThemeSize.middleGap),
                 Expanded(flex: 1, child: buildLyric()),
-                SizedBox(height: ThemeSize.containerPadding),
+                SizedBox(height: ThemeSize.middleGap),
                 buildSinger(),
-                SizedBox(height: ThemeSize.containerPadding),
+                SizedBox(height: ThemeSize.middleGap),
                 buildPlayMenu(),
-                SizedBox(height: ThemeSize.containerPadding),
+                SizedBox(height: ThemeSize.middleGap),
                 buildprogress(),
-                SizedBox(height: ThemeSize.containerPadding),
+                SizedBox(height: ThemeSize.middleGap),
                 buildPlayBtn(),
-                SizedBox(height: ThemeSize.containerPadding)
+                SizedBox(height: ThemeSize.middleGap)
               ],
             ),
           ),
           Positioned(
-              left: ThemeSize.containerPadding,
-              top: ThemeSize.containerPadding +
+              left: ThemeSize.middleGap,
+              top: ThemeSize.middleGap +
                   MediaQuery.of(context).padding.top,
               child: InkWell(
                 onTap: (){
@@ -167,13 +167,13 @@ class MusicPlayerPageState extends State<MusicPlayerPage>
 
   Widget buildPlayCircle() {
     double playerWidth =
-        MediaQuery.of(context).size.width - ThemeSize.containerPadding * 6;
+        MediaQuery.of(context).size.width - ThemeSize.middleGap * 6;
     return Container(
         width: playerWidth,
         height: playerWidth,
         clipBehavior: Clip.hardEdge,
         decoration: BoxDecoration(
-          color: ThemeColors.opcityColor,
+          color: ThemeColors.opacityBlack,
           borderRadius: BorderRadius.circular(playerWidth),
         ),
         child: RotationTransition(
@@ -197,7 +197,7 @@ class MusicPlayerPageState extends State<MusicPlayerPage>
                 borderRadius: BorderRadius.circular(playerWidth),
               ),
               child: Padding(
-                  padding: EdgeInsets.all(ThemeSize.containerPadding * 4),
+                  padding: EdgeInsets.all(ThemeSize.middleGap * 4),
                   child: ClipOval(
                     child: MusicAvaterComponent(
                         type: 'music',
@@ -205,7 +205,7 @@ class MusicPlayerPageState extends State<MusicPlayerPage>
                         avater: provider.musicModel.cover,
                         size: playerWidth -
                             ThemeSize.smallMargin -
-                            ThemeSize.containerPadding * 3),
+                            ThemeSize.middleGap * 3),
                   ))),
         ));
   }
@@ -217,7 +217,7 @@ class MusicPlayerPageState extends State<MusicPlayerPage>
             ? InkWell(
                 child: LyricsReader(
                   padding: EdgeInsets.symmetric(
-                      horizontal: ThemeSize.containerPadding),
+                      horizontal: ThemeSize.middleGap),
                   model: LyricsModelBuilder.create()
                       .bindLyricToMain(provider.musicModel.lyrics)
                       .getModel(),
@@ -266,8 +266,8 @@ class MusicPlayerPageState extends State<MusicPlayerPage>
               )
             : Text('暂无歌词',
                 style: TextStyle(
-                    color: ThemeColors.opcityWhiteColor,
-                    fontSize: ThemeSize.middleFontSize)));
+                    color: ThemeColors.opacityWhite,
+                    fontSize: ThemeSize.middleFont)));
   }
 
   ///@author: wuwenqiang
@@ -280,8 +280,8 @@ class MusicPlayerPageState extends State<MusicPlayerPage>
             overflow: TextOverflow.ellipsis, // 设置溢出模式为省略号
             style: TextStyle(
                 decoration: TextDecoration.underline,
-                decorationColor: ThemeColors.colorWhite,
-                color: ThemeColors.colorWhite)));
+                decorationColor: ThemeColors.white,
+                color: ThemeColors.white)));
   }
 
   ///@author: wuwenqiang
@@ -409,9 +409,9 @@ class MusicPlayerPageState extends State<MusicPlayerPage>
   Widget buildprogress() {
     return Row(
       children: [
-        SizedBox(width: ThemeSize.containerPadding * 2),
+        SizedBox(width: ThemeSize.middleGap * 2),
         Text(getDuration(duration),
-            style: TextStyle(color: ThemeColors.colorWhite)),
+            style: TextStyle(color: ThemeColors.white)),
         Expanded(
           flex: 1,
           child: Slider(
@@ -430,13 +430,13 @@ class MusicPlayerPageState extends State<MusicPlayerPage>
             },
             min: 0,
             max: 100.0,
-            activeColor: ThemeColors.opcityWhiteColor,
-            inactiveColor: ThemeColors.opcityColor,
+            activeColor: ThemeColors.opacityWhite,
+            inactiveColor: ThemeColors.opacityBlack,
           ),
         ),
         Text(getDuration(totalSec),
-            style: TextStyle(color: ThemeColors.colorWhite)),
-        SizedBox(width: ThemeSize.containerPadding * 2),
+            style: TextStyle(color: ThemeColors.white)),
+        SizedBox(width: ThemeSize.middleGap * 2),
       ],
     );
   }
@@ -447,7 +447,7 @@ class MusicPlayerPageState extends State<MusicPlayerPage>
         Expanded(
             flex: 1,
             child: PopupMenuButton<LoopModeEnum>(
-              color: ThemeColors.popupMenuColor,
+              color: ThemeColors.popupMenu,
               initialValue: provider.loopMode,
               child: Image.asset(
                 loopMode[provider.loopMode]!,
@@ -468,7 +468,7 @@ class MusicPlayerPageState extends State<MusicPlayerPage>
                             height: ThemeSize.smallIcon),
                         SizedBox(width: ThemeSize.smallMargin),
                         Text('顺序播放',
-                            style: TextStyle(color: ThemeColors.colorWhite))
+                            style: TextStyle(color: ThemeColors.white))
                       ])),
                   PopupMenuItem<LoopModeEnum>(
                     value: LoopModeEnum.REPEAT,
@@ -478,7 +478,7 @@ class MusicPlayerPageState extends State<MusicPlayerPage>
                           height: ThemeSize.smallIcon),
                       SizedBox(width: ThemeSize.smallMargin),
                       Text('单曲循环',
-                          style: TextStyle(color: ThemeColors.colorWhite))
+                          style: TextStyle(color: ThemeColors.white))
                     ]),
                   ),
                   PopupMenuItem<LoopModeEnum>(
@@ -489,7 +489,7 @@ class MusicPlayerPageState extends State<MusicPlayerPage>
                           height: ThemeSize.smallIcon),
                       SizedBox(width: ThemeSize.smallMargin),
                       Text('随机播放',
-                          style: TextStyle(color: ThemeColors.colorWhite))
+                          style: TextStyle(color: ThemeColors.white))
                     ]),
                   )
                 ];
@@ -517,7 +517,7 @@ class MusicPlayerPageState extends State<MusicPlayerPage>
                         borderRadius:
                             BorderRadius.circular(ThemeSize.bigAvater),
                         border:
-                            Border.all(color: ThemeColors.colorWhite, width: 2),
+                            Border.all(color: ThemeColors.white, width: 2),
                       ),
                       child: Center(
                         child: Image.asset(

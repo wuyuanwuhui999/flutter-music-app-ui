@@ -40,7 +40,7 @@ class _MusicClassifyListPageState extends State<MusicClassifyListPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: ThemeColors.colorBg,
+        backgroundColor: ThemeColors.background,
         body: SafeArea(
           top: true,
           child: Container(
@@ -61,7 +61,7 @@ class _MusicClassifyListPageState extends State<MusicClassifyListPage>
                       loadedText: '加载完成',
                       noMoreText: '没有更多',
                       bgColor: Colors.transparent,
-                      textColor: ThemeColors.disableColor,
+                      textColor: ThemeColors.gray,
                     ),
                     onLoad: () async {
                       if (total > pageNum * PAGE_SIZE) {
@@ -75,7 +75,7 @@ class _MusicClassifyListPageState extends State<MusicClassifyListPage>
                             timeInSecForIosWeb: 1,
                             backgroundColor: Colors.blue,
                             textColor: Colors.white,
-                            fontSize: ThemeSize.middleFontSize);
+                            fontSize: ThemeSize.middleFont);
                       }
                     },
                     child: Padding(

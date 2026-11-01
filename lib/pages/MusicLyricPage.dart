@@ -44,7 +44,7 @@ class _MusicLyricPageState extends State<MusicLyricPage>
     MusicModel musicModel = Provider.of<PlayerMusicProvider>(context, listen: false).musicModel;
 
     return Scaffold(
-        backgroundColor: ThemeColors.colorBg,
+        backgroundColor: ThemeColors.background,
         body:Stack(children: [
           /// 图片在Stack最底层
           ImageFiltered(
@@ -62,11 +62,11 @@ class _MusicLyricPageState extends State<MusicLyricPage>
                     child:SizedBox()
                     // LyricWidget(
                     //   lyricStyle: TextStyle(
-                    //       color: ThemeColors.opcityWhiteColor,
-                    //       fontSize: ThemeSize.middleFontSize),
+                    //       color: ThemeColors.opacityWhite,
+                    //       fontSize: ThemeSize.middleFont),
                     //   currLyricStyle: TextStyle(
-                    //       color: ThemeColors.colorWhite,
-                    //       fontSize: ThemeSize.middleFontSize),
+                    //       color: ThemeColors.white,
+                    //       fontSize: ThemeSize.middleFont),
                     //   size: Size(double.infinity, double.infinity),
                     //   lyrics: LyricUtil.formatLyric(musicModel.lyrics),
                     //   controller: _lyricController,

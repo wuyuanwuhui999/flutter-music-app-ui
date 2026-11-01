@@ -193,7 +193,7 @@ class _MusicIndexPageState extends State<MusicIndexPage>
     MusicModel? musicModel =
         Provider.of<PlayerMusicProvider>(context).musicModel;
     return Scaffold(
-        backgroundColor: ThemeColors.colorBg,
+        backgroundColor: ThemeColors.background,
         body: SafeArea(
             top: true,
             child: PageView.builder(
@@ -223,11 +223,11 @@ class _MusicIndexPageState extends State<MusicIndexPage>
                     Routes.router.navigateTo(context, '/MusicPlayerPage');
                   })
               : Icon(Icons.music_note,
-                  color: ThemeColors.colorBg, size: ThemeSize.bigIcon),
+                  color: ThemeColors.background, size: ThemeSize.bigIcon),
         ),
         bottomNavigationBar: BottomAppBar(
             height: ThemeSize.bottomBarHeight,
-            color: ThemeColors.colorWhite,
+            color: ThemeColors.white,
             shape: const CircularNotchedRectangle(),
             child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,

@@ -35,7 +35,7 @@ class RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: ThemeColors.colorBg,
+        backgroundColor: ThemeColors.background,
         body: SafeArea(
             top: true,
             child: SizedBox(
@@ -44,14 +44,14 @@ class RegisterPageState extends State<RegisterPage> {
               child: Column(
                 children: <Widget>[
                   const NavigatorTitleComponent(title: "注册"),
-                  SizedBox(height: ThemeSize.containerPadding),
+                  SizedBox(height: ThemeSize.middleGap),
                   Container(
                       decoration: ThemeStyle.boxDecoration,
                       margin: ThemeStyle.paddingBox,
                       padding: ThemeStyle.paddingBox,
                       child: Column(
                         children: [
-                          SizedBox(height: ThemeSize.containerPadding),
+                          SizedBox(height: ThemeSize.middleGap),
                           Row(
                             children: <Widget>[
                               SizedBox(
@@ -60,7 +60,7 @@ class RegisterPageState extends State<RegisterPage> {
                                   children: [
                                     Text("*",
                                         style: TextStyle(
-                                            color: ThemeColors.warnColor)),
+                                            color: ThemeColors.warn)),
                                     const Text("用户名")
                                   ],
                                 ),
@@ -73,10 +73,10 @@ class RegisterPageState extends State<RegisterPage> {
 
                                     enabledBorder: UnderlineInputBorder(
                                         borderSide: BorderSide(
-                                            color: ThemeColors.disableColor)),
+                                            color: ThemeColors.gray)),
                                     focusedBorder: UnderlineInputBorder(
                                         borderSide: BorderSide(
-                                            color: ThemeColors.disableColor)),
+                                            color: ThemeColors.gray)),
                                     hintText: "请输入用户名",
                                   ),
                                   onChanged: (value) {
@@ -90,7 +90,7 @@ class RegisterPageState extends State<RegisterPage> {
                               )
                             ],
                           ),
-                          SizedBox(height: ThemeSize.containerPadding),
+                          SizedBox(height: ThemeSize.middleGap),
                           Row(
                             children: <Widget>[
                               SizedBox(
@@ -99,7 +99,7 @@ class RegisterPageState extends State<RegisterPage> {
                                   children: [
                                     Text("*",
                                         style: TextStyle(
-                                            color: ThemeColors.warnColor)),
+                                            color: ThemeColors.warn)),
                                     const Text("密码")
                                   ],
                                 ),
@@ -110,10 +110,10 @@ class RegisterPageState extends State<RegisterPage> {
                                   decoration: InputDecoration(
                                     enabledBorder: UnderlineInputBorder(
                                         borderSide: BorderSide(
-                                            color: ThemeColors.disableColor)),
+                                            color: ThemeColors.gray)),
                                     focusedBorder: UnderlineInputBorder(
                                         borderSide: BorderSide(
-                                            color: ThemeColors.disableColor)),
+                                            color: ThemeColors.gray)),
                                     hintText: "请输入密码",
                                   ),
                                   onChanged: (value) {},
@@ -124,7 +124,7 @@ class RegisterPageState extends State<RegisterPage> {
                               )
                             ],
                           ),
-                          SizedBox(height: ThemeSize.containerPadding),
+                          SizedBox(height: ThemeSize.middleGap),
                           Row(
                             children: <Widget>[
                               SizedBox(
@@ -133,7 +133,7 @@ class RegisterPageState extends State<RegisterPage> {
                                   children: [
                                     Text("*",
                                         style: TextStyle(
-                                            color: ThemeColors.warnColor)),
+                                            color: ThemeColors.warn)),
                                     const Text("确认密码")
                                   ],
                                 ),
@@ -144,10 +144,10 @@ class RegisterPageState extends State<RegisterPage> {
                                   decoration: InputDecoration(
                                     enabledBorder: UnderlineInputBorder(
                                         borderSide: BorderSide(
-                                            color: ThemeColors.disableColor)),
+                                            color: ThemeColors.gray)),
                                     focusedBorder: UnderlineInputBorder(
                                         borderSide: BorderSide(
-                                            color: ThemeColors.disableColor)),
+                                            color: ThemeColors.gray)),
                                     hintText: "确认密码",
                                   ),
                                   onChanged: (value) {},
@@ -158,7 +158,7 @@ class RegisterPageState extends State<RegisterPage> {
                               )
                             ],
                           ),
-                          SizedBox(height: ThemeSize.containerPadding),
+                          SizedBox(height: ThemeSize.middleGap),
                           Row(
                             children: <Widget>[
                               SizedBox(
@@ -167,7 +167,7 @@ class RegisterPageState extends State<RegisterPage> {
                                   children: [
                                     Text("*",
                                         style: TextStyle(
-                                            color: ThemeColors.warnColor)),
+                                            color: ThemeColors.warn)),
                                     const Text("昵称")
                                   ],
                                 ),
@@ -178,10 +178,10 @@ class RegisterPageState extends State<RegisterPage> {
                                   decoration: InputDecoration(
                                     enabledBorder: UnderlineInputBorder(
                                         borderSide: BorderSide(
-                                            color: ThemeColors.disableColor)),
+                                            color: ThemeColors.gray)),
                                     focusedBorder: UnderlineInputBorder(
                                         borderSide: BorderSide(
-                                            color: ThemeColors.disableColor)),
+                                            color: ThemeColors.gray)),
                                     hintText: "请输入昵称",
                                   ),
                                   onChanged: (value) {},
@@ -192,7 +192,7 @@ class RegisterPageState extends State<RegisterPage> {
                               )
                             ],
                           ),
-                          SizedBox(height: ThemeSize.containerPadding),
+                          SizedBox(height: ThemeSize.middleGap),
                           Row(
                             children: <Widget>[
                               SizedBox(
@@ -201,7 +201,7 @@ class RegisterPageState extends State<RegisterPage> {
                                   children: [
                                     Text("*",
                                         style: TextStyle(
-                                            color: ThemeColors.warnColor)),
+                                            color: ThemeColors.warn)),
                                     const Text("邮箱")
                                   ],
                                 ),
@@ -212,10 +212,10 @@ class RegisterPageState extends State<RegisterPage> {
                                   decoration: InputDecoration(
                                     enabledBorder: UnderlineInputBorder(
                                         borderSide: BorderSide(
-                                            color: ThemeColors.disableColor)),
+                                            color: ThemeColors.gray)),
                                     focusedBorder: UnderlineInputBorder(
                                         borderSide: BorderSide(
-                                            color: ThemeColors.disableColor)),
+                                            color: ThemeColors.gray)),
                                     hintText: "请输入邮箱地址",
                                   ),
                                   onChanged: (value) {},
@@ -226,7 +226,7 @@ class RegisterPageState extends State<RegisterPage> {
                               )
                             ],
                           ),
-                          SizedBox(height: ThemeSize.containerPadding),
+                          SizedBox(height: ThemeSize.middleGap),
                           Row(
                             children: <Widget>[
                               const SizedBox(
@@ -245,7 +245,7 @@ class RegisterPageState extends State<RegisterPage> {
                                           groupValue: groupValue,
                                           // title: Text("男"),
                                           onChanged: _handleRadioValueChanged),
-                                      SizedBox(width: ThemeSize.containerPadding),
+                                      SizedBox(width: ThemeSize.middleGap),
                                       const Text("女"),
                                       Radio(
                                           value: 1,
@@ -253,12 +253,12 @@ class RegisterPageState extends State<RegisterPage> {
                                           onChanged: _handleRadioValueChanged),
                                     ],
                                   ),
-                                  Divider(height: 1,color:ThemeColors.borderColor)
+                                  Divider(height: 1,color:ThemeColors.gray)
                                 ],)
                               )
                             ],
                           ),
-                          SizedBox(height: ThemeSize.containerPadding),
+                          SizedBox(height: ThemeSize.middleGap),
                           Row(
                             children: <Widget>[
                               const SizedBox(
@@ -271,10 +271,10 @@ class RegisterPageState extends State<RegisterPage> {
                                   decoration: InputDecoration(
                                     enabledBorder: UnderlineInputBorder(
                                         borderSide: BorderSide(
-                                            color: ThemeColors.disableColor)),
+                                            color: ThemeColors.gray)),
                                     focusedBorder: UnderlineInputBorder(
                                         borderSide: BorderSide(
-                                            color: ThemeColors.disableColor)),
+                                            color: ThemeColors.gray)),
                                     hintText: "请输入区域",
                                   ),
                                   onChanged: (value) {},
@@ -285,7 +285,7 @@ class RegisterPageState extends State<RegisterPage> {
                               )
                             ],
                           ),
-                          SizedBox(height: ThemeSize.containerPadding),
+                          SizedBox(height: ThemeSize.middleGap),
                           Row(
                             children: <Widget>[
                               const SizedBox(
@@ -298,10 +298,10 @@ class RegisterPageState extends State<RegisterPage> {
                                   decoration: InputDecoration(
                                     enabledBorder: UnderlineInputBorder(
                                         borderSide: BorderSide(
-                                            color: ThemeColors.disableColor)),
+                                            color: ThemeColors.gray)),
                                     focusedBorder: UnderlineInputBorder(
                                         borderSide: BorderSide(
-                                            color: ThemeColors.disableColor)),
+                                            color: ThemeColors.gray)),
                                     hintText: "请输入个性签名",
                                   ),
                                   onChanged: (value) {},
@@ -312,11 +312,11 @@ class RegisterPageState extends State<RegisterPage> {
                               )
                             ],
                           ),
-                          SizedBox(height: ThemeSize.containerPadding),
+                          SizedBox(height: ThemeSize.middleGap),
                         ],
                       )),
                   Container(
-                    margin: EdgeInsets.all(ThemeSize.containerPadding),
+                    margin: EdgeInsets.all(ThemeSize.middleGap),
                     width: double.infinity,
                     decoration: BoxDecoration(
                         color: Colors.red,

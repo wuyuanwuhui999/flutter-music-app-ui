@@ -129,7 +129,7 @@ class _MusicCirclePageState extends State<MusicCirclePage>
         left: 0,
         right: 0,
         child: Container(
-            decoration: BoxDecoration(color: ThemeColors.colorWhite),
+            decoration: BoxDecoration(color: ThemeColors.white),
             padding: ThemeStyle.padding,
             child: Row(children: [
               Expanded(
@@ -142,12 +142,12 @@ class _MusicCirclePageState extends State<MusicCirclePage>
                               cursorColor: ThemeColors.grey, //设置光标
                               decoration: InputDecoration(
                                 filled: true,
-                                fillColor: ThemeColors.colorBg,
+                                fillColor: ThemeColors.background,
                                 hintText:
                                 replyCommentModel != null ? "回复${replyCommentModel?.username}"
                                     : (firstCommentModel != null ? "回复${firstCommentModel?.username}" : "评论"),
                                 hintStyle: TextStyle(
-                                    fontSize: ThemeSize.smallFontSize,
+                                    fontSize: ThemeSize.smallFont,
                                     color: ThemeColors.grey),
                                 border: OutlineInputBorder(
                                   borderSide: BorderSide.none,
@@ -157,7 +157,7 @@ class _MusicCirclePageState extends State<MusicCirclePage>
                                 contentPadding: EdgeInsets.only(
                                     left: ThemeSize.smallMargin),
                               ))))),
-              SizedBox(width: ThemeSize.containerPadding),
+              SizedBox(width: ThemeSize.middleGap),
               Container(
                 height: ThemeSize.middleAvater,
                 child: ElevatedButton(
@@ -194,7 +194,7 @@ class _MusicCirclePageState extends State<MusicCirclePage>
                   child: Text(
                     '发送',
                     style: TextStyle(
-                        fontSize: ThemeSize.middleFontSize,
+                        fontSize: ThemeSize.middleFont,
                         color: Colors.white),
                   ),
                 ),
@@ -302,8 +302,8 @@ class _MusicCirclePageState extends State<MusicCirclePage>
                       circleIndex != -1 ? '取消赞' : '赞',
                       style: TextStyle(
                           decoration: TextDecoration.none,
-                          fontSize: ThemeSize.smallFontSize,
-                          color: ThemeColors.colorWhite,
+                          fontSize: ThemeSize.smallFont,
+                          color: ThemeColors.white,
                           fontWeight: FontWeight.normal),
                     )
                   ],
@@ -335,8 +335,8 @@ class _MusicCirclePageState extends State<MusicCirclePage>
                       '评论',
                       style: TextStyle(
                           decoration: TextDecoration.none,
-                          fontSize: ThemeSize.smallFontSize,
-                          color: ThemeColors.colorWhite,
+                          fontSize: ThemeSize.smallFont,
+                          color: ThemeColors.white,
                           fontWeight: FontWeight.normal),
                     )
                   ],
@@ -350,7 +350,7 @@ class _MusicCirclePageState extends State<MusicCirclePage>
         decoration: ThemeStyle.boxDecoration,
         margin: ThemeStyle.margin,
         width:
-            MediaQuery.of(context).size.width - ThemeSize.containerPadding * 2,
+            MediaQuery.of(context).size.width - ThemeSize.middleGap * 2,
         padding: ThemeStyle.padding,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -366,7 +366,7 @@ class _MusicCirclePageState extends State<MusicCirclePage>
               width: ThemeSize.middleAvater,
               fit: BoxFit.cover,
             )),
-            SizedBox(width: ThemeSize.containerPadding),
+            SizedBox(width: ThemeSize.middleGap),
             Expanded(
                 flex: 1,
                 child: Column(
@@ -381,10 +381,10 @@ class _MusicCirclePageState extends State<MusicCirclePage>
                         softWrap: false,
                         maxLines: 5,
                         overflow: TextOverflow.ellipsis),
-                    SizedBox(height: ThemeSize.containerPadding),
+                    SizedBox(height: ThemeSize.middleGap),
                     Container(
                       decoration: BoxDecoration(
-                        color: ThemeColors.colorBg,
+                        color: ThemeColors.background,
                         borderRadius: BorderRadius.all(
                             Radius.circular(ThemeSize.minPlayIcon)),
                       ),
@@ -398,21 +398,21 @@ class _MusicCirclePageState extends State<MusicCirclePage>
                             width: ThemeSize.middleAvater,
                             fit: BoxFit.cover,
                           )),
-                          SizedBox(width: ThemeSize.containerPadding),
+                          SizedBox(width: ThemeSize.middleGap),
                           Text(
                               '${circleModel.musicSongName} - ${circleModel.musicAuthorName}'),
                           const Expanded(flex: 1, child: SizedBox()),
                           Image.asset("lib/assets/images/icon_music_play.png",
                               width: ThemeSize.smallIcon,
                               height: ThemeSize.smallIcon),
-                          SizedBox(width: ThemeSize.containerPadding),
+                          SizedBox(width: ThemeSize.middleGap),
                         ],
                       ),
                     ),
-                    SizedBox(height: ThemeSize.containerPadding),
+                    SizedBox(height: ThemeSize.middleGap),
                     Row(children: [
                       Text(formatTime(circleModel.createTime),
-                          style: TextStyle(color: ThemeColors.disableColor)),
+                          style: TextStyle(color: ThemeColors.gray)),
                       const Expanded(flex: 1, child: SizedBox()),
                       InkWell(
                         key: circleModel.key,
@@ -427,7 +427,7 @@ class _MusicCirclePageState extends State<MusicCirclePage>
                     ]),
                     SizedBox(
                         height: circleModel.circleLikes!.isNotEmpty
-                            ? ThemeSize.containerPadding
+                            ? ThemeSize.middleGap
                             : 0),
                     buildCircleLikeAndCommentList(circleModel)
                   ],
@@ -446,7 +446,7 @@ class _MusicCirclePageState extends State<MusicCirclePage>
       return Container(
           padding: ThemeStyle.padding,
           decoration: BoxDecoration(
-              color: ThemeColors.colorBg,
+              color: ThemeColors.background,
               borderRadius:
                   BorderRadius.all(Radius.circular(ThemeSize.middleRadius))),
           child: Column(children: [
@@ -510,7 +510,7 @@ class _MusicCirclePageState extends State<MusicCirclePage>
     List<Widget> circleCommentWidget = [
       SizedBox(
           height: (circleLikes.isNotEmpty || replyCommentModel != null)
-              ? ThemeSize.containerPadding
+              ? ThemeSize.middleGap
               : 0)
     ];
     for (var circleComment in circleComments) {
@@ -591,7 +591,7 @@ class _MusicCirclePageState extends State<MusicCirclePage>
                 loadedText: '加载完成',
                 noMoreText: '没有更多',
                 bgColor: Colors.transparent,
-                textColor: ThemeColors.disableColor,
+                textColor: ThemeColors.gray,
               ),
             onLoad: () async {
               pageNum++;
@@ -604,7 +604,7 @@ class _MusicCirclePageState extends State<MusicCirclePage>
                     timeInSecForIosWeb: 1,
                     backgroundColor: Colors.blue,
                     textColor: Colors.white,
-                    fontSize: ThemeSize.middleFontSize);
+                    fontSize: ThemeSize.middleFont);
               } else {
                 getCircleWidgetListByType();
               }

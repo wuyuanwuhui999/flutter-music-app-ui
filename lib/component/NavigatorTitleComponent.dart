@@ -12,7 +12,7 @@ class NavigatorTitleComponent extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         padding: ThemeStyle.padding,
-        decoration: BoxDecoration(color: ThemeColors.colorWhite),
+        decoration: BoxDecoration(color: ThemeColors.white),
         child:
         Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
           InkWell(

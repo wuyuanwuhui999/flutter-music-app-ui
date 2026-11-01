@@ -117,8 +117,8 @@ class _MusicUserPageState extends State<MusicUserPage>
             toastLength: Toast.LENGTH_SHORT,
             gravity: ToastGravity.CENTER,
             timeInSecForIosWeb: 1,
-            backgroundColor: ThemeColors.disableColor,
-            fontSize: ThemeSize.middleFontSize);
+            backgroundColor: ThemeColors.gray,
+            fontSize: ThemeSize.middleFont);
         setState(() {
           musicLikeList.removeAt(index);
         });
@@ -134,8 +134,8 @@ class _MusicUserPageState extends State<MusicUserPage>
             toastLength: Toast.LENGTH_SHORT,
             gravity: ToastGravity.CENTER,
             timeInSecForIosWeb: 1,
-            backgroundColor: ThemeColors.disableColor,
-            fontSize: ThemeSize.middleFontSize);
+            backgroundColor: ThemeColors.gray,
+            fontSize: ThemeSize.middleFont);
         setState(() {
           favoriteDirectoryList.removeAt(index);
         });
@@ -154,8 +154,8 @@ class _MusicUserPageState extends State<MusicUserPage>
             toastLength: Toast.LENGTH_SHORT,
             gravity: ToastGravity.CENTER,
             timeInSecForIosWeb: 1,
-            backgroundColor: ThemeColors.disableColor,
-            fontSize: ThemeSize.middleFontSize);
+            backgroundColor: ThemeColors.gray,
+            fontSize: ThemeSize.middleFont);
         setState(() {
           authorList.removeAt(index);
         });
@@ -190,7 +190,7 @@ class _MusicUserPageState extends State<MusicUserPage>
         child: Column(children: [
       SizedBox(
           height:
-              MediaQuery.of(context).padding.top + ThemeSize.containerPadding),
+              MediaQuery.of(context).padding.top + ThemeSize.middleGap),
       buildUserInfoWidget(),
       buildFavoriteDirectoryWidget(),
       buildMusicLikeWidget(),
@@ -205,7 +205,7 @@ class _MusicUserPageState extends State<MusicUserPage>
     return Container(
       decoration: ThemeStyle.boxDecoration,
       margin: ThemeStyle.margin,
-      width: MediaQuery.of(context).size.width - ThemeSize.containerPadding * 2,
+      width: MediaQuery.of(context).size.width - ThemeSize.middleGap * 2,
       padding: ThemeStyle.padding,
       child: Row(
         children: [
@@ -223,14 +223,14 @@ class _MusicUserPageState extends State<MusicUserPage>
                       width: ThemeSize.middleIcon,
                       height: ThemeSize.middleIcon,
                     )),
-          SizedBox(width: ThemeSize.containerPadding),
+          SizedBox(width: ThemeSize.middleGap),
           Expanded(
               flex: 1,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(userInfo.username,
-                      style: TextStyle(fontSize: ThemeSize.bigFontSize)),
+                      style: TextStyle(fontSize: ThemeSize.bigFont)),
                   SizedBox(height: ThemeSize.smallMargin),
                   Text(userInfo.sign ?? "",
                       style: TextStyle(color: ThemeColors.subTitle))
@@ -253,7 +253,7 @@ class _MusicUserPageState extends State<MusicUserPage>
         decoration: ThemeStyle.boxDecoration,
         margin: ThemeStyle.margin,
         width:
-            MediaQuery.of(context).size.width - ThemeSize.containerPadding * 2,
+            MediaQuery.of(context).size.width - ThemeSize.middleGap * 2,
         padding: ThemeStyle.padding,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -283,11 +283,11 @@ class _MusicUserPageState extends State<MusicUserPage>
                       },
                       child:  Image.asset("lib/assets/images/icon_add.png",
                         width: ThemeSize.smallIcon,
-                        color: ThemeColors.disableColor,
+                        color: ThemeColors.gray,
                         colorBlendMode: BlendMode.srcIn,
                         height: ThemeSize.smallIcon),)
                    ,
-                    SizedBox(width: ThemeSize.containerPadding),
+                    SizedBox(width: ThemeSize.middleGap),
                     InkWell(
                         onTap: () async {
                           EasyLoading.show();
@@ -296,7 +296,7 @@ class _MusicUserPageState extends State<MusicUserPage>
                         },
                         child: Image.asset("lib/assets/images/icon_refresh.png",
                             width: ThemeSize.smallIcon,
-                            color: ThemeColors.disableColor,
+                            color: ThemeColors.gray,
                             colorBlendMode: BlendMode.srcIn,
                             height: ThemeSize.smallIcon))
                   ],
@@ -312,7 +312,7 @@ class _MusicUserPageState extends State<MusicUserPage>
                           width: 1, //宽度
                           color: entry.key == favoriteDirectoryList.length - 1
                               ? Colors.white
-                              : ThemeColors.disableColor, //边框颜色
+                              : ThemeColors.gray, //边框颜色
                         ),
                       ),
                     ),
@@ -322,7 +322,7 @@ class _MusicUserPageState extends State<MusicUserPage>
                           children: [
                             SlidableAction(
                               padding: EdgeInsets.only(
-                                  top: ThemeSize.containerPadding),
+                                  top: ThemeSize.middleGap),
                               onPressed: (context) {
                                 useDeleteFavoriteDirectory(
                                     entry.value.name,
@@ -338,10 +338,10 @@ class _MusicUserPageState extends State<MusicUserPage>
                         ),
                         child: Container(
                             padding: EdgeInsets.only(
-                                top: ThemeSize.containerPadding,
+                                top: ThemeSize.middleGap,
                                 bottom: entry.key == favoriteDirectoryList.length - 1
                                     ? 0
-                                    : ThemeSize.containerPadding),
+                                    : ThemeSize.middleGap),
                             child: Row(
                               children: [
                                 entry.value.cover != null
@@ -357,7 +357,7 @@ class _MusicUserPageState extends State<MusicUserPage>
                                         //超出部分，可裁剪
                                         clipBehavior: Clip.hardEdge,
                                         decoration: BoxDecoration(
-                                          color: ThemeColors.colorBg,
+                                          color: ThemeColors.background,
                                           borderRadius: BorderRadius.circular(
                                               ThemeSize.bigAvater),
                                         ),
@@ -365,9 +365,9 @@ class _MusicUserPageState extends State<MusicUserPage>
                                             child: Text(
                                           entry.value.name.substring(0, 1),
                                           style: TextStyle(
-                                              fontSize: ThemeSize.bigFontSize),
+                                              fontSize: ThemeSize.bigFont),
                                         ))),
-                                SizedBox(width: ThemeSize.containerPadding),
+                                SizedBox(width: ThemeSize.middleGap),
                                 Expanded(
                                   flex: 1,
                                   child: Column(
@@ -392,8 +392,8 @@ class _MusicUserPageState extends State<MusicUserPage>
                                       width: ThemeSize.smallIcon,
                                       height: ThemeSize.smallIcon,
                                     )),
-                                SizedBox(width: ThemeSize.containerPadding * 2),
-                                SizedBox(width: ThemeSize.containerPadding * 2),
+                                SizedBox(width: ThemeSize.middleGap * 2),
+                                SizedBox(width: ThemeSize.middleGap * 2),
                                 Image.asset(
                                   "lib/assets/images/icon_music_menu.png",
                                   width: ThemeSize.smallIcon,
@@ -414,7 +414,7 @@ class _MusicUserPageState extends State<MusicUserPage>
         decoration: ThemeStyle.boxDecoration,
         margin: ThemeStyle.margin,
         width:
-            MediaQuery.of(context).size.width - ThemeSize.containerPadding * 2,
+            MediaQuery.of(context).size.width - ThemeSize.middleGap * 2,
         padding: ThemeStyle.padding,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -436,20 +436,20 @@ class _MusicUserPageState extends State<MusicUserPage>
                       },
                       child: Image.asset("lib/assets/images/icon_refresh.png",
                           width: ThemeSize.smallIcon,
-                          color: ThemeColors.disableColor,
+                          color: ThemeColors.gray,
                           colorBlendMode: BlendMode.srcIn,
                           height: ThemeSize.smallIcon),
                     ),
                     SizedBox(
                         width: totalLikeMusic > 5
-                            ? ThemeSize.containerPadding
+                            ? ThemeSize.middleGap
                             : 0),
                     totalLikeMusic > 0
                         ? Text("更多",
                             style: TextStyle(
-                                color: ThemeColors.disableColor,
+                                color: ThemeColors.gray,
                                 decoration: TextDecoration.underline,
-                                decorationColor: ThemeColors.disableColor))
+                                decorationColor: ThemeColors.gray))
                         : const SizedBox()
                   ],
                 )),
@@ -464,7 +464,7 @@ class _MusicUserPageState extends State<MusicUserPage>
                               width: 1, //宽度
                               color: entry.key == musicLikeList.length - 1
                                   ? Colors.white
-                                  : ThemeColors.disableColor, //边框颜色
+                                  : ThemeColors.gray, //边框颜色
                             ),
                           ),
                         ),
@@ -474,7 +474,7 @@ class _MusicUserPageState extends State<MusicUserPage>
                               children: [
                                 SlidableAction(
                                   padding: EdgeInsets.only(
-                                      top: ThemeSize.containerPadding),
+                                      top: ThemeSize.middleGap),
                                   onPressed: (context) {
                                     useDeleteFavoriteMusic(entry.value.songName,
                                         entry.value.id, entry.key);
@@ -488,10 +488,10 @@ class _MusicUserPageState extends State<MusicUserPage>
                             ),
                             child: Container(
                               padding: EdgeInsets.only(
-                                  top: ThemeSize.containerPadding,
+                                  top: ThemeSize.middleGap,
                                   bottom: entry.key == musicLikeList.length - 1
                                       ? 0
-                                      : ThemeSize.containerPadding),
+                                      : ThemeSize.middleGap),
                               child: Row(
                                 children: [
                                   ClipOval(
@@ -500,7 +500,7 @@ class _MusicUserPageState extends State<MusicUserPage>
                                     width: ThemeSize.bigAvater,
                                     height: ThemeSize.bigAvater,
                                   )),
-                                  SizedBox(width: ThemeSize.containerPadding),
+                                  SizedBox(width: ThemeSize.middleGap),
                                   Expanded(
                                     flex: 1,
                                     child: Text(entry.value.songName),
@@ -511,7 +511,7 @@ class _MusicUserPageState extends State<MusicUserPage>
                                     height: ThemeSize.smallIcon,
                                   ),
                                   SizedBox(
-                                      width: ThemeSize.containerPadding * 2),
+                                      width: ThemeSize.middleGap * 2),
                                   Image.asset(
                                     "lib/assets/images/icon_music_menu.png",
                                     width: ThemeSize.smallIcon,
@@ -532,7 +532,7 @@ class _MusicUserPageState extends State<MusicUserPage>
         decoration: ThemeStyle.boxDecoration,
         margin: ThemeStyle.margin,
         width:
-            MediaQuery.of(context).size.width - ThemeSize.containerPadding * 2,
+            MediaQuery.of(context).size.width - ThemeSize.middleGap * 2,
         padding: ThemeStyle.padding,
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           MusicTitleComponent(
@@ -552,20 +552,20 @@ class _MusicUserPageState extends State<MusicUserPage>
                     },
                     child: Image.asset("lib/assets/images/icon_refresh.png",
                         width: ThemeSize.smallIcon,
-                        color: ThemeColors.disableColor,
+                        color: ThemeColors.gray,
                         colorBlendMode: BlendMode.srcIn,
                         height: ThemeSize.smallIcon),
                   ),
                   SizedBox(
                       width: totalFavoriteAuthor > 5
-                          ? ThemeSize.containerPadding
+                          ? ThemeSize.middleGap
                           : 0),
                   totalFavoriteAuthor > 5
                       ? Text("更多",
                           style: TextStyle(
-                              color: ThemeColors.disableColor,
+                              color: ThemeColors.gray,
                               decoration: TextDecoration.underline,
-                              decorationColor: ThemeColors.disableColor))
+                              decorationColor: ThemeColors.gray))
                       : const SizedBox()
                 ],
               )),
@@ -580,7 +580,7 @@ class _MusicUserPageState extends State<MusicUserPage>
                           width: 1, //宽度
                           color: entry.key == authorList.length - 1
                               ? Colors.white
-                              : ThemeColors.disableColor, //边框颜色
+                              : ThemeColors.gray, //边框颜色
                         ),
                       ),
                     ),
@@ -590,7 +590,7 @@ class _MusicUserPageState extends State<MusicUserPage>
                           children: [
                             SlidableAction(
                               padding: EdgeInsets.only(
-                                  top: ThemeSize.containerPadding),
+                                  top: ThemeSize.middleGap),
                               onPressed: (context) {
                                 useDeleteFavoriteAuthor(entry.value.authorName!,
                                     entry.value.authorId, entry.key);
@@ -604,10 +604,10 @@ class _MusicUserPageState extends State<MusicUserPage>
                         ),
                         child: Container(
                           padding: EdgeInsets.only(
-                              top: ThemeSize.containerPadding,
+                              top: ThemeSize.middleGap,
                               bottom: entry.key == authorList.length - 1
                                   ? 0
-                                  : ThemeSize.containerPadding),
+                                  : ThemeSize.middleGap),
                           child: Row(
                             children: [
                               entry.value.avatar != null
@@ -623,7 +623,7 @@ class _MusicUserPageState extends State<MusicUserPage>
                                       //超出部分，可裁剪
                                       clipBehavior: Clip.hardEdge,
                                       decoration: BoxDecoration(
-                                        color: ThemeColors.colorBg,
+                                        color: ThemeColors.background,
                                         borderRadius: BorderRadius.circular(
                                             ThemeSize.bigAvater),
                                       ),
@@ -631,9 +631,9 @@ class _MusicUserPageState extends State<MusicUserPage>
                                           child: Text(
                                         entry.value.authorName!.substring(0, 1),
                                         style: TextStyle(
-                                            fontSize: ThemeSize.bigFontSize),
+                                            fontSize: ThemeSize.bigFont),
                                       ))),
-                              SizedBox(width: ThemeSize.containerPadding),
+                              SizedBox(width: ThemeSize.middleGap),
                               Expanded(
                                 flex: 1,
                                 child: Column(
@@ -652,7 +652,7 @@ class _MusicUserPageState extends State<MusicUserPage>
                                 width: ThemeSize.smallIcon,
                                 height: ThemeSize.smallIcon,
                               ),
-                              SizedBox(width: ThemeSize.containerPadding * 2),
+                              SizedBox(width: ThemeSize.middleGap * 2),
                               Image.asset(
                                 "lib/assets/images/icon_music_menu.png",
                                 width: ThemeSize.smallIcon,
@@ -671,7 +671,7 @@ class _MusicUserPageState extends State<MusicUserPage>
         decoration: ThemeStyle.boxDecoration,
         margin: ThemeStyle.margin,
         width:
-            MediaQuery.of(context).size.width - ThemeSize.containerPadding * 2,
+            MediaQuery.of(context).size.width - ThemeSize.middleGap * 2,
         padding: ThemeStyle.padding,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -694,18 +694,18 @@ class _MusicUserPageState extends State<MusicUserPage>
                       child: Image.asset("lib/assets/images/icon_refresh.png",
                           width: ThemeSize.smallIcon,
                           colorBlendMode: BlendMode.srcIn,
-                          color: ThemeColors.disableColor,
+                          color: ThemeColors.gray,
                           height: ThemeSize.smallIcon),
                     ),
                     SizedBox(
                         width:
-                            totalRecord > 5 ? ThemeSize.containerPadding : 0),
+                            totalRecord > 5 ? ThemeSize.middleGap : 0),
                     totalRecord > 10
                         ? Text("更多",
                             style: TextStyle(
-                                color: ThemeColors.disableColor,
+                                color: ThemeColors.gray,
                                 decoration: TextDecoration.underline,
-                                decorationColor: ThemeColors.disableColor))
+                                decorationColor: ThemeColors.gray))
                         : const SizedBox()
                   ],
                 )),
@@ -716,14 +716,14 @@ class _MusicUserPageState extends State<MusicUserPage>
                   return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(height: ThemeSize.containerPadding),
+                        SizedBox(height: ThemeSize.middleGap),
                         entry.key != 0
                             ? Divider(
-                                height: 1, color: ThemeColors.disableColor)
+                                height: 1, color: ThemeColors.gray)
                             : const SizedBox(),
                         SizedBox(
                             height: entry.key != 0
-                                ? ThemeSize.containerPadding
+                                ? ThemeSize.middleGap
                                 : 0),
                         Row(
                           children: [
@@ -733,7 +733,7 @@ class _MusicUserPageState extends State<MusicUserPage>
                               width: ThemeSize.bigAvater,
                               height: ThemeSize.bigAvater,
                             )),
-                            SizedBox(width: ThemeSize.containerPadding),
+                            SizedBox(width: ThemeSize.middleGap),
                             Expanded(
                               flex: 1,
                               child: Column(
@@ -752,13 +752,13 @@ class _MusicUserPageState extends State<MusicUserPage>
                               width: ThemeSize.smallIcon,
                               height: ThemeSize.smallIcon,
                             ),
-                            SizedBox(width: ThemeSize.containerPadding * 2),
+                            SizedBox(width: ThemeSize.middleGap * 2),
                             Image.asset(
                               "lib/assets/images/icon_delete.png",
                               width: ThemeSize.smallIcon,
                               height: ThemeSize.smallIcon,
                             ),
-                            SizedBox(width: ThemeSize.containerPadding * 2),
+                            SizedBox(width: ThemeSize.middleGap * 2),
                             Image.asset(
                               "lib/assets/images/icon_music_menu.png",
                               width: ThemeSize.smallIcon,

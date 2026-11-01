@@ -43,7 +43,7 @@ class MusicAvaterComponent extends StatelessWidget {
                 width: size,
                 height: size,
                 decoration: BoxDecoration(
-                    color: ThemeColors.colorBg,
+                    color: ThemeColors.background,
                     borderRadius: BorderRadius.all(Radius.circular(size))),
                 child: Center(child: Text(name)),
               )

@@ -63,7 +63,7 @@ class _MusicAuthorListPageState extends State<MusicAuthorListPage>
   Widget build(BuildContext context) {
     provider = Provider.of<PlayerMusicProvider>(context, listen: true);
     return Scaffold(
-        backgroundColor: ThemeColors.colorBg,
+        backgroundColor: ThemeColors.background,
         body: SafeArea(
             top: true,
             child: Container(
@@ -83,7 +83,7 @@ class _MusicAuthorListPageState extends State<MusicAuthorListPage>
                           loadedText: '加载完成',
                           noMoreText: '没有更多',
                           bgColor: Colors.transparent,
-                          textColor: ThemeColors.disableColor,
+                          textColor: ThemeColors.gray,
                         ),
                         onLoad: () async {
                             if (pageNum * pageSize < total) {

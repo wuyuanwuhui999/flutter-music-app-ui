@@ -67,7 +67,7 @@ class _MusicAuthorCategoryPageState extends State<MusicAuthorCategoryPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: ThemeColors.colorBg,
+        backgroundColor: ThemeColors.background,
         body: SafeArea(
             top: true,
             child: Container(
@@ -87,7 +87,7 @@ class _MusicAuthorCategoryPageState extends State<MusicAuthorCategoryPage>
                           loadedText: '加载完成',
                           noMoreText: '没有更多',
                           bgColor: Colors.transparent,
-                          textColor: ThemeColors.disableColor,
+                          textColor: ThemeColors.gray,
                         ),
                         onLoad: () async {
                             if (pageNum * PAGE_SIZE < total) {
@@ -151,7 +151,7 @@ class _MusicAuthorCategoryPageState extends State<MusicAuthorCategoryPage>
                   color: authorCategoryList[activeIndex].id ==
                           authorCategoryList[i].id
                       ? ThemeColors.orange
-                      : ThemeColors.borderColor),
+                      : ThemeColors.gray),
               borderRadius:
                   BorderRadius.all(Radius.circular(ThemeSize.middleRadius)),
             ),
@@ -178,11 +178,11 @@ class _MusicAuthorCategoryPageState extends State<MusicAuthorCategoryPage>
         decoration: ThemeStyle.boxDecoration,
         margin: ThemeStyle.margin,
         width:
-            MediaQuery.of(context).size.width - ThemeSize.containerPadding * 2,
+            MediaQuery.of(context).size.width - ThemeSize.middleGap * 2,
         padding: EdgeInsets.only(
-            left: ThemeSize.containerPadding,
-            right: ThemeSize.containerPadding,
-            bottom: ThemeSize.containerPadding),
+            left: ThemeSize.middleGap,
+            right: ThemeSize.middleGap,
+            bottom: ThemeSize.middleGap),
         child: Column(
             children: musicAuthorList.map((item) {
           index++;
@@ -191,17 +191,17 @@ class _MusicAuthorCategoryPageState extends State<MusicAuthorCategoryPage>
               Routes.router.navigateTo(context, '/MusicAuthorListPage?authorModel=${Uri.encodeComponent(json.encode(item.toMap()))}');
             },child: Container(
                 padding: EdgeInsets.only(
-                    top: ThemeSize.containerPadding,
+                    top: ThemeSize.middleGap,
                     bottom: index == musicAuthorList.length
                         ? 0
-                        : ThemeSize.containerPadding),
+                        : ThemeSize.middleGap),
                 decoration: index == musicAuthorList.length
                     ? null
                     : BoxDecoration(
                     border: Border(
                         bottom: BorderSide(
                           width: 1, //宽度
-                          color: ThemeColors.colorBg, //边框颜色
+                          color: ThemeColors.background, //边框颜色
                         ))),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -223,7 +223,7 @@ class _MusicAuthorCategoryPageState extends State<MusicAuthorCategoryPage>
                           width: ThemeSize.middleAvater,
                           fit: BoxFit.cover),
                     ),
-                    SizedBox(width: ThemeSize.containerPadding),
+                    SizedBox(width: ThemeSize.middleGap),
                     Expanded(flex: 1,child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -232,14 +232,14 @@ class _MusicAuthorCategoryPageState extends State<MusicAuthorCategoryPage>
                         Text(
                           "${item.total.toString()}首",
                           style: TextStyle(
-                              color: ThemeColors.disableColor,
+                              color: ThemeColors.gray,
                               fontWeight: FontWeight.bold),
                         ),
                       ],
                     )),
                     Image.asset("lib/assets/images/icon_music_play.png",
                         height: ThemeSize.smallIcon, width: ThemeSize.smallIcon),
-                    SizedBox(width: ThemeSize.containerPadding),
+                    SizedBox(width: ThemeSize.middleGap),
                     InkWell(
                         onTap: (){
                           if(item.isLike == 1){
@@ -258,7 +258,7 @@ class _MusicAuthorCategoryPageState extends State<MusicAuthorCategoryPage>
                         },
                         child: Image.asset(item.isLike == 0 ? "lib/assets/images/icon_like.png" : "lib/assets/images/icon_like_active.png",
                         height: ThemeSize.smallIcon, width: ThemeSize.smallIcon)),
-                    SizedBox(width: ThemeSize.containerPadding),
+                    SizedBox(width: ThemeSize.middleGap),
                     Image.asset("lib/assets/images/icon_music_menu.png",
                         height: ThemeSize.smallIcon, width: ThemeSize.smallIcon),
                   ],

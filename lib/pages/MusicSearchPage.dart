@@ -85,7 +85,7 @@ class _SearchMusicPageState extends State<MusicSearchPage> {
   Widget build(BuildContext context) {
     provider = Provider.of<PlayerMusicProvider>(context,listen: true);
     return Scaffold(
-      backgroundColor: ThemeColors.colorBg,
+      backgroundColor: ThemeColors.background,
       body: SafeArea(
         top: true,
         child: Container(
@@ -99,7 +99,7 @@ class _SearchMusicPageState extends State<MusicSearchPage> {
                 loadedText: '加载完成',
                 noMoreText: '没有更多',
                 bgColor: Colors.transparent,
-                textColor: ThemeColors.disableColor,
+                textColor: ThemeColors.gray,
               ),
               onLoad: () async {
                 if (total > musicList.length) {
@@ -113,7 +113,7 @@ class _SearchMusicPageState extends State<MusicSearchPage> {
                       timeInSecForIosWeb: 1,
                       backgroundColor: Colors.blue,
                       textColor: Colors.white,
-                      fontSize: ThemeSize.middleFontSize);
+                      fontSize: ThemeSize.middleFont);
                 }
               },
               child: Column(
@@ -154,9 +154,9 @@ class _SearchMusicPageState extends State<MusicSearchPage> {
                   height: ThemeSize.buttonHeight,
                   //修饰黑色背景与圆角
                   decoration: new BoxDecoration(
-                    color: ThemeColors.colorBg,
+                    color: ThemeColors.background,
                     borderRadius: new BorderRadius.all(
-                        new Radius.circular(ThemeSize.superRadius)),
+                        new Radius.circular(ThemeSize.buttonHeight / 2)),
                   ),
                   alignment: Alignment.center,
                   padding: EdgeInsets.only(left: ThemeSize.smallMargin * 2),
@@ -170,7 +170,7 @@ class _SearchMusicPageState extends State<MusicSearchPage> {
                               decoration: InputDecoration(
                                 hintText: widget.keyword,
                                 hintStyle: TextStyle(
-                                    fontSize: ThemeSize.smallFontSize,
+                                    fontSize: ThemeSize.smallFont,
                                     color: ThemeColors.grey),
                                 border: InputBorder.none,
                                 contentPadding: EdgeInsets.only(
@@ -234,7 +234,7 @@ class _SearchMusicPageState extends State<MusicSearchPage> {
                 child: Text(
                   '搜索',
                   style: TextStyle(
-                      fontSize: ThemeSize.middleFontSize, color: Colors.white),
+                      fontSize: ThemeSize.middleFont, color: Colors.white),
                 ),
               ))
         ],

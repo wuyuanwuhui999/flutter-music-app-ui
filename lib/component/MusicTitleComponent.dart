@@ -43,7 +43,7 @@ class MusicTitleComponentState extends State<MusicTitleComponent>
                 widget.onFold?.call(isFold);
               },
               child: Image.asset("lib/assets/images/icon_down.png",
-                  color: ThemeColors.disableColor,
+                  color: ThemeColors.gray,
                   colorBlendMode: BlendMode.srcIn,
                   width: ThemeSize.smallIcon, height: ThemeSize.smallIcon)
           ),
@@ -52,7 +52,7 @@ class MusicTitleComponentState extends State<MusicTitleComponent>
         SizedBox(width: ThemeSize.smallMargin),
         Text(widget.title),
         const Expanded(flex: 1, child: SizedBox()),
-        widget.operateWidget ?? Text("更多",style: TextStyle(color: ThemeColors.disableColor,decoration: TextDecoration.underline, decorationColor: ThemeColors.disableColor)),
+        widget.operateWidget ?? Text("更多",style: TextStyle(color: ThemeColors.gray,decoration: TextDecoration.underline, decorationColor: ThemeColors.gray)),
       ],
     );
   }

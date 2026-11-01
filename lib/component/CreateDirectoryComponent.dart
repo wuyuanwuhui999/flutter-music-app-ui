@@ -31,14 +31,14 @@ class CreateDirectoryComponentState extends State<CreateDirectoryComponent> {
             style: TextStyle(color: Colors.red),
           ),
           Text('名称'),
-          SizedBox(width: ThemeSize.containerPadding),
+          SizedBox(width: ThemeSize.middleGap),
           Expanded(
             flex: 1,
             child: Container(
                 height: ThemeSize.buttonHeight,
-                padding: EdgeInsets.only(left: ThemeSize.containerPadding),
+                padding: EdgeInsets.only(left: ThemeSize.middleGap),
                 decoration: BoxDecoration(
-                    color: ThemeColors.colorBg,
+                    color: ThemeColors.background,
                     borderRadius: BorderRadius.all(
                         Radius.circular(ThemeSize.middleRadius))),
                 child: TextField(
@@ -54,7 +54,7 @@ class CreateDirectoryComponentState extends State<CreateDirectoryComponent> {
                     decoration: InputDecoration(
                       hintText: "请输入收藏夹名称",
                       hintStyle: TextStyle(
-                          fontSize: ThemeSize.smallFontSize,
+                          fontSize: ThemeSize.smallFont,
                           color: ThemeColors.grey),
                       border: InputBorder.none,
                       contentPadding:
@@ -62,7 +62,7 @@ class CreateDirectoryComponentState extends State<CreateDirectoryComponent> {
                     ))),
           )
         ]),
-        SizedBox(height: ThemeSize.containerPadding),
+        SizedBox(height: ThemeSize.middleGap),
         Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -70,10 +70,10 @@ class CreateDirectoryComponentState extends State<CreateDirectoryComponent> {
                 opacity: 0,
                 child: Text('*', style: TextStyle(color: Colors.red))),
             Text('封面'),
-            SizedBox(width: ThemeSize.containerPadding),
+            SizedBox(width: ThemeSize.middleGap),
             Container(
               decoration: BoxDecoration(
-                  color: ThemeColors.colorBg,
+                  color: ThemeColors.background,
                   borderRadius: BorderRadius.all(
                       Radius.circular(ThemeSize.middleRadius))),
               width: ThemeSize.bigAvater,
@@ -85,14 +85,14 @@ class CreateDirectoryComponentState extends State<CreateDirectoryComponent> {
             )
           ],
         ),
-        SizedBox(height: ThemeSize.containerPadding),
+        SizedBox(height: ThemeSize.middleGap),
         Opacity(
             opacity: disableCreateBtn ? 0.5 : 1,
             child: Container(
               decoration: BoxDecoration(
                 color: Colors.red,
                 borderRadius:
-                BorderRadius.all(Radius.circular(ThemeSize.superRadius)),
+                BorderRadius.all(Radius.circular(ThemeSize.buttonHeight / 2)),
               ),
               width: double.infinity,
               height: ThemeSize.buttonHeight,
@@ -105,7 +105,7 @@ class CreateDirectoryComponentState extends State<CreateDirectoryComponent> {
                           gravity: ToastGravity.CENTER,
                           timeInSecForIosWeb: 1,
                           textColor: Colors.white,
-                          fontSize: ThemeSize.middleFontSize);
+                          fontSize: ThemeSize.middleFont);
                     }else{
                       insertFavoriteDirectoryService(FavoriteDirectoryModel(
                           name: favoriteNameController.text))
@@ -116,7 +116,7 @@ class CreateDirectoryComponentState extends State<CreateDirectoryComponent> {
                             gravity: ToastGravity.CENTER,
                             timeInSecForIosWeb: 1,
                             textColor: Colors.white,
-                            fontSize: ThemeSize.middleFontSize);
+                            fontSize: ThemeSize.middleFont);
                         favoriteNameController.text = '';
                         widget.onCreate(FavoriteDirectoryModel.fromJson(value.data));
                       });
@@ -126,15 +126,15 @@ class CreateDirectoryComponentState extends State<CreateDirectoryComponent> {
                   child: Center(
                       child: Text(
                         '创建',
-                        style: TextStyle(color: ThemeColors.colorWhite),
+                        style: TextStyle(color: ThemeColors.white),
                       ))),
             )),
-        SizedBox(height: ThemeSize.containerPadding),
+        SizedBox(height: ThemeSize.middleGap),
         Container(
           decoration: BoxDecoration(
-            border: Border.all(color: ThemeColors.borderColor),
+            border: Border.all(color: ThemeColors.gray),
             borderRadius:
-            BorderRadius.all(Radius.circular(ThemeSize.superRadius)),
+            BorderRadius.all(Radius.circular(ThemeSize.buttonHeight / 2)),
           ),
           height: ThemeSize.buttonHeight,
           child: InkWell(

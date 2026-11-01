@@ -196,7 +196,7 @@ class ChatPageState extends State<ChatPage> {
           timeInSecForIosWeb: 1,
           backgroundColor: Colors.blue,
           textColor: Colors.white,
-          fontSize: ThemeSize.middleFontSize);
+          fontSize: ThemeSize.middleFont);
     } else if (loading) {
       return;
     }
@@ -285,8 +285,8 @@ class ChatPageState extends State<ChatPage> {
   // 头部
   Widget buildHeaderWidget() {
     return Container(
-      padding: const EdgeInsets.all(ThemeSize.containerPadding),
-      decoration: const BoxDecoration(color: ThemeColors.colorWhite),
+      padding: const EdgeInsets.all(ThemeSize.middleGap),
+      decoration: const BoxDecoration(color: ThemeColors.white),
       child: Row(
         children: [
           AvaterComponent(
@@ -298,7 +298,7 @@ class ChatPageState extends State<ChatPage> {
                 textAlign: TextAlign.center,
               )),
           PopupMenuButton<String>(
-            color: ThemeColors.popupMenuColor.withOpacity(1),
+            color: ThemeColors.popupMenu.withOpacity(1),
             child: Image.asset('lib/assets/images/icon_menu.png',
                 width: ThemeSize.smallIcon, height: ThemeSize.smallIcon),
             onSelected: (String item) {
@@ -316,12 +316,12 @@ class ChatPageState extends State<ChatPage> {
                 const PopupMenuItem<String>(
                     value: "会话记录",
                     child: Text("会话记录",
-                        style: TextStyle(color: ThemeColors.disableColor))),
+                        style: TextStyle(color: ThemeColors.gray))),
                 const PopupMenuDivider(height: 1),
                 const PopupMenuItem<String>(
                     value: "切换模型",
                     child: Text("切换模型",
-                        style: TextStyle(color: ThemeColors.disableColor))),
+                        style: TextStyle(color: ThemeColors.gray))),
               ];
             },
           )
@@ -337,14 +337,14 @@ class ChatPageState extends State<ChatPage> {
             controller: scrollController, // 绑定控制器
             scrollDirection: Axis.vertical,
             padding: const EdgeInsets.only(
-                bottom: ThemeSize.containerPadding,
-                left: ThemeSize.containerPadding,
-                right: ThemeSize.containerPadding),
+                bottom: ThemeSize.middleGap,
+                left: ThemeSize.middleGap,
+                right: ThemeSize.middleGap),
             children: [
               ...chatList.map((item) {
                 return Padding(
                     padding:
-                    const EdgeInsets.only(top: ThemeSize.containerPadding),
+                    const EdgeInsets.only(top: ThemeSize.middleGap),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -418,7 +418,7 @@ class ChatPageState extends State<ChatPage> {
               loading
                   ? Padding(
                   padding: const EdgeInsets.only(
-                      top: ThemeSize.containerPadding),
+                      top: ThemeSize.middleGap),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -452,7 +452,7 @@ class ChatPageState extends State<ChatPage> {
                                           ? "正在思考中"
                                           : thinkContent,
                                       style: const TextStyle(
-                                          color: ThemeColors.disableColor),
+                                          color: ThemeColors.gray),
                                     ),
                                     responseContent.isNotEmpty
                                         ? Text(responseContent)
@@ -472,7 +472,7 @@ class ChatPageState extends State<ChatPage> {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(ThemeSize.smallMargin),
-      decoration: const BoxDecoration(color: ThemeColors.colorBg),
+      decoration: const BoxDecoration(color: ThemeColors.background),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -486,8 +486,8 @@ class ChatPageState extends State<ChatPage> {
 
               ///圆角
               style: OutlinedButton.styleFrom(
-                backgroundColor: ThemeColors.colorWhite,
-                foregroundColor: ThemeColors.colorWhite,
+                backgroundColor: ThemeColors.white,
+                foregroundColor: ThemeColors.white,
                 side: BorderSide(
                     color:
                     showThink ? Colors.orange : ThemeColors.subTitle),
@@ -499,11 +499,11 @@ class ChatPageState extends State<ChatPage> {
               child: Text(
                 '深度思考',
                 style: TextStyle(
-                    fontSize: ThemeSize.middleFontSize,
+                    fontSize: ThemeSize.middleFont,
                     color:
                     showThink ? Colors.orange : ThemeColors.subTitle),
               )),
-          const SizedBox(width: ThemeSize.containerPadding),
+          const SizedBox(width: ThemeSize.middleGap),
           OutlinedButton(
               onPressed: () {
                 setState(() {
@@ -513,9 +513,9 @@ class ChatPageState extends State<ChatPage> {
 
               ///圆角
               style: OutlinedButton.styleFrom(
-                backgroundColor: ThemeColors.colorWhite,
+                backgroundColor: ThemeColors.white,
                 // 背景色（可选）
-                foregroundColor: ThemeColors.colorWhite,
+                foregroundColor: ThemeColors.white,
                 // 文字颜色
                 side: BorderSide(
                     color: type == "db"
@@ -531,7 +531,7 @@ class ChatPageState extends State<ChatPage> {
                 Text(language == "zh" ? "中文" : "En",
                     style: const TextStyle(
                         color: ThemeColors.mainTitle,
-                        fontSize: ThemeSize.middleFontSize)),
+                        fontSize: ThemeSize.middleFont)),
                 const SizedBox(width: ThemeSize.miniMargin),
                 Transform(
                   alignment: Alignment.center,
@@ -553,7 +553,7 @@ class ChatPageState extends State<ChatPage> {
   Widget buildInputWidget() {
     return Container(
         padding: ThemeStyle.padding,
-        decoration: const BoxDecoration(color: ThemeColors.colorWhite),
+        decoration: const BoxDecoration(color: ThemeColors.white),
         child: Row(children: [
           GestureDetector(
             onTap: () {
@@ -565,16 +565,16 @@ class ChatPageState extends State<ChatPage> {
             child: Image.asset("lib/assets/images/icon_chat.png",
                 width: ThemeSize.middleIcon, height: ThemeSize.middleIcon),
           ),
-          const SizedBox(width: ThemeSize.containerPadding),
+          const SizedBox(width: ThemeSize.middleGap),
           Expanded(
               flex: 1,
               child: Container(
                   height: ThemeSize.buttonHeight,
                   //修饰黑色背景与圆角
                   decoration: const BoxDecoration(
-                    color: ThemeColors.colorBg,
+                    color: ThemeColors.background,
                     borderRadius: BorderRadius.all(
-                        Radius.circular(ThemeSize.superRadius)),
+                        Radius.circular(ThemeSize.buttonHeight / 2)),
                   ),
                   alignment: Alignment.center,
                   padding:
@@ -594,7 +594,7 @@ class ChatPageState extends State<ChatPage> {
                               decoration: const InputDecoration(
                                 hintText: "有问题，尽管问",
                                 hintStyle: TextStyle(
-                                    fontSize: ThemeSize.smallFontSize,
+                                    fontSize: ThemeSize.smallFont,
                                     color: ThemeColors.grey),
                                 border: InputBorder.none,
                                 contentPadding: EdgeInsets.only(
@@ -616,16 +616,16 @@ class ChatPageState extends State<ChatPage> {
                       const SizedBox(width: ThemeSize.smallMargin)
                     ],
                   ))),
-          const SizedBox(width: ThemeSize.containerPadding),
+          const SizedBox(width: ThemeSize.middleGap),
           GestureDetector(
               onTap: useWebsocket,
               child: Container(
                 height: ThemeSize.buttonHeight,
                 width: ThemeSize.buttonHeight,
                 decoration: const BoxDecoration(
-                  color: ThemeColors.colorBg,
+                  color: ThemeColors.background,
                   borderRadius:
-                  BorderRadius.all(Radius.circular(ThemeSize.superRadius)),
+                  BorderRadius.all(Radius.circular(ThemeSize.buttonHeight / 2)),
                 ),
                 child: Center(
                   child: loading
@@ -633,7 +633,7 @@ class ChatPageState extends State<ChatPage> {
                     width: ThemeSize.miniIcon,
                     height: ThemeSize.miniIcon,
                     decoration: const BoxDecoration(
-                        color: ThemeColors.disableColor),
+                        color: ThemeColors.gray),
                   )
                       : Image.asset("lib/assets/images/icon_send.png",
                       width: ThemeSize.smallIcon,
@@ -684,7 +684,7 @@ class ChatPageState extends State<ChatPage> {
                     loadedText: '加载完成',
                     noMoreText: '没有更多',
                     bgColor: Colors.transparent,
-                    textColor: ThemeColors.disableColor,
+                    textColor: ThemeColors.gray,
                   ),
                   onLoad: () async {
                     pageNum++;
@@ -696,7 +696,7 @@ class ChatPageState extends State<ChatPage> {
                           timeInSecForIosWeb: 1,
                           backgroundColor: Colors.blue,
                           textColor: Colors.white,
-                          fontSize: ThemeSize.middleFontSize);
+                          fontSize: ThemeSize.middleFont);
                     } else {}
                   },
                   child: Container(
@@ -720,7 +720,7 @@ class ChatPageState extends State<ChatPage> {
                               Text(
                                 item.key,
                                 style: const TextStyle(
-                                    color: ThemeColors.disableColor),
+                                    color: ThemeColors.gray),
                               ),
                               ...item.value.map((bItem) {
                                 return GestureDetector(
@@ -751,7 +751,7 @@ class ChatPageState extends State<ChatPage> {
                               SizedBox(
                                   height: isLast
                                       ? 0
-                                      : ThemeSize.containerPadding)
+                                      : ThemeSize.middleGap)
                             ],
                           );
                         }).toList(),
@@ -767,7 +767,7 @@ class ChatPageState extends State<ChatPage> {
                 },
                 child: Container(
                   decoration:
-                  BoxDecoration(color: ThemeColors.popupMenuColor),
+                  BoxDecoration(color: ThemeColors.popupMenu),
                   height: MediaQuery.of(context).size.height,
                 ),
               ),
@@ -780,7 +780,7 @@ class ChatPageState extends State<ChatPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: ThemeColors.colorBg,
+      backgroundColor: ThemeColors.background,
       body: SafeArea(
           top: true,
           child: Stack(

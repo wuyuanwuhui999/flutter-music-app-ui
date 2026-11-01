@@ -77,7 +77,7 @@ class DialogComponent extends StatelessWidget {
                           child: Text(
                             title,
                             style: const TextStyle(
-                              fontSize: ThemeSize.middleFontSize,
+                              fontSize: ThemeSize.middleFont,
                               fontWeight: FontWeight.bold,
                             ),
                           ),

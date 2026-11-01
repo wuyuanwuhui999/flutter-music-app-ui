@@ -69,7 +69,7 @@ class _MusicCategoryPageState extends State<MusicCategoryPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: ThemeColors.colorBg,
+        backgroundColor: ThemeColors.background,
         body: SafeArea(
           top: true,
           child: Container(
@@ -89,7 +89,7 @@ class _MusicCategoryPageState extends State<MusicCategoryPage>
                         loadedText: '加载完成',
                         noMoreText: '没有更多',
                         bgColor: Colors.transparent,
-                        textColor: ThemeColors.disableColor,
+                        textColor: ThemeColors.gray,
                       ),
                       onLoad: () async {
                         if (pageNum * PAGE_SIZE < total) {
@@ -170,7 +170,7 @@ class _MusicCategoryPageState extends State<MusicCategoryPage>
                 childAspectRatio: 3,
                 // 宽高比列
                 children: this.buildGridItems(context)),
-            SizedBox(height: ThemeSize.containerPadding),
+            SizedBox(height: ThemeSize.middleGap),
             InkWell(
               onTap: () {
                 setState(() {
@@ -215,7 +215,7 @@ class _MusicCategoryPageState extends State<MusicCategoryPage>
               border: Border.all(
                   color: allClassifies[activeIndex].id == allClassifies[i].id
                       ? ThemeColors.orange
-                      : ThemeColors.borderColor),
+                      : ThemeColors.gray),
               borderRadius:
                   BorderRadius.all(Radius.circular(ThemeSize.middleRadius)),
             ),

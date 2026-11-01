@@ -119,7 +119,7 @@ class _MusicRecommentPageState extends State<MusicRecommentPage>
         decoration: ThemeStyle.boxDecoration,
         margin: ThemeStyle.margin,
         width:
-            MediaQuery.of(context).size.width - ThemeSize.containerPadding * 2,
+            MediaQuery.of(context).size.width - ThemeSize.middleGap * 2,
         padding: ThemeStyle.padding,
         child: Row(children: [
           index < iconList.length
@@ -132,9 +132,9 @@ class _MusicRecommentPageState extends State<MusicRecommentPage>
                       child: Text(
                     (index + 1).toString(),
                   ))),
-          SizedBox(width: ThemeSize.containerPadding),
+          SizedBox(width: ThemeSize.middleGap),
           MusicAvaterComponent(type:'music',name:'',size: ThemeSize.middleAvater,avater:musicModel.cover),
-          SizedBox(width: ThemeSize.containerPadding),
+          SizedBox(width: ThemeSize.middleGap),
           Expanded(
             flex: 1,
             child: Column(
@@ -146,7 +146,7 @@ class _MusicRecommentPageState extends State<MusicRecommentPage>
                     overflow: TextOverflow.ellipsis),
                 SizedBox(height: ThemeSize.smallMargin),
                 Text(musicModel.authorName,
-                    style: TextStyle(color: ThemeColors.disableColor)),
+                    style: TextStyle(color: ThemeColors.gray)),
               ],
             ),
           ),
@@ -168,7 +168,7 @@ class _MusicRecommentPageState extends State<MusicRecommentPage>
                 }
                 Routes.router.navigateTo(context, '/MusicPlayerPage');
               }),
-          SizedBox(width: ThemeSize.containerPadding),
+          SizedBox(width: ThemeSize.middleGap),
           InkWell(child: Image.asset(
               "lib/assets/images/icon_like${musicModel.isLike == 1 ? "_active" : ""}.png",
               width: ThemeSize.smallIcon,
@@ -191,7 +191,7 @@ class _MusicRecommentPageState extends State<MusicRecommentPage>
               });
             }
           }),
-          SizedBox(width: ThemeSize.containerPadding),
+          SizedBox(width: ThemeSize.middleGap),
           Image.asset("lib/assets/images/icon_music_menu.png",
               width: ThemeSize.smallIcon, height: ThemeSize.smallIcon),
         ]));
@@ -226,7 +226,7 @@ class _MusicRecommentPageState extends State<MusicRecommentPage>
           loadedText: '加载完成',
           noMoreText: '没有更多',
           bgColor: Colors.transparent,
-          textColor: ThemeColors.disableColor,
+          textColor: ThemeColors.gray,
         ),
         onLoad: () async {
           pageNum++;
@@ -238,14 +238,14 @@ class _MusicRecommentPageState extends State<MusicRecommentPage>
                 timeInSecForIosWeb: 1,
                 backgroundColor: Colors.blue,
                 textColor: Colors.white,
-                fontSize: ThemeSize.middleFontSize);
+                fontSize: ThemeSize.middleFont);
           } else {
             getRecommendMusicList(pageNum, pageSize);
           }
         },
         child: Column(
           children: [
-            SizedBox(height: MediaQuery.of(context).padding.top + ThemeSize.containerPadding),
+            SizedBox(height: MediaQuery.of(context).padding.top + ThemeSize.middleGap),
             ...buildMusicWedgetList()
           ],
         ),

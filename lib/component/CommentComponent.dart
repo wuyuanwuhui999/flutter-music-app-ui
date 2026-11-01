@@ -43,9 +43,9 @@ class _CommentComponentState extends State<CommentComponent>{
   Widget build(BuildContext context) {
     return Column(children: [
       Padding(padding: ThemeStyle.padding,child: Text('${commentTotal.toString()}条评论',textAlign: TextAlign.center)),
-      Divider(height: 1,color:ThemeColors.borderColor),
+      Divider(height: 1,color:ThemeColors.gray),
       Expanded(flex: 1,child: commentList.isNotEmpty ? SingleChildScrollView(child:Padding(padding: ThemeStyle.padding,child: buildCommentList(commentList),)):const Center(child: Text("暂无评论"))),
-      Divider(height: 1,color:ThemeColors.borderColor),
+      Divider(height: 1,color:ThemeColors.gray),
       buildSendWidget()
     ]);
   }
@@ -106,7 +106,7 @@ class _CommentComponentState extends State<CommentComponent>{
   /// @date: 2024-05-25 14:28
   Widget buildSendWidget(){
     return Container(
-        decoration: BoxDecoration(color: ThemeColors.colorWhite),
+        decoration: BoxDecoration(color: ThemeColors.white),
         padding: ThemeStyle.padding,
         child: Row(children: [
           Expanded(
@@ -119,11 +119,11 @@ class _CommentComponentState extends State<CommentComponent>{
                           cursorColor: ThemeColors.grey, //设置光标
                           decoration: InputDecoration(
                             filled: true,
-                            fillColor: ThemeColors.colorBg,
+                            fillColor: ThemeColors.background,
                             hintText: replyCommentModel != null ? "回复${replyCommentModel?.username}"
                                 : (firstCommentModel != null ? "回复${firstCommentModel?.username}" : "评论"),
                             hintStyle: TextStyle(
-                                fontSize: ThemeSize.smallFontSize,
+                                fontSize: ThemeSize.smallFont,
                                 color: ThemeColors.grey),
                             border: OutlineInputBorder(
                               borderSide: BorderSide.none,
@@ -133,7 +133,7 @@ class _CommentComponentState extends State<CommentComponent>{
                             contentPadding: EdgeInsets.only(
                                 left: ThemeSize.smallMargin),
                           ))))),
-          SizedBox(width: ThemeSize.containerPadding),
+          SizedBox(width: ThemeSize.middleGap),
           SizedBox(
             height: ThemeSize.middleAvater,
             child: ElevatedButton(
@@ -169,7 +169,7 @@ class _CommentComponentState extends State<CommentComponent>{
               child: Text(
                 '发送',
                 style: TextStyle(
-                    fontSize: ThemeSize.middleFontSize,
+                    fontSize: ThemeSize.middleFont,
                     color: Colors.white),
               ),
             ),

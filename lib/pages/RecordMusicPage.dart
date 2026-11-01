@@ -50,7 +50,7 @@ class RecordMusicPageState extends State<RecordMusicPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: ThemeColors.colorBg,
+        backgroundColor: ThemeColors.background,
         body: SafeArea(
         top: true,
         child:  SizedBox(
@@ -70,7 +70,7 @@ class RecordMusicPageState extends State<RecordMusicPage> {
                       loadedText: '加载完成',
                       noMoreText: '没有更多',
                       bgColor: Colors.transparent,
-                      textColor: ThemeColors.disableColor,
+                      textColor: ThemeColors.gray,
                     ),
                     onLoad: () async {
                       if (pageNum * PAGE_SIZE < total) {
@@ -84,7 +84,7 @@ class RecordMusicPageState extends State<RecordMusicPage> {
                             timeInSecForIosWeb: 1,
                             backgroundColor: Colors.blue,
                             textColor: Colors.white,
-                            fontSize: ThemeSize.middleFontSize);
+                            fontSize: ThemeSize.middleFont);
                       }
                     },
                     child: Padding(
@@ -96,14 +96,14 @@ class RecordMusicPageState extends State<RecordMusicPage> {
                           return Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                SizedBox(height: entry.key != 0 ? ThemeSize.containerPadding : 0),
+                                SizedBox(height: entry.key != 0 ? ThemeSize.middleGap : 0),
                                 entry.key != 0
                                     ? Divider(
-                                    height: 1, color: ThemeColors.disableColor)
+                                    height: 1, color: ThemeColors.gray)
                                     : const SizedBox(),
                                 SizedBox(
                                     height: entry.key != 0
-                                        ? ThemeSize.containerPadding
+                                        ? ThemeSize.middleGap
                                         : 0),
                                 Row(
                                   children: [
@@ -113,7 +113,7 @@ class RecordMusicPageState extends State<RecordMusicPage> {
                                           width: ThemeSize.bigAvater,
                                           height: ThemeSize.bigAvater,
                                         )),
-                                    SizedBox(width: ThemeSize.containerPadding),
+                                    SizedBox(width: ThemeSize.middleGap),
                                     Expanded(
                                       flex: 1,
                                       child: Column(
@@ -137,7 +137,7 @@ class RecordMusicPageState extends State<RecordMusicPage> {
                                       height: ThemeSize.smallIcon,
                                     ))
                                     ,
-                                    SizedBox(width: ThemeSize.containerPadding * 2),
+                                    SizedBox(width: ThemeSize.middleGap * 2),
                                     Image.asset(
                                       "lib/assets/images/icon_music_menu.png",
                                       width: ThemeSize.smallIcon,

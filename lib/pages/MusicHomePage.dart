@@ -79,9 +79,9 @@ class MusicHomePageState extends State<MusicHomePage>
     return Container(
         width: MediaQuery.of(context).size.width,
         padding: EdgeInsets.only(
-            left: ThemeSize.containerPadding,
-            right: ThemeSize.containerPadding,
-            top: ThemeSize.containerPadding +
+            left: ThemeSize.middleGap,
+            right: ThemeSize.middleGap,
+            top: ThemeSize.middleGap +
                 MediaQuery.of(context).padding.top),
         child: Column(children: <Widget>[
           buildSearchWidget(),
@@ -96,7 +96,7 @@ class MusicHomePageState extends State<MusicHomePage>
                   loadedText: '加载完成',
                   noMoreText: '没有更多',
                   bgColor: Colors.transparent,
-                  textColor: ThemeColors.disableColor,
+                  textColor: ThemeColors.gray,
                 ),
                 onLoad: () async {
                   if (currentClassifiesList.length == allClassifies.length) {
@@ -107,7 +107,7 @@ class MusicHomePageState extends State<MusicHomePage>
                         timeInSecForIosWeb: 1,
                         backgroundColor: Colors.blue,
                         textColor: Colors.white,
-                        fontSize: ThemeSize.middleFontSize);
+                        fontSize: ThemeSize.middleFont);
                   } else {
                     _getCategoryItem();
                   }
@@ -127,7 +127,7 @@ class MusicHomePageState extends State<MusicHomePage>
         decoration: ThemeStyle.boxDecoration,
         margin: ThemeStyle.margin,
         width:
-            MediaQuery.of(context).size.width - ThemeSize.containerPadding * 2,
+            MediaQuery.of(context).size.width - ThemeSize.middleGap * 2,
         padding: ThemeStyle.padding,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -173,20 +173,20 @@ class MusicHomePageState extends State<MusicHomePage>
                                   height: ThemeSize.buttonHeight,
                                   //修饰黑色背景与圆角
                                   decoration: new BoxDecoration(
-                                    color: ThemeColors.colorBg,
+                                    color: ThemeColors.background,
                                     borderRadius: new BorderRadius.all(
                                         new Radius.circular(
                                             ThemeSize.bigRadius)),
                                   ),
                                   alignment: Alignment.centerLeft,
                                   padding: EdgeInsets.only(
-                                      left: ThemeSize.containerPadding),
+                                      left: ThemeSize.middleGap),
                                   child: Text(
                                     keyword,
                                     style: TextStyle(color: ThemeColors.grey),
                                   )));
                         }))),
-            SizedBox(width: ThemeSize.containerPadding),
+            SizedBox(width: ThemeSize.middleGap),
             InkWell(
               child: Image.asset("lib/assets/images/icon_ai.png",
                   width: ThemeSize.middleIcon, height: ThemeSize.middleIcon),
@@ -203,7 +203,7 @@ class MusicHomePageState extends State<MusicHomePage>
         decoration: ThemeStyle.boxDecoration,
         margin: ThemeStyle.margin,
         width:
-            MediaQuery.of(context).size.width - ThemeSize.containerPadding * 2,
+            MediaQuery.of(context).size.width - ThemeSize.middleGap * 2,
         padding: ThemeStyle.padding,
         child: Row(children: [
           Expanded(
@@ -273,7 +273,7 @@ class MusicHomePageState extends State<MusicHomePage>
         decoration: ThemeStyle.boxDecoration,
         margin: ThemeStyle.margin,
         width:
-            MediaQuery.of(context).size.width - ThemeSize.containerPadding * 2,
+            MediaQuery.of(context).size.width - ThemeSize.middleGap * 2,
         padding: ThemeStyle.padding,
         child: Column(
           children: [
@@ -289,9 +289,9 @@ class MusicHomePageState extends State<MusicHomePage>
                   child: Text(
                     "更多",
                     style: TextStyle(
-                        color: ThemeColors.disableColor,
+                        color: ThemeColors.gray,
                         decoration: TextDecoration.underline,
-                        decorationColor: ThemeColors.disableColor),
+                        decorationColor: ThemeColors.gray),
                   ),
                   onTap: () {
                     if (musicClassifyModel.classifyName == "推荐歌手") {
@@ -335,7 +335,7 @@ class MusicHomePageState extends State<MusicHomePage>
               musicModelList.add(musicItem);
               musicWidgetList.add(Padding(
                   padding: EdgeInsets.only(
-                    top: ThemeSize.containerPadding,
+                    top: ThemeSize.middleGap,
                   ),
                   child: Row(
                     children: [
@@ -344,7 +344,7 @@ class MusicHomePageState extends State<MusicHomePage>
                           name: '',
                           size: ThemeSize.middleAvater,
                           avater: musicItem.cover),
-                      SizedBox(width: ThemeSize.containerPadding),
+                      SizedBox(width: ThemeSize.middleGap),
                       Expanded(
                         flex: 1,
                         child: Column(
@@ -352,13 +352,13 @@ class MusicHomePageState extends State<MusicHomePage>
                           children: [
                             Text(musicItem.songName,
                                 style: TextStyle(
-                                    fontSize: ThemeSize.middleFontSize)),
+                                    fontSize: ThemeSize.middleFont)),
                             Text(
                               "${musicItem.authorName} - ${musicItem.albumName}",
                               softWrap: false,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: TextStyle(color: ThemeColors.disableColor),
+                              style: TextStyle(color: ThemeColors.gray),
                             )
                           ],
                         ),
@@ -397,7 +397,7 @@ class MusicHomePageState extends State<MusicHomePage>
                             Routes.router
                                 .navigateTo(context, '/MusicPlayerPage');
                           }),
-                      SizedBox(width: ThemeSize.containerPadding),
+                      SizedBox(width: ThemeSize.middleGap),
                       Image.asset(
                         musicItem.isLike == 1
                             ? "lib/assets/images/icon_like_active.png"
@@ -405,7 +405,7 @@ class MusicHomePageState extends State<MusicHomePage>
                         width: ThemeSize.smallIcon,
                         height: ThemeSize.smallIcon,
                       ),
-                      SizedBox(width: ThemeSize.containerPadding),
+                      SizedBox(width: ThemeSize.middleGap),
                       Image.asset(
                         "lib/assets/images/icon_music_menu.png",
                         width: ThemeSize.smallIcon,
@@ -431,7 +431,7 @@ class MusicHomePageState extends State<MusicHomePage>
             // 动态计算歌手头像大小
             return Column(
               children: [
-                SizedBox(height: ThemeSize.containerPadding),
+                SizedBox(height: ThemeSize.middleGap),
                 Row(
                     children: authorsList.cast().map((item) {
                   MusicAuthorModel authorModel =
@@ -450,7 +450,7 @@ class MusicHomePageState extends State<MusicHomePage>
                                 avater: authorModel.avatar,
                                 size: ThemeSize.middleAvater,
                                 name: authorModel.authorName![0]),
-                            SizedBox(height: ThemeSize.containerPadding),
+                            SizedBox(height: ThemeSize.middleGap),
                             Text(authorModel.authorName!)
                           ],
                         ),

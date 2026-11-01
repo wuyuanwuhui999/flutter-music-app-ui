@@ -45,7 +45,7 @@ class _MusicSharePageState extends State<MusicSharePage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: ThemeColors.colorBg,
+        backgroundColor: ThemeColors.background,
         body: SafeArea(
           top: true,
           child: SizedBox(
@@ -59,9 +59,9 @@ class _MusicSharePageState extends State<MusicSharePage>
                   child: Column(
                     children: [
                       buildTextAreaWidget(),
-                      SizedBox(height: ThemeSize.containerPadding),
+                      SizedBox(height: ThemeSize.middleGap),
                       buildMusicWidget(),
-                      SizedBox(height: ThemeSize.containerPadding),
+                      SizedBox(height: ThemeSize.middleGap),
                       buildPermissionWidget()
                     ],
                   ),
@@ -78,7 +78,7 @@ class _MusicSharePageState extends State<MusicSharePage>
   Widget buildBtnWidget(){
     return Container(
         padding: ThemeStyle.padding,
-        decoration: BoxDecoration(color: ThemeColors.colorWhite),
+        decoration: BoxDecoration(color: ThemeColors.white),
         child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -96,7 +96,7 @@ class _MusicSharePageState extends State<MusicSharePage>
                     child: Text(
                       '取消',
                       style: TextStyle(
-                          fontSize: ThemeSize.middleFontSize),
+                          fontSize: ThemeSize.middleFont),
                     ),
                   )),
               Container(
@@ -106,8 +106,8 @@ class _MusicSharePageState extends State<MusicSharePage>
                     child: Text(
                       '发布',
                       style: TextStyle(
-                          color: ThemeColors.colorWhite,
-                          fontSize: ThemeSize.middleFontSize),
+                          color: ThemeColors.white,
+                          fontSize: ThemeSize.middleFont),
                     ),
 
                     style: ElevatedButton.styleFrom(
@@ -125,7 +125,7 @@ class _MusicSharePageState extends State<MusicSharePage>
     return Container(
         height: ThemeSize.textareaHeight,
         decoration: BoxDecoration(
-            color: ThemeColors.disableColor,
+            color: ThemeColors.gray,
             borderRadius: BorderRadius.all(
                 Radius.circular(ThemeSize.middleRadius))),
         padding: ThemeStyle.padding,
@@ -151,7 +151,7 @@ class _MusicSharePageState extends State<MusicSharePage>
       padding: ThemeStyle.padding,
       child: Row(children: [
         MusicAvaterComponent(type:'music',name:'',avater:widget.musicModel.cover,size:ThemeSize.middleAvater),
-        SizedBox(width: ThemeSize.containerPadding),
+        SizedBox(width: ThemeSize.middleGap),
         Text('${widget.musicModel.authorName} - ${widget.musicModel.songName}')
       ],),
     );
@@ -182,7 +182,7 @@ class _MusicSharePageState extends State<MusicSharePage>
           width: ThemeSize.middleIcon,
           fit: BoxFit.cover,
         ),
-        SizedBox(width: ThemeSize.containerPadding),
+        SizedBox(width: ThemeSize.middleGap),
         const Expanded(flex: 1, child: Text('谁可以看')),
         Text(PermissionMap[circleModel.permission]!),
         SizedBox(width: ThemeSize.smallMargin),
@@ -212,7 +212,7 @@ class _MusicSharePageState extends State<MusicSharePage>
           timeInSecForIosWeb: 1,
           backgroundColor: Colors.blue,
           textColor: Colors.white,
-          fontSize: ThemeSize.middleFontSize);
+          fontSize: ThemeSize.middleFont);
       loading = false;
       Navigator.pop(context);
     }).catchError((){

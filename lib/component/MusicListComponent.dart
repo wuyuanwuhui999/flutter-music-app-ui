@@ -67,12 +67,12 @@ class _MusicListComponentState extends State<MusicListComponent> {
         },
         child: Row(children: [
           MusicAvaterComponent(type:'music',name:'',avater:ele.cover,size:ThemeSize.middleAvater),
-          SizedBox(width: ThemeSize.containerPadding),
+          SizedBox(width: ThemeSize.middleGap),
           Expanded(
             flex: 1,
             child: Text('${ele.authorName} - ${ele.songName}'),
           ),
-          SizedBox(width: ThemeSize.containerPadding),
+          SizedBox(width: ThemeSize.middleGap),
           Image.asset(
               provider.musicModel?.id == ele.id &&
                       provider.playing &&
@@ -81,7 +81,7 @@ class _MusicListComponentState extends State<MusicListComponent> {
                   : 'lib/assets/images/icon_music_play.png',
               width: ThemeSize.smallIcon,
               height: ThemeSize.smallIcon),
-          SizedBox(width: ThemeSize.containerPadding),
+          SizedBox(width: ThemeSize.middleGap),
           InkWell(
             onTap: () {
               useLike(ele);
@@ -93,7 +93,7 @@ class _MusicListComponentState extends State<MusicListComponent> {
                 width: ThemeSize.smallIcon,
                 height: ThemeSize.smallIcon),
           ),
-          SizedBox(width: ThemeSize.containerPadding),
+          SizedBox(width: ThemeSize.middleGap),
           Image.asset('lib/assets/images/icon_music_menu.png',
               width: ThemeSize.smallIcon, height: ThemeSize.smallIcon),
         ]),
@@ -101,10 +101,10 @@ class _MusicListComponentState extends State<MusicListComponent> {
       if (index != widget.musicList.length - 1) {
         musicListWidget.add(Container(
           height: 1,
-          decoration: BoxDecoration(color: ThemeColors.borderColor),
+          decoration: BoxDecoration(color: ThemeColors.gray),
           margin: EdgeInsets.only(
-              top: ThemeSize.containerPadding,
-              bottom: ThemeSize.containerPadding),
+              top: ThemeSize.middleGap,
+              bottom: ThemeSize.middleGap),
         ));
       }
     });

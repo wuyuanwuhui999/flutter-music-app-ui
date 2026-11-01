@@ -18,7 +18,7 @@ class UpdatePasswordPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: ThemeColors.colorBg,
+        backgroundColor: ThemeColors.background,
         body: SafeArea(
           child: Container(
             height: double.infinity,
@@ -26,7 +26,7 @@ class UpdatePasswordPage extends StatelessWidget {
             child: Column(
               children: <Widget>[
                 const NavigatorTitleComponent(title: "修改密码"),
-                SizedBox(height: ThemeSize.containerPadding),
+                SizedBox(height: ThemeSize.middleGap),
                 Column(
                   children: [
                     Container(
@@ -40,7 +40,7 @@ class UpdatePasswordPage extends StatelessWidget {
                               children: [
                                 Text("*",
                                     style: TextStyle(
-                                        color: ThemeColors.warnColor)),
+                                        color: ThemeColors.warn)),
                                 Expanded(
                                     flex: 1,
                                     child: TextField(
@@ -51,22 +51,22 @@ class UpdatePasswordPage extends StatelessWidget {
                                         decoration: InputDecoration(
                                           hintText: "请输入旧密码",
                                           hintStyle: TextStyle(
-                                              fontSize: ThemeSize.smallFontSize,
+                                              fontSize: ThemeSize.smallFont,
                                               color: ThemeColors.grey),
                                           contentPadding: EdgeInsets.only(
-                                              left: ThemeSize.containerPadding),
+                                              left: ThemeSize.middleGap),
                                           border: InputBorder.none,
                                         )))
                               ],
                             ),
-                            Divider(height: 1, color: ThemeColors.borderColor),
-                            SizedBox(height: ThemeSize.containerPadding),
+                            Divider(height: 1, color: ThemeColors.gray),
+                            SizedBox(height: ThemeSize.middleGap),
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Text("*",
                                     style: TextStyle(
-                                        color: ThemeColors.warnColor)),
+                                        color: ThemeColors.warn)),
                                 Expanded(
                                     flex: 1,
                                     child: TextField(
@@ -77,22 +77,22 @@ class UpdatePasswordPage extends StatelessWidget {
                                         decoration: InputDecoration(
                                           hintText: "请输入新密码",
                                           hintStyle: TextStyle(
-                                              fontSize: ThemeSize.smallFontSize,
+                                              fontSize: ThemeSize.smallFont,
                                               color: ThemeColors.grey),
                                           contentPadding: EdgeInsets.only(
-                                              left: ThemeSize.containerPadding),
+                                              left: ThemeSize.middleGap),
                                           border: InputBorder.none,
                                         )))
                               ],
                             ),
-                            Divider(height: 1, color: ThemeColors.borderColor),
-                            SizedBox(height: ThemeSize.containerPadding),
+                            Divider(height: 1, color: ThemeColors.gray),
+                            SizedBox(height: ThemeSize.middleGap),
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Text("*",
                                     style: TextStyle(
-                                        color: ThemeColors.warnColor)),
+                                        color: ThemeColors.warn)),
                                 Expanded(
                                     flex: 1,
                                     child: TextField(
@@ -103,17 +103,17 @@ class UpdatePasswordPage extends StatelessWidget {
                                         decoration: InputDecoration(
                                           hintText: "请输入确认密码",
                                           hintStyle: TextStyle(
-                                              fontSize: ThemeSize.smallFontSize,
+                                              fontSize: ThemeSize.smallFont,
                                               color: ThemeColors.grey),
                                           contentPadding: EdgeInsets.only(
-                                              left: ThemeSize.containerPadding),
+                                              left: ThemeSize.middleGap),
                                           border: InputBorder.none,
                                         )))
                               ],
                             ),
                           ],
                         )),
-                    SizedBox(height: ThemeSize.containerPadding),
+                    SizedBox(height: ThemeSize.middleGap),
                     Container(
                         margin: ThemeStyle.paddingBox,
                         child: InkWell(
@@ -126,7 +126,7 @@ class UpdatePasswordPage extends StatelessWidget {
                                   gravity: ToastGravity.CENTER,
                                   backgroundColor: ThemeColors.subTitle,
                                   textColor: Colors.white,
-                                  fontSize: ThemeSize.middleFontSize);
+                                  fontSize: ThemeSize.middleFont);
                             } else if (newPasswordController.text == "") {
                               Fluttertoast.showToast(
                                   msg: '请输入新密码',
@@ -134,7 +134,7 @@ class UpdatePasswordPage extends StatelessWidget {
                                   gravity: ToastGravity.CENTER,
                                   backgroundColor: ThemeColors.subTitle,
                                   textColor: Colors.white,
-                                  fontSize: ThemeSize.middleFontSize);
+                                  fontSize: ThemeSize.middleFont);
                             } else if (comfirmController.text == "") {
                               Fluttertoast.showToast(
                                   msg: '请输入确认密码',
@@ -142,7 +142,7 @@ class UpdatePasswordPage extends StatelessWidget {
                                   gravity: ToastGravity.CENTER,
                                   backgroundColor: ThemeColors.subTitle,
                                   textColor: Colors.white,
-                                  fontSize: ThemeSize.middleFontSize);
+                                  fontSize: ThemeSize.middleFont);
                             } else if (comfirmController.text !=
                                 newPasswordController.text) {
                               Fluttertoast.showToast(
@@ -151,7 +151,7 @@ class UpdatePasswordPage extends StatelessWidget {
                                   gravity: ToastGravity.CENTER,
                                   backgroundColor: ThemeColors.subTitle,
                                   textColor: Colors.white,
-                                  fontSize: ThemeSize.middleFontSize);
+                                  fontSize: ThemeSize.middleFont);
                             } else {
                               loading = true;
                               updatePasswordService(oldPasswordController.text,
@@ -165,7 +165,7 @@ class UpdatePasswordPage extends StatelessWidget {
                                       gravity: ToastGravity.BOTTOM,
                                       backgroundColor: ThemeColors.subTitle,
                                       textColor: Colors.white,
-                                      fontSize: ThemeSize.middleFontSize);
+                                      fontSize: ThemeSize.middleFont);
                                   Navigator.of(context).pop();
                                 } else {
                                   Fluttertoast.showToast(
@@ -174,7 +174,7 @@ class UpdatePasswordPage extends StatelessWidget {
                                       gravity: ToastGravity.BOTTOM,
                                       backgroundColor: ThemeColors.subTitle,
                                       textColor: Colors.white,
-                                      fontSize: ThemeSize.middleFontSize);
+                                      fontSize: ThemeSize.middleFont);
                                 }
                               });
                             }
@@ -184,13 +184,13 @@ class UpdatePasswordPage extends StatelessWidget {
                             decoration: BoxDecoration(
                               color: Colors.red,
                               borderRadius: BorderRadius.all(
-                                  Radius.circular(ThemeSize.superRadius)),
+                                  Radius.circular(ThemeSize.buttonHeight / 2)),
                             ),
                             width: double.infinity,
                             child: Center(
                                 child: Text("提交",
                                     style: TextStyle(
-                                        color: ThemeColors.colorWhite))),
+                                        color: ThemeColors.white))),
                           ),
                         )),
                   ],

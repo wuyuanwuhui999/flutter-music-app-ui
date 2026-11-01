@@ -57,7 +57,7 @@ class _FavoriteComponentState extends State<FavoriteComponent> {
                   ClipRRect(
                     borderRadius: BorderRadius.circular(ThemeSize.middleRadius),
                     child: Container(
-                        decoration: const BoxDecoration(color: ThemeColors.colorBg),
+                        decoration: const BoxDecoration(color: ThemeColors.background),
                         width: ThemeSize.bigAvater,
                         height: ThemeSize.bigAvater,
                         child: Center(
@@ -78,7 +78,7 @@ class _FavoriteComponentState extends State<FavoriteComponent> {
           Column(
               children: this.favoriteDirectory.map((item) {
             return Column(children: [
-              SizedBox(height: ThemeSize.containerPadding),
+              SizedBox(height: ThemeSize.middleGap),
               Row(
                 children: [
                   item.cover == null
@@ -88,7 +88,7 @@ class _FavoriteComponentState extends State<FavoriteComponent> {
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.all(
                                   Radius.circular(ThemeSize.middleRadius)),
-                              color: ThemeColors.colorBg),
+                              color: ThemeColors.background),
                           child: Center(
                               child: Image.asset(
                             "lib/assets/images/icon_music_default_cover.png",
@@ -101,7 +101,7 @@ class _FavoriteComponentState extends State<FavoriteComponent> {
                           child: Image.network("$HOST${item.cover}",
                               width: ThemeSize.bigAvater,
                               height: ThemeSize.bigAvater)),
-                  SizedBox(width: ThemeSize.containerPadding),
+                  SizedBox(width: ThemeSize.middleGap),
                   Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -110,7 +110,7 @@ class _FavoriteComponentState extends State<FavoriteComponent> {
                           SizedBox(height: ThemeSize.smallMargin),
                           Text(
                             item.total.toString() + "首",
-                            style: TextStyle(color: ThemeColors.disableColor),
+                            style: TextStyle(color: ThemeColors.gray),
                           )
                         ],
                       ),
@@ -149,14 +149,14 @@ class _FavoriteComponentState extends State<FavoriteComponent> {
             style: TextStyle(color: Colors.red),
           ),
           Text('名称'),
-          SizedBox(width: ThemeSize.containerPadding),
+          SizedBox(width: ThemeSize.middleGap),
           Expanded(
             flex: 1,
             child: Container(
                 height: ThemeSize.buttonHeight,
-                padding: EdgeInsets.only(left: ThemeSize.containerPadding),
+                padding: EdgeInsets.only(left: ThemeSize.middleGap),
                 decoration: BoxDecoration(
-                    color: ThemeColors.colorBg,
+                    color: ThemeColors.background,
                     borderRadius: BorderRadius.all(
                         Radius.circular(ThemeSize.middleRadius))),
                 child: TextField(
@@ -172,7 +172,7 @@ class _FavoriteComponentState extends State<FavoriteComponent> {
                     decoration: InputDecoration(
                       hintText: "请输入收藏夹名称",
                       hintStyle: TextStyle(
-                          fontSize: ThemeSize.smallFontSize,
+                          fontSize: ThemeSize.smallFont,
                           color: ThemeColors.grey),
                       border: InputBorder.none,
                       contentPadding:
@@ -180,7 +180,7 @@ class _FavoriteComponentState extends State<FavoriteComponent> {
                     ))),
           )
         ]),
-        SizedBox(height: ThemeSize.containerPadding),
+        SizedBox(height: ThemeSize.middleGap),
         Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -188,10 +188,10 @@ class _FavoriteComponentState extends State<FavoriteComponent> {
                 opacity: 0,
                 child: Text('*', style: TextStyle(color: Colors.red))),
             Text('封面'),
-            SizedBox(width: ThemeSize.containerPadding),
+            SizedBox(width: ThemeSize.middleGap),
             Container(
               decoration: BoxDecoration(
-                  color: ThemeColors.colorBg,
+                  color: ThemeColors.background,
                   borderRadius: BorderRadius.all(
                       Radius.circular(ThemeSize.middleRadius))),
               width: ThemeSize.bigAvater,
@@ -203,14 +203,14 @@ class _FavoriteComponentState extends State<FavoriteComponent> {
             )
           ],
         ),
-        SizedBox(height: ThemeSize.containerPadding),
+        SizedBox(height: ThemeSize.middleGap),
         Opacity(
             opacity: disableCreateBtn ? 0.5 : 1,
             child: Container(
               decoration: BoxDecoration(
                 color: Colors.red,
                 borderRadius:
-                    BorderRadius.all(Radius.circular(ThemeSize.superRadius)),
+                    BorderRadius.all(Radius.circular(ThemeSize.buttonHeight / 2)),
               ),
               width: double.infinity,
               height: ThemeSize.buttonHeight,
@@ -223,7 +223,7 @@ class _FavoriteComponentState extends State<FavoriteComponent> {
                           gravity: ToastGravity.CENTER,
                           timeInSecForIosWeb: 1,
                           textColor: Colors.white,
-                          fontSize: ThemeSize.middleFontSize);
+                          fontSize: ThemeSize.middleFont);
                     }else{
                       insertFavoriteDirectoryService(FavoriteDirectoryModel(
                           name: favoriteNameController.text))
@@ -234,7 +234,7 @@ class _FavoriteComponentState extends State<FavoriteComponent> {
                             gravity: ToastGravity.CENTER,
                             timeInSecForIosWeb: 1,
                             textColor: Colors.white,
-                            fontSize: ThemeSize.middleFontSize);
+                            fontSize: ThemeSize.middleFont);
                         favoriteNameController.text = '';
                         setState(() {
                           favoriteDirectory.insert(
@@ -248,15 +248,15 @@ class _FavoriteComponentState extends State<FavoriteComponent> {
                   child: Center(
                       child: Text(
                     '创建',
-                    style: TextStyle(color: ThemeColors.colorWhite),
+                    style: TextStyle(color: ThemeColors.white),
                   ))),
             )),
-        SizedBox(height: ThemeSize.containerPadding),
+        SizedBox(height: ThemeSize.middleGap),
         Container(
           decoration: BoxDecoration(
-            border: Border.all(color: ThemeColors.borderColor),
+            border: Border.all(color: ThemeColors.gray),
             borderRadius:
-                BorderRadius.all(Radius.circular(ThemeSize.superRadius)),
+                BorderRadius.all(Radius.circular(ThemeSize.buttonHeight / 2)),
           ),
           height: ThemeSize.buttonHeight,
           child: InkWell(
@@ -276,10 +276,10 @@ class _FavoriteComponentState extends State<FavoriteComponent> {
   ///@date: 2024-07-3 22:15
   Widget buildAddBtnWidget() {
     return Container(
-      margin: EdgeInsets.all(ThemeSize.containerPadding),
+      margin: EdgeInsets.all(ThemeSize.middleGap),
       decoration: BoxDecoration(
         color: Colors.red,
-        borderRadius: BorderRadius.all(Radius.circular(ThemeSize.superRadius)),
+        borderRadius: BorderRadius.all(Radius.circular(ThemeSize.buttonHeight / 2)),
       ),
       width: double.infinity,
       height: ThemeSize.buttonHeight,
@@ -296,7 +296,7 @@ class _FavoriteComponentState extends State<FavoriteComponent> {
                           gravity: ToastGravity.CENTER,
                           timeInSecForIosWeb: 1,
                           textColor: Colors.white,
-                          fontSize: ThemeSize.middleFontSize);
+                          fontSize: ThemeSize.middleFont);
                       widget.onFavorite(selectedValues.length > 0);
                     }
                   });
@@ -306,7 +306,7 @@ class _FavoriteComponentState extends State<FavoriteComponent> {
             widget.isFavorite && selectedValues.length == 0
                 ? '取消收藏'
                 : '添加${selectedValues.length > 0 ? '（已选${selectedValues.length}个）' : ''}',
-            style: TextStyle(color: ThemeColors.colorWhite),
+            style: TextStyle(color: ThemeColors.white),
           ))),
     );
   }
@@ -319,7 +319,7 @@ class _FavoriteComponentState extends State<FavoriteComponent> {
           padding: ThemeStyle.padding,
           child: Text("选择收藏夹"),
         ),
-        Divider(height: 1, color: ThemeColors.borderColor),
+        Divider(height: 1, color: ThemeColors.gray),
         Expanded(
             flex: 1,
             child: Padding(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../theme/ThemeStyle.dart';
+import '../theme/ThemeSize.dart';
 
 class TitleComponent extends StatelessWidget {
   final String title;
@@ -9,7 +10,7 @@ class TitleComponent extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         margin: ThemeStyle.margin,
-        padding: EdgeInsets.only(left: 5),
+        padding: EdgeInsets.only(left: ThemeSize.miniMargin),
         decoration: BoxDecoration(
           border: Border(
             left: BorderSide(
