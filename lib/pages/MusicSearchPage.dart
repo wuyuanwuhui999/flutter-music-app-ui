@@ -145,7 +145,7 @@ class _SearchMusicPageState extends State<MusicSearchPage> {
     return Container(
       decoration: ThemeStyle.boxDecoration,
       padding: ThemeStyle.padding,
-      margin: ThemeStyle.margin,
+      margin: EdgeInsets.only(bottom: ThemeSize.middleGap,top: ThemeSize.middleGap)
       child: Row(
         children: <Widget>[
           Expanded(
@@ -227,7 +227,7 @@ class _SearchMusicPageState extends State<MusicSearchPage> {
 
                 ///圆角
                 style: ButtonStyle(
-                  backgroundColor: WidgetStateProperty.all(ThemeColors.blueColor), // 按扭背景颜色
+                  backgroundColor: WidgetStateProperty.all(ThemeColors.primary), // 按扭背景颜色
                   foregroundColor: WidgetStateProperty.all(Colors.white), // 按钮文本颜色
                   shape: WidgetStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(ThemeSize.bigRadius))), // 圆角
                 ),
@@ -256,7 +256,7 @@ class _SearchMusicPageState extends State<MusicSearchPage> {
 
       ///圆角
       style: ButtonStyle(
-        backgroundColor: WidgetStateProperty.all(ThemeColors.blueColor), // 按扭背景颜色
+        backgroundColor: WidgetStateProperty.all(ThemeColors.primary), // 按扭背景颜色
         foregroundColor: WidgetStateProperty.all(Colors.white), // 按钮文本颜色
         shape: WidgetStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(ThemeSize.bigRadius))), // 圆角
       ),

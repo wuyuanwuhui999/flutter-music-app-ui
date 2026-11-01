@@ -29,7 +29,7 @@ class CustomDialogComponent {
           content: builder(context),
           actions: [
             CupertinoDialogAction(
-              child: const Text('确认', style: TextStyle(color: ThemeColors.activeColor)),
+              child: const Text('确认', style: TextStyle(color: ThemeColors.primary)),
               onPressed: () {
                 Navigator.pop(context, Action.Ok);
               },

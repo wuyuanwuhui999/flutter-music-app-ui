@@ -104,7 +104,7 @@ class _EditPageState extends State<EditPage> {
                               borderRadius: BorderRadius.all(
                                   Radius.circular(ThemeSize.minBtnRadius)),
                               color: hasChange
-                                  ? ThemeColors.activeColor
+                                  ? ThemeColors.primary
                                   : ThemeColors.gray,
                             ),
                             child: Center(

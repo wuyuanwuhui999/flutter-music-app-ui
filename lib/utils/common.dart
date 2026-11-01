@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 
 import '../common/constant.dart';
+import '../theme/ThemeColors.dart';
 
 String formatTime(String data) {
   // 获取当前时间对象
@@ -57,7 +58,7 @@ Future showCustomDialog(BuildContext context,Widget body,String name,Function ok
         content:body,
         actions: [
           CupertinoDialogAction(
-            child: Text('确认'),
+            child: Text('确认', style: TextStyle(color: ThemeColors.primary)),
             onPressed: () {
               Navigator.pop(context, Action.Ok);
             },
