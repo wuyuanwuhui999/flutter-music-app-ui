@@ -111,7 +111,7 @@ class _SearchMusicPageState extends State<MusicSearchPage> {
                       toastLength: Toast.LENGTH_SHORT,
                       gravity: ToastGravity.CENTER,
                       timeInSecForIosWeb: 1,
-                      backgroundColor: Colors.blue,
+                      backgroundColor: ThemeColors.primary,
                       textColor: Colors.white,
                       fontSize: ThemeSize.middleFont);
                 }
@@ -145,7 +145,7 @@ class _SearchMusicPageState extends State<MusicSearchPage> {
     return Container(
       decoration: ThemeStyle.boxDecoration,
       padding: ThemeStyle.padding,
-      margin: EdgeInsets.only(bottom: ThemeSize.middleGap,top: ThemeSize.middleGap)
+      margin: EdgeInsets.only(bottom: ThemeSize.middleGap,top: ThemeSize.middleGap),
       child: Row(
         children: <Widget>[
           Expanded(

@@ -90,7 +90,7 @@ class _MusicSharePageState extends State<MusicSharePage>
                     },
 
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue,
+                      backgroundColor: ThemeColors.primary,
                       foregroundColor: Colors.white,
                     ),
                     child: Text(
@@ -111,7 +111,7 @@ class _MusicSharePageState extends State<MusicSharePage>
                     ),
 
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue,
+                      backgroundColor: ThemeColors.primary,
                       foregroundColor: Colors.white,
                     ),
                   ))
@@ -210,7 +210,7 @@ class _MusicSharePageState extends State<MusicSharePage>
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
           timeInSecForIosWeb: 1,
-          backgroundColor: Colors.blue,
+          backgroundColor: ThemeColors.primary,
           textColor: Colors.white,
           fontSize: ThemeSize.middleFont);
       loading = false;

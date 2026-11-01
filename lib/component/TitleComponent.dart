@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../theme/ThemeStyle.dart';
 import '../theme/ThemeSize.dart';
+import '../theme/ThemeColors.dart';
 
 class TitleComponent extends StatelessWidget {
   final String title;
@@ -15,7 +16,7 @@ class TitleComponent extends StatelessWidget {
           border: Border(
             left: BorderSide(
               width: 3, //宽度
-              color: Colors.blue, //边框颜色
+              color: ThemeColors.primary, //边框颜色
             ),
           ),
         ),

@@ -236,7 +236,7 @@ class _MusicRecommentPageState extends State<MusicRecommentPage>
                 toastLength: Toast.LENGTH_SHORT,
                 gravity: ToastGravity.CENTER,
                 timeInSecForIosWeb: 1,
-                backgroundColor: Colors.blue,
+                backgroundColor: ThemeColors.primary,
                 textColor: Colors.white,
                 fontSize: ThemeSize.middleFont);
           } else {

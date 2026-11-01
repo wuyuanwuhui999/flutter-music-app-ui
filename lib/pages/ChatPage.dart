@@ -194,7 +194,7 @@ class ChatPageState extends State<ChatPage> {
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
           timeInSecForIosWeb: 1,
-          backgroundColor: Colors.blue,
+          backgroundColor: ThemeColors.primary,
           textColor: Colors.white,
           fontSize: ThemeSize.middleFont);
     } else if (loading) {
@@ -694,7 +694,7 @@ class ChatPageState extends State<ChatPage> {
                           toastLength: Toast.LENGTH_SHORT,
                           gravity: ToastGravity.CENTER,
                           timeInSecForIosWeb: 1,
-                          backgroundColor: Colors.blue,
+                          backgroundColor: ThemeColors.primary,
                           textColor: Colors.white,
                           fontSize: ThemeSize.middleFont);
                     } else {}
