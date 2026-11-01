@@ -125,7 +125,7 @@ class MusicHomePageState extends State<MusicHomePage>
   Widget buildSearchWidget() {
     return Container(
         decoration: ThemeStyle.boxDecoration,
-        margin: ThemeStyle.margin,
+        margin: EdgeInsets.only(bottom: ThemeSize.middleGap,top:ThemeSize.middleGap),
         width:
             MediaQuery.of(context).size.width - ThemeSize.middleGap * 2,
         padding: ThemeStyle.padding,
