@@ -32,6 +32,10 @@ class MusicHomePageState extends State<MusicHomePage>
   List<MusicClassifyModel> allClassifies = [];
   EasyRefreshController easyRefreshController = EasyRefreshController();
 
+  // 首页“经典老歌”入口跳转的分类歌曲列表页参数
+  static const int classicSongClassifyId = 2;
+  static const String classicSongClassifyName = "经典老歌";
+
   @override
   void initState() {
     super.initState();
@@ -251,14 +255,25 @@ class MusicHomePageState extends State<MusicHomePage>
             ],
           )),
           Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset("lib/assets/images/icon_music_classics.png",
-                    width: ThemeSize.bigAvater, height: ThemeSize.bigAvater),
-                SizedBox(height: ThemeSize.smallMargin),
-                Text("经典老歌")
-              ],
+            // 经典老歌：跳转到分类歌曲列表页，参数 {id: 2, classifyName: "经典老歌"}
+            child: InkWell(
+              onTap: () {
+                Map<String, dynamic> classifyParams = {
+                  "id": classicSongClassifyId,
+                  "classifyName": classicSongClassifyName
+                };
+                Routes.router.navigateTo(context,
+                    '/MusicClassifyListPage?musicClassifyModel=${Uri.encodeComponent(json.encode(classifyParams))}');
+              },
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset("lib/assets/images/icon_music_classics.png",
+                      width: ThemeSize.bigAvater, height: ThemeSize.bigAvater),
+                  SizedBox(height: ThemeSize.smallMargin),
+                  Text("经典老歌")
+                ],
+              ),
             ),
             flex: 1,
           )
