@@ -127,7 +127,7 @@ class _MusicClassifyListPageState extends State<MusicClassifyListPage>
       setState(() {
         musicList
             .addAll(value.data.map((e) => MusicModel.fromJson(e)).toList());
-        total = value.total!;
+        total = value.total ?? 0; // 接口失败时 total 为 null，用 ! 会直接崩
         easyRefreshController.finishLoad(
             success: true, noMore: musicList.length == total);
       });
