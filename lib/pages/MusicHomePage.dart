@@ -36,8 +36,8 @@ class MusicHomePageState extends State<MusicHomePage>
   static const int classicSongClassifyId = 2;
   static const String classicSongClassifyName = "经典老歌";
 
-  // 首页“排行榜”入口跳转的分类歌曲列表页参数
-  static const int rankClassifyId = 2;
+  // 首页“排行榜”入口跳转的分类歌曲列表页参数（对应后端“热门榜单”，id=1）
+  static const int rankClassifyId = 1;
   static const String rankClassifyName = "排行榜";
 
   // 跳转到分类歌曲列表页，参数 {id, classifyName}
