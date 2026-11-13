@@ -36,6 +36,20 @@ class MusicHomePageState extends State<MusicHomePage>
   static const int classicSongClassifyId = 2;
   static const String classicSongClassifyName = "经典老歌";
 
+  // 首页“排行榜”入口跳转的分类歌曲列表页参数
+  static const int rankClassifyId = 2;
+  static const String rankClassifyName = "排行榜";
+
+  // 跳转到分类歌曲列表页，参数 {id, classifyName}
+  void gotoClassifyList(int classifyId, String classifyName) {
+    Map<String, dynamic> classifyParams = {
+      "id": classifyId,
+      "classifyName": classifyName
+    };
+    Routes.router.navigateTo(context,
+        '/MusicClassifyListPage?musicClassifyModel=${Uri.encodeComponent(json.encode(classifyParams))}');
+  }
+
   @override
   void initState() {
     super.initState();
@@ -245,25 +259,28 @@ class MusicHomePageState extends State<MusicHomePage>
             flex: 1,
           ),
           Expanded(
+            // 排行榜：跳转到分类歌曲列表页，参数 {id: 2, classifyName: "排行榜"}
+            child: InkWell(
+              onTap: () {
+                gotoClassifyList(rankClassifyId, rankClassifyName);
+              },
               child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset("lib/assets/images/icon_music_rank.png",
-                  width: ThemeSize.bigAvater, height: ThemeSize.bigAvater),
-              SizedBox(height: ThemeSize.smallMargin),
-              Text("排行榜")
-            ],
-          )),
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset("lib/assets/images/icon_music_rank.png",
+                      width: ThemeSize.bigAvater, height: ThemeSize.bigAvater),
+                  SizedBox(height: ThemeSize.smallMargin),
+                  Text("排行榜")
+                ],
+              ),
+            ),
+            flex: 1,
+          ),
           Expanded(
             // 经典老歌：跳转到分类歌曲列表页，参数 {id: 2, classifyName: "经典老歌"}
             child: InkWell(
               onTap: () {
-                Map<String, dynamic> classifyParams = {
-                  "id": classicSongClassifyId,
-                  "classifyName": classicSongClassifyName
-                };
-                Routes.router.navigateTo(context,
-                    '/MusicClassifyListPage?musicClassifyModel=${Uri.encodeComponent(json.encode(classifyParams))}');
+                gotoClassifyList(classicSongClassifyId, classicSongClassifyName);
               },
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
