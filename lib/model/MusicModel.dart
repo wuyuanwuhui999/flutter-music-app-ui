@@ -17,7 +17,7 @@ class MusicModel extends ClassMusicParamsModel{
   int? bigPackId; // 未使用字段
   int? finalId; // 未使用字段
   int audioId; // 音频id
-  int? similarAudioId; // 未使用字段
+  String? similarAudioId; // 未使用字段
   int? isHot; // 是否热门
   int albumAudioId; // 音频专辑id
   int? audioGroupId; // 歌曲组id
@@ -89,7 +89,8 @@ class MusicModel extends ClassMusicParamsModel{
         bigPackId: _toInt(json["isPublish"]),
         finalId: _toInt(json["finalId"]),
         audioId: _toInt(json["audioId"]) ?? 0,
-        similarAudioId: _toInt(json["similarAudioId"]),
+        // 字段类型已改为 String?，后端可能返回数字，统一转成字符串
+        similarAudioId: json["similarAudioId"]?.toString(),
         isHot: _toInt(json["isHot"]),
         albumAudioId: _toInt(json["albumAudioId"]) ?? 0,
         audioGroupId: _toInt(json["audioGroupId"]),
