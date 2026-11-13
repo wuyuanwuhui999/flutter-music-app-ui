@@ -1,6 +1,6 @@
 const SUCCESS = "SUCCESS";
 const FAIL = "FAIL";
-const HOST = 'http://192.168.5.62:4000';
+const HOST = 'http://192.168.234.154:4000';
 
 const TOKEN_STORAGE_KEY = 'TOKEN_STORAGE_KEY';
 
