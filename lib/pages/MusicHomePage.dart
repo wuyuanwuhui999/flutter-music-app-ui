@@ -36,9 +36,9 @@ class MusicHomePageState extends State<MusicHomePage>
   static const int classicSongClassifyId = 2;
   static const String classicSongClassifyName = "经典老歌";
 
-  // 首页“排行榜”入口跳转的分类歌曲列表页参数（对应后端“热门榜单”，id=1）
+  // 首页“热门歌曲”入口跳转的分类歌曲列表页参数（对应后端“热门榜单”，id=1）
   static const int rankClassifyId = 1;
-  static const String rankClassifyName = "排行榜";
+  static const String rankClassifyName = "热门歌曲";
 
   // 跳转到分类歌曲列表页，参数 {id, classifyName}
   void gotoClassifyList(int classifyId, String classifyName) {
@@ -259,7 +259,7 @@ class MusicHomePageState extends State<MusicHomePage>
             flex: 1,
           ),
           Expanded(
-            // 排行榜：跳转到分类歌曲列表页，参数 {id: 2, classifyName: "排行榜"}
+            // 热门歌曲：跳转到分类歌曲列表页，参数 {id: 1, classifyName: "热门歌曲"}
             child: InkWell(
               onTap: () {
                 gotoClassifyList(rankClassifyId, rankClassifyName);
@@ -270,7 +270,7 @@ class MusicHomePageState extends State<MusicHomePage>
                   Image.asset("lib/assets/images/icon_music_rank.png",
                       width: ThemeSize.bigAvater, height: ThemeSize.bigAvater),
                   SizedBox(height: ThemeSize.smallMargin),
-                  Text("排行榜")
+                  Text("热门歌曲")
                 ],
               ),
             ),
