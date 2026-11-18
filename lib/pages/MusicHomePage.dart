@@ -40,6 +40,19 @@ class MusicHomePageState extends State<MusicHomePage>
   static const int rankClassifyId = 1;
   static const String rankClassifyName = "热门歌曲";
 
+  // 首页第二行四个分类入口跳转的分类歌曲列表页参数
+  static const int viperMasterClassifyId = 3;
+  static const String viperMasterClassifyName = "蝰蛇母带";
+
+  static const int exclusiveSongClassifyId = 4;
+  static const String exclusiveSongClassifyName = "专属好歌";
+
+  static const int musicMemoryClassifyId = 5;
+  static const String musicMemoryClassifyName = "音乐记忆";
+
+  static const int popHotSongClassifyId = 6;
+  static const String popHotSongClassifyName = "流行热歌";
+
   // 跳转到分类歌曲列表页，参数 {id, classifyName}
   void gotoClassifyList(int classifyId, String classifyName) {
     Map<String, dynamic> classifyParams = {
@@ -216,6 +229,26 @@ class MusicHomePageState extends State<MusicHomePage>
         ));
   }
 
+  // 分类入口单个格子（图标 + 名称）
+  Widget buildClassifyItem(String icon, String name, VoidCallback onTap) {
+    return Expanded(
+      child: InkWell(
+        onTap: onTap,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(icon,
+                width: ThemeSize.bigAvater, height: ThemeSize.bigAvater),
+            SizedBox(height: ThemeSize.smallMargin),
+            Text(name, maxLines: 1, overflow: TextOverflow.ellipsis)
+          ],
+        ),
+      ),
+      flex: 1,
+    );
+  }
+
+  // 首页分类入口：两行四列网格
   Widget buildClassifyWidget() {
     return Container(
         decoration: ThemeStyle.boxDecoration,
@@ -223,77 +256,52 @@ class MusicHomePageState extends State<MusicHomePage>
         width:
             MediaQuery.of(context).size.width - ThemeSize.middleGap * 2,
         padding: ThemeStyle.padding,
-        child: Row(children: [
-          Expanded(
-            child: InkWell(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset("lib/assets/images/icon_music_singer.png",
-                      width: ThemeSize.bigAvater, height: ThemeSize.bigAvater),
-                  SizedBox(height: ThemeSize.smallMargin),
-                  Text("歌手")
-                ],
-              ),
-              onTap: () {
-                Routes.router.navigateTo(context, '/MusicAuthorCategoryPage');
-              },
-            ),
-            flex: 1,
-          ),
-          Expanded(
-            child: InkWell(
-              onTap: () {
-                Routes.router.navigateTo(context, '/MusicCategoryPage');
-              },
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset("lib/assets/images/icon_music_classify.png",
-                      width: ThemeSize.bigAvater, height: ThemeSize.bigAvater),
-                  SizedBox(height: ThemeSize.smallMargin),
-                  Text("分类歌曲")
-                ],
-              ),
-            ),
-            flex: 1,
-          ),
-          Expanded(
-            // 热门歌曲：跳转到分类歌曲列表页，参数 {id: 1, classifyName: "热门歌曲"}
-            child: InkWell(
-              onTap: () {
-                gotoClassifyList(rankClassifyId, rankClassifyName);
-              },
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset("lib/assets/images/icon_music_rank.png",
-                      width: ThemeSize.bigAvater, height: ThemeSize.bigAvater),
-                  SizedBox(height: ThemeSize.smallMargin),
-                  Text("热门歌曲")
-                ],
-              ),
-            ),
-            flex: 1,
-          ),
-          Expanded(
-            // 经典老歌：跳转到分类歌曲列表页，参数 {id: 2, classifyName: "经典老歌"}
-            child: InkWell(
-              onTap: () {
-                gotoClassifyList(classicSongClassifyId, classicSongClassifyName);
-              },
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset("lib/assets/images/icon_music_classics.png",
-                      width: ThemeSize.bigAvater, height: ThemeSize.bigAvater),
-                  SizedBox(height: ThemeSize.smallMargin),
-                  Text("经典老歌")
-                ],
-              ),
-            ),
-            flex: 1,
-          )
+        child: Column(children: [
+          Row(children: [
+            buildClassifyItem("lib/assets/images/icon_music_singer.png", "歌手",
+                () {
+              Routes.router.navigateTo(context, '/MusicAuthorCategoryPage');
+            }),
+            buildClassifyItem("lib/assets/images/icon_music_classify.png", "分类歌曲",
+                () {
+              Routes.router.navigateTo(context, '/MusicCategoryPage');
+            }),
+            // 热门歌曲：参数 {id: 1, classifyName: "热门歌曲"}
+            buildClassifyItem("lib/assets/images/icon_music_rank.png", "热门歌曲",
+                () {
+              gotoClassifyList(rankClassifyId, rankClassifyName);
+            }),
+            // 经典老歌：参数 {id: 2, classifyName: "经典老歌"}
+            buildClassifyItem(
+                "lib/assets/images/icon_music_classics.png", "经典老歌", () {
+              gotoClassifyList(classicSongClassifyId, classicSongClassifyName);
+            })
+          ]),
+          SizedBox(height: ThemeSize.middleGap),
+          Row(children: [
+            // 蝰蛇母带：参数 {id: 3, classifyName: "蝰蛇母带"}
+            buildClassifyItem(
+                "lib/assets/images/icon_kuisheyinxiao.png", "蝰蛇母带", () {
+              gotoClassifyList(
+                  viperMasterClassifyId, viperMasterClassifyName);
+            }),
+            // 专属好歌：参数 {id: 4, classifyName: "专属好歌"}
+            buildClassifyItem(
+                "lib/assets/images/icon_zhuanshuhaoge.png", "专属好歌", () {
+              gotoClassifyList(
+                  exclusiveSongClassifyId, exclusiveSongClassifyName);
+            }),
+            // 音乐记忆：参数 {id: 5, classifyName: "音乐记忆"}
+            buildClassifyItem(
+                "lib/assets/images/icon_yinyuejiyi.png", "音乐记忆", () {
+              gotoClassifyList(musicMemoryClassifyId, musicMemoryClassifyName);
+            }),
+            // 流行热歌：参数 {id: 6, classifyName: "流行热歌"}
+            buildClassifyItem(
+                "lib/assets/images/icon_liuxingrege.png", "流行热歌", () {
+              gotoClassifyList(popHotSongClassifyId, popHotSongClassifyName);
+            })
+          ])
         ]));
   }
 

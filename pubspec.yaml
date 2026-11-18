@@ -167,6 +167,10 @@ flutter:
     - lib/assets/images/icon_menu.png
     - lib/assets/images/icon_chat.png
     - lib/assets/images/icon_switch.png
+    - lib/assets/images/icon_kuisheyinxiao.png
+    - lib/assets/images/icon_zhuanshuhaoge.png
+    - lib/assets/images/icon_yinyuejiyi.png
+    - lib/assets/images/icon_liuxingrege.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 
